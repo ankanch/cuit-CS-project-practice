@@ -1,0 +1,17 @@
+REGEDIT
+; This .REG file may be used by your SETUP program.
+;   If a SETUP program is not available, the entries below will be
+;   registered in your InitInstance automatically with a call to
+;   CWinApp::RegisterShellFileTypes and COleObjectFactory::UpdateRegistryAll.
+
+
+HKEY_CLASSES_ROOT\mypad.Application = mypad Application
+
+
+HKEY_CLASSES_ROOT\mypad.Application\CLSID = {D73F77BF-CD7F-49B2-888B-0F303438D597}
+
+HKEY_CLASSES_ROOT\CLSID\{D73F77BF-CD7F-49B2-888B-0F303438D597} = mypad Application
+HKEY_CLASSES_ROOT\CLSID\{D73F77BF-CD7F-49B2-888B-0F303438D597}\ProgId = mypad.Application
+
+
+HKEY_CLASSES_ROOT\CLSID\{D73F77BF-CD7F-49B2-888B-0F303438D597}\LocalServer32 = mypad.EXE

@@ -1,0 +1,29 @@
+// mypad.idl : type library source for mypad.exe
+
+// This file will be processed by the MIDL compiler to produce the
+// type library (mypad.tlb).
+
+[ uuid(16628033-0D92-417F-93D6-8D75781B73F1), version(1.0) ]
+library mypad
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	//  Primary dispatch interface for CmypadDoc
+	
+	[ uuid(EA04B42F-9750-4F0C-928C-271FA4902396) ]
+	dispinterface Imypad
+	{
+		properties:
+			
+		methods:
+	};
+
+	//  Class information for CmypadDoc
+	
+	[ uuid(D73F77BF-CD7F-49B2-888B-0F303438D597) ]
+	coclass mypad
+	{
+		[default] dispinterface Imypad;
+	};
+};
