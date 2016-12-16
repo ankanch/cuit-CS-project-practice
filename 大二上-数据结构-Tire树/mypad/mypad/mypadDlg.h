@@ -3,6 +3,8 @@
 //
 
 #pragma once
+#include "TrieTree.h"
+#include "afxwin.h"
 
 class CmypadDlgAutoProxy;
 
@@ -45,4 +47,11 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnEnChangeEditContent();
+private:
+	CTrieTree triedata;
+public:
+	// Ö÷±à¼­¿ò
+	CEdit m_edit;
+	//×ÖÌå
+	CFont * f;
 };

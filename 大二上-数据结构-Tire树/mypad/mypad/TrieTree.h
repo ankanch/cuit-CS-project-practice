@@ -24,8 +24,8 @@ class CTrieTree
 public:
 	CTrieTree();
 	~CTrieTree();
-	const bool Insert(CString word);  //将一个单词插入Trie树
-	const bool Search(CString word);		//查找一个单词是否已经在Trie树中
+	const bool Insert(CString word,PWORDNODE tg);  //将一个单词插入Trie树
+	const bool Search(CString word,PWORDNODE tg);		//查找一个单词是否已经在Trie树中
 	const PROOT GetRoot();  //返回树根
 	const int GetNodesCount();  //返回节点数
 	const int GetLevelCount();  //树的深度（包括树根）
@@ -34,7 +34,8 @@ private:
 	const int GetLLCLSize();  //获取levelnodes_count_list的大小
 	const int SearchForAlphabetIndex(const char ch,const WORDNODE & node); //该函数用来查找数据为ch的节点在当前node中的pnexlist索引,未找到：-1
 	const PWORDNODE CreateNode(const char chr, PLEAFDATA leafdata = nullptr);   //创建新节点
-	const bool AddToNextList(WORDNODE & desnode,PWORDNODE srcnode);  //将一个新的节点添加到指定节点的pnextlist域中
+	const int AddToNextList(WORDNODE & desnode,PWORDNODE srcnode);  //将一个新的节点添加到指定节点的pnextlist域中
+	const void deleteTrieTree(PROOT root);   //删除所有Trie树的数据
 
 	PROOT proot;		//指向树根
 	int diff_words_count; //记录不同单词个数

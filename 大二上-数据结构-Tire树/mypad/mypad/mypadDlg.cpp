@@ -70,6 +70,7 @@ CMypadDlg::~CMypadDlg()
 void CMypadDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_EDIT_CONTENT, m_edit);
 }
 
 BEGIN_MESSAGE_MAP(CMypadDlg, CDialogEx)
@@ -113,6 +114,22 @@ BOOL CMypadDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 
 	// TODO: Add extra initialization here
+	f = new CFont;
+	f->CreateFont(22, // nHeight 
+		0, // nWidth 
+		0, // nEscapement 
+		0, // nOrientation 
+		FW_BOLD, // nWeight 
+		TRUE, // bItalic 
+		FALSE, // bUnderline 
+		0, // cStrikeOut 
+		ANSI_CHARSET, // nCharSet 
+		OUT_DEFAULT_PRECIS, // nOutPrecision 
+		CLIP_DEFAULT_PRECIS, // nClipPrecision 
+		DEFAULT_QUALITY, // nQuality 
+		DEFAULT_PITCH | FF_SWISS, // nPitchAndFamily 
+		_T("Arial")); // lpszFac 
+	m_edit.SetFont(f);
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -214,4 +231,8 @@ void CMypadDlg::OnEnChangeEditContent()
 	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
 
 	// TODO:  在此添加控件通知处理程序代码
+	CString textdata;
+	m_edit.GetWindowTextA(textdata);
+	SetDlgItemTextA(IDC_STATIC_WORDS_COUNT, textdata);
+	
 }
