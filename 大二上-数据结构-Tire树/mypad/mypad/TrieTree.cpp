@@ -9,6 +9,7 @@ CTrieTree::CTrieTree()
 	proot->pdata = nullptr;
 	proot->pnextlist = nullptr;
 	proot->size_nextlist = 0;
+	proot->nextlist_fill = 0;
 	levelnodes_count_list = new int[BUFFER_LEVEL_COUNT];  //初始化层节点数数组
 	level_count = 0;
 	nodes_count = 0;
@@ -40,6 +41,10 @@ const void CTrieTree::deleteTrieTree(PROOT root)
 const bool CTrieTree::Insert(CString word, PWORDNODE tg)
 {
 	int chindex = SearchForAlphabetIndex(word[0], *tg);
+	if (word[0] == '\0' || word[0] == ' ')
+	{
+		return true;
+	}
 	//在当前节点寻找字符，未找到：
 	if (chindex == -1)
 	{
@@ -72,6 +77,10 @@ const bool CTrieTree::Insert(CString word, PWORDNODE tg)
 const bool CTrieTree::Search(CString word, PWORDNODE tg)
 {
 	int chindex = SearchForAlphabetIndex(word[0], *tg);
+	if (word[0] == '\0' || word[0] == ' ')
+	{
+		return true;
+	}
 	//在当前节点寻找字符，未找到：则返回
 	if (chindex == -1)
 	{

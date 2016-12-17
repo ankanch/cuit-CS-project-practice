@@ -4,6 +4,7 @@
 
 #pragma once
 #include "TrieTree.h"
+#include "TrieGraph.h"
 #include "afxwin.h"
 
 class CmypadDlgAutoProxy;
@@ -54,4 +55,14 @@ public:
 	CEdit m_edit;
 	//字体
 	CFont * f;
+	//储存编辑框在空格按下之前的数据，用于增量创建Trie树
+	CString last_edit_data;
+	//标记是否需要插入Trie
+	bool ins_avb;
+	//记录上一次按下空格时候光标的位置
+	int last_sel_pos;
+	//绘制Trie树的对话框指针
+	CTrieGraph *triegraphdlg;
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	afx_msg void OnMenuShowTrie();
 };

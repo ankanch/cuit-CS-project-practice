@@ -63,6 +63,7 @@ CMypadDlg::~CMypadDlg()
 	// If there is an automation proxy for this dialog, set
 	//  its back pointer to this dialog to NULL, so it knows
 	//  the dialog has been deleted.
+	delete triegraphdlg;
 	if (m_pAutoProxy != NULL)
 		m_pAutoProxy->m_pDialog = NULL;
 }
@@ -79,6 +80,8 @@ BEGIN_MESSAGE_MAP(CMypadDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_EN_CHANGE(IDC_EDIT_CONTENT, &CMypadDlg::OnEnChangeEditContent)
+	ON_WM_KEYDOWN()
+	ON_COMMAND(ID_MENU_SHOW_TRIE, &CMypadDlg::OnMenuShowTrie)
 END_MESSAGE_MAP()
 
 
@@ -114,6 +117,8 @@ BOOL CMypadDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 
 	// TODO: Add extra initialization here
+	last_sel_pos = 0;
+	ins_avb = false;
 	f = new CFont;
 	f->CreateFont(22, // nHeight 
 		0, // nWidth 
@@ -130,6 +135,9 @@ BOOL CMypadDlg::OnInitDialog()
 		DEFAULT_PITCH | FF_SWISS, // nPitchAndFamily 
 		_T("Arial")); // lpszFac 
 	m_edit.SetFont(f);
+	//
+	triegraphdlg = new CTrieGraph();
+	triegraphdlg->Create(IDD_DIALOG_TRIE_GRAPH, this);
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -231,8 +239,49 @@ void CMypadDlg::OnEnChangeEditContent()
 	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
 
 	// TODO:  在此添加控件通知处理程序代码
-	CString textdata;
-	m_edit.GetWindowTextA(textdata);
-	SetDlgItemTextA(IDC_STATIC_WORDS_COUNT, textdata);
-	
+	m_edit.GetWindowTextA(last_edit_data);
+	SetDlgItemTextA(IDC_STATIC_WORDS_COUNT, last_edit_data);
+	if (ins_avb == true)   //如果按下了空格，判断之前是否有未插入Trie的单词
+	{
+		CString newdata = last_edit_data.Mid(last_sel_pos);
+		newdata.Replace(' ','\0');
+		ins_avb = false;
+		m_edit.GetSel(last_sel_pos,last_sel_pos);
+		CString buf = "";
+		buf.Format("save to last sel pos=%d",last_sel_pos);
+		MessageBoxA(buf,"new data="+ newdata+"/");
+		if (triedata.Search(newdata, triedata.GetRoot()) == false)
+		{
+			if (triedata.Insert(newdata, triedata.GetRoot()) == false)
+			{
+
+			}
+		}
+	}
+}
+
+
+BOOL CMypadDlg::PreTranslateMessage(MSG* pMsg)
+{
+	// TODO: 在此添加专用代码和/或调用基类
+	if (pMsg->message == WM_KEYDOWN)
+	{
+		if (pMsg->wParam == VK_SPACE)
+		{
+			int spos, epos = 0;
+			m_edit.GetSel(spos, epos);
+			CString buf = "";
+			buf.Format("sel start pos=%d,sel ending pos=%d", spos, epos);
+			MessageBoxA(buf);
+			ins_avb = true;
+		}
+	}
+	return CDialogEx::PreTranslateMessage(pMsg);
+}
+
+
+void CMypadDlg::OnMenuShowTrie()
+{
+	// TODO: 在此添加命令处理程序代码
+	triegraphdlg->ShowWindow(SW_SHOW);
 }
