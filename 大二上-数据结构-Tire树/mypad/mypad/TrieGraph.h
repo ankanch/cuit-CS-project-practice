@@ -1,6 +1,9 @@
 #pragma once
 #include"TrieTree.h"
+#include<queue>
+
 // CTrieGraph 对话框
+typedef std::queue<PWORDNODE> CONVERSEQUEUE;
 //绘制图点的结构
 typedef struct graphnode {
 	int level;	//指示该字母在Trie中的层数
@@ -36,10 +39,14 @@ protected:
 	DECLARE_MESSAGE_MAP()
 private:
 	PGRAPHDATA graphdata;	//储存图的数据
-	void ConvertTrieToDrawable(const CTrieTree & trie);	//该函数用来讲Trie中的节点转换成GRAPHNODE，方便绘制
+	CTrieTree * trie;		//储存trie树的数据
+	void ConvertTrieToDrawable( CTrieTree * trie);	//该函数用来将Trie中的节点转换成GRAPHNODE，方便绘制
 
 public:
 	const bool UpdateGraph(PGRAPHNODE *pdellist);   //该函数用来更新图画
-	const bool InitGraph(const CTrieTree & trie);		//该函数用来绘制初始图画
+	const bool InitGraph( CTrieTree * trie);		//该函数用来绘制初始图画
+	void setTrieTree(CTrieTree * trieroot);
 	afx_msg void OnClose();
+	virtual BOOL OnInitDialog();
+	afx_msg void OnPaint();
 };

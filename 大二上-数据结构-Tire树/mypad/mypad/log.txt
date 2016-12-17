@@ -1,0 +1,14 @@
+in function Search:
+	alphabet t 's searching result (root=*):postion=-1
+in function Search:
+	alphabet i 's searching result (root=*):postion=-1
+in function Search:
+	alphabet a 's searching result (root=*):postion=-1
+in function Search:
+	alphabet t 's searching result (root=*):postion=0
+in function Search:
+	alphabet e 's searching result (root=*):postion=-1
+in function Search:
+	alphabet b 's searching result (root=*):postion=-1
+in function Search:
+	alphabet k 's searching result (root=*):postion=-1

@@ -138,6 +138,11 @@ BOOL CMypadDlg::OnInitDialog()
 	//
 	triegraphdlg = new CTrieGraph();
 	triegraphdlg->Create(IDD_DIALOG_TRIE_GRAPH, this);
+	//
+	CStdioFile ff;
+	ff.Open("log.txt",CFile::modeWrite);
+	ff.SetLength(0);
+	ff.Close();
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -247,15 +252,11 @@ void CMypadDlg::OnEnChangeEditContent()
 		newdata.Replace(' ','\0');
 		ins_avb = false;
 		m_edit.GetSel(last_sel_pos,last_sel_pos);
-		CString buf = "";
-		buf.Format("save to last sel pos=%d",last_sel_pos);
-		MessageBoxA(buf,"new data="+ newdata+"/");
+		//MessageBoxA("new data=/"+ newdata+"/");
 		if (triedata.Search(newdata, triedata.GetRoot()) == false)
 		{
-			if (triedata.Insert(newdata, triedata.GetRoot()) == false)
-			{
-
-			}
+			//MessageBoxA("Insert:" + newdata);
+			triedata.Insert(newdata, triedata.GetRoot());
 		}
 	}
 }
@@ -272,7 +273,7 @@ BOOL CMypadDlg::PreTranslateMessage(MSG* pMsg)
 			m_edit.GetSel(spos, epos);
 			CString buf = "";
 			buf.Format("sel start pos=%d,sel ending pos=%d", spos, epos);
-			MessageBoxA(buf);
+			//MessageBoxA(buf);
 			ins_avb = true;
 		}
 	}
@@ -283,5 +284,7 @@ BOOL CMypadDlg::PreTranslateMessage(MSG* pMsg)
 void CMypadDlg::OnMenuShowTrie()
 {
 	// TODO: 在此添加命令处理程序代码
+	triegraphdlg->setTrieTree(&triedata);
 	triegraphdlg->ShowWindow(SW_SHOW);
+	triegraphdlg->setTrieTree(&triedata);
 }

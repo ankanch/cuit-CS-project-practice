@@ -11,6 +11,10 @@ CTrieTree::CTrieTree()
 	proot->size_nextlist = 0;
 	proot->nextlist_fill = 0;
 	levelnodes_count_list = new int[BUFFER_LEVEL_COUNT];  //初始化层节点数数组
+	for (int i = 0; i < BUFFER_LEVEL_COUNT; i++)
+	{
+		levelnodes_count_list[i] = 0;
+	}
 	level_count = 0;
 	nodes_count = 0;
 	diff_words_count = 0;
@@ -38,9 +42,23 @@ const void CTrieTree::deleteTrieTree(PROOT root)
 	return;
 }
 
-const bool CTrieTree::Insert(CString word, PWORDNODE tg)
+void CTrieTree::log(const CString data)
 {
+	CStdioFile ff;
+	ff.Open("log.txt", CFile::modeNoTruncate | CFile::modeWrite|CFile::modeCreate);
+	ff.SeekToEnd();
+	ff.WriteString(data + "\r\n");
+	ff.Close();
+}
+
+const bool CTrieTree::Insert(CString word, PWORDNODE tg,int level)
+{
+	//CString buf = "";
+	//log("in function Insert:");
+	int ll = level;
 	int chindex = SearchForAlphabetIndex(word[0], *tg);
+	//buf.Format("\talphabet %c 's searching result (root=%c):postion=%d at level %d", word[0],GetRoot()->ch,chindex, level);
+	//log(buf);
 	if (word[0] == '\0' || word[0] == ' ')
 	{
 		return true;
@@ -54,13 +72,32 @@ const bool CTrieTree::Insert(CString word, PWORDNODE tg)
 		newnode->pdata = nullptr;
 		newnode->pnextlist = nullptr;
 		newnode->size_nextlist = 0;
-		int pos = AddToNextList(*tg, newnode);
+		int pos = AddToNextList(tg, newnode);
+		//buf.Format("\tadd to nextlist in the postion of %d at level %d", pos, level);
+		//log(buf);
+		//增加辅助信息
+		nodes_count++;    //增加节点计数
+								//更新每一层的节点数目
+		if (GetLLCLSize() == ll)  //储存每一层多少节点的数组满载
+		{
+			AppendMemoryForLLCL();
+			levelnodes_count_list[ll]++;
+		}
+		else
+		{
+			levelnodes_count_list[ll]++;
+		}
+		if (level_count < ll)   //更新层数
+		{
+			level_count++;
+		}
+		//辅助信息增加完毕
 		if (word.GetLength() == 1)
 		{
 			//单词已经添加完毕
 			return true;
 		}
-		Insert(word.Mid(1), tg->pnextlist[pos]);
+		Insert(word.Mid(1), tg->pnextlist[pos],ll+1);
 	}
 	else//找到
 	{
@@ -69,14 +106,18 @@ const bool CTrieTree::Insert(CString word, PWORDNODE tg)
 			//单词已经添加完毕
 			return true;
 		}
-		Insert(word.Mid(1), tg->pnextlist[chindex]);
+		Insert(word.Mid(1), tg->pnextlist[chindex],ll+1);
 	}
 	return true;
 }
 
 const bool CTrieTree::Search(CString word, PWORDNODE tg)
 {
+	CString buf = "";
+	log("in function Search:");
 	int chindex = SearchForAlphabetIndex(word[0], *tg);
+	buf.Format("\talphabet %c 's searching result (root=%c):postion=%d", word[0],GetRoot()->ch,chindex);
+	log(buf);
 	if (word[0] == '\0' || word[0] == ' ')
 	{
 		return true;
@@ -93,7 +134,10 @@ const bool CTrieTree::Search(CString word, PWORDNODE tg)
 			//无子节点
 			return true;
 		}
-		Search(word.Mid(1), tg->pnextlist[chindex]);
+		if (!Search(word.Mid(1), tg->pnextlist[chindex]))
+		{
+			return false;
+		}
 	}
 	return true;
 }
@@ -113,6 +157,11 @@ const int CTrieTree::GetLevelCount()
 	return level_count;
 }
 
+const int * CTrieTree::GetLLCList()
+{
+	return levelnodes_count_list;
+}
+
 const bool CTrieTree::AppendMemoryForLLCL()
 {
 	try {
@@ -121,8 +170,13 @@ const bool CTrieTree::AppendMemoryForLLCL()
 		{
 			buf[i] = levelnodes_count_list[i];
 		}
+		for (int i = size_LLCL; i < (size_LLCL + BUFFER_INCREMENT_LEVEL_COUNT); i++)
+		{
+			buf[i] = 0;
+		}
 		delete[] levelnodes_count_list;
 		levelnodes_count_list = buf;
+		size_LLCL += BUFFER_INCREMENT_LEVEL_COUNT;
 	}catch(...){
 		//出现未知错误
 		return false;
@@ -137,10 +191,12 @@ const int CTrieTree::GetLLCLSize()
 
 const int CTrieTree::SearchForAlphabetIndex(const char ch, const WORDNODE & node)
 {
-	for (int i = 0; i < node.size_nextlist; i++)
+	for (int i = 0; i < node.nextlist_fill; i++)
 	{
-		node.pnextlist[i]->ch == ch;
-		return i;
+		if (node.pnextlist[i]->ch == ch)
+		{
+			return i;
+		}
 	}
 	return -1;
 }
@@ -155,30 +211,29 @@ const PWORDNODE CTrieTree::CreateNode(const char chr,PLEAFDATA leafdata)
 	return newnode;
 }
 
-const int CTrieTree::AddToNextList(WORDNODE & desnode, PWORDNODE srcnode)
+const int CTrieTree::AddToNextList(WORDNODE * desnode, PWORDNODE srcnode)
 {
-	int pos = desnode.nextlist_fill;  //记录新添加的节点位置
-	if (desnode.nextlist_fill == desnode.size_nextlist)
+	if (desnode->nextlist_fill == desnode->size_nextlist)
 	{//计算是否还有空间:如果空间满了，再分配，然后，复制，然后，添加
-		PWORDNODE * newnextlist = new PWORDNODE[desnode.size_nextlist + INCREMENT_NEXTLIST_SIZE];
-		for (int i = 0; i < desnode.size_nextlist; i++)
+		PWORDNODE * newnextlist = new PWORDNODE[desnode->size_nextlist + INCREMENT_NEXTLIST_SIZE];
+		for (int i = 0; i < desnode->size_nextlist; i++)
 		{
-			newnextlist[i] = desnode.pnextlist[i];
+			newnextlist[i] = desnode->pnextlist[i];
 		}
-		newnextlist[desnode.nextlist_fill] = srcnode;
-		for (int i = desnode.nextlist_fill+1; i < desnode.size_nextlist; i++)
+		newnextlist[desnode->nextlist_fill] = srcnode;
+		desnode->size_nextlist += INCREMENT_NEXTLIST_SIZE;
+		for (int i = desnode->nextlist_fill+1; i < desnode->size_nextlist; i++)
 		{
 			newnextlist[i] = nullptr;
 		}
-		delete[] desnode.pnextlist;
-		desnode.pnextlist = newnextlist;
-		desnode.nextlist_fill++;
-		desnode.size_nextlist += INCREMENT_NEXTLIST_SIZE;
-		return pos;
+		delete[] desnode->pnextlist;
+		desnode->pnextlist = newnextlist;
+		desnode->nextlist_fill++;
+		return desnode->nextlist_fill-1;
 	}
 	//空间未装满
-	desnode.pnextlist[desnode.nextlist_fill + 1] = srcnode;
-	desnode.nextlist_fill++;
-	return ++pos;
+	desnode->pnextlist[desnode->nextlist_fill] = srcnode;
+	desnode->nextlist_fill++;
+	return desnode->nextlist_fill-1;
 }
 

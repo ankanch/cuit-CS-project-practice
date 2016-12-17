@@ -1,5 +1,4 @@
 #pragma once
-
 #define BUFFER_LEVEL_COUNT 20   //每一层的节点数数组的初始长度（假设会有20层）
 #define BUFFER_INCREMENT_LEVEL_COUNT 10  //层节点数数组的递增量
 #define INCREMENT_NEXTLIST_SIZE 7   //nextlist的递增量
@@ -24,18 +23,21 @@ class CTrieTree
 public:
 	CTrieTree();
 	~CTrieTree();
-	const bool Insert(CString word,PWORDNODE tg);  //将一个单词插入Trie树
+	const bool Insert(CString word,PWORDNODE tg,int level=1);  //将一个单词插入Trie树
 	const bool Search(CString word,PWORDNODE tg);		//查找一个单词是否已经在Trie树中
 	const PROOT GetRoot();  //返回树根
+	//下面的函数为绘图接口
 	const int GetNodesCount();  //返回节点数
 	const int GetLevelCount();  //树的深度（包括树根）
+	const int*GetLLCList();		//获取每一层的节点数数组
 private:
 	const bool AppendMemoryForLLCL();  //该函数用来向levelnodes_count_list追加空间
 	const int GetLLCLSize();  //获取levelnodes_count_list的大小
 	const int SearchForAlphabetIndex(const char ch,const WORDNODE & node); //该函数用来查找数据为ch的节点在当前node中的pnexlist索引,未找到：-1
 	const PWORDNODE CreateNode(const char chr, PLEAFDATA leafdata = nullptr);   //创建新节点
-	const int AddToNextList(WORDNODE & desnode,PWORDNODE srcnode);  //将一个新的节点添加到指定节点的pnextlist域中
+	const int AddToNextList(WORDNODE * desnode,PWORDNODE srcnode);  //将一个新的节点添加到指定节点的pnextlist域中
 	const void deleteTrieTree(PROOT root);   //删除所有Trie树的数据
+	void log(const CString data);//调试函数
 
 	PROOT proot;		//指向树根
 	int diff_words_count; //记录不同单词个数
