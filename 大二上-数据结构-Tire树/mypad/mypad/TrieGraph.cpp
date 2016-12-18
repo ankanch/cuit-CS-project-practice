@@ -27,35 +27,33 @@ void CTrieGraph::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 }
 
-void CTrieGraph::ConvertTrieToDrawable( CTrieTree * trie)
+PGRAPHDATA CTrieGraph::ConvertTrieToDrawable( CTrieTree * trie)
 {
 	const int*llcl = trie->GetLLCList();
 	int levelcount = trie->GetLevelCount();
 	int nodes = trie->GetNodesCount();
 	graphdata->nodessum = nodes;
 	graphdata->level = levelcount;
-	/////////////////////////////////////////////////////////////////////
-	CString xxx;
-	xxx.Format("<<<<llcl sum=%d>>>>\n\n", levelcount);
-	for (int i = 0; i <= levelcount; i++)
-	{
-		CString buf = "";
-		buf.Format("llcl %d:\tcount = %d\n", i + 1, llcl[i]);
-		xxx += buf;
-	}
-	CString buf = "";
-	buf.Format("\nlevelcount=%d\nnodescount=%d(include root)\n", levelcount, nodes);
-	xxx += buf;
-	MessageBoxA(xxx, "xxx data");
-	/////////////////////////////////////////////////////////////////////
 	//计算相关必要绘图变量
 	CRect drawarea;
 	this->GetClientRect(drawarea);
-	graphdata->y_split = drawarea.Width() / (levelcount + 4);
+	//根据层数计算每一层之间的间隔
+	int *level_height = new int[levelcount];
+	int *level_node_looped = new int[levelcount];   //记录每次循环的时候，每一层循环了多少个点
+	//graphdata->y_split = drawarea.Width() / (levelcount + 1);
+	graphdata->y_split = 65;
+	int y = graphdata->y_split;
+	for (int i = 0; i < levelcount; i++)
+	{
+		level_height[i] = y;
+		level_node_looped[i] = 0;
+		y+= graphdata->y_split;
+	}
 	//接下来计算x间隔（以最大的为算，对齐中轴线）
+	int max = llcl[1];
 	if (nodes > 2)
 	{
-		int max = llcl[1];
+
 		for (int i = 1; i <= levelcount; i++)
 		{
 			if (max <= llcl[i])
@@ -63,30 +61,69 @@ void CTrieGraph::ConvertTrieToDrawable( CTrieTree * trie)
 				max = llcl[i];
 			}
 		}
-		graphdata->x_split = drawarea.Width() / (max + 4);
+		graphdata->x_split = drawarea.Width() / (max + 2);
 	}
+	//根据每一层的数目计算每一层点之间的间隔
+	int x = graphdata->x_split;
+	int * level_width = new int[max];
+	for (int i = 0; i < max; i++)
+	{
+		level_width[i] = x;
+		x += graphdata->y_split;
+	}
+	/////////////////////////////////////////////////////////////////////
+	CString xxx;
+	xxx.Format("<<<<llcl sum=%d>>>>\n\n", levelcount);
+	for (int i = 0; i <= levelcount; i++)
+	{
+		CString buf = "";
+		buf.Format("llcl %d:\tcount = %d\n", i, llcl[i]);
+		xxx += buf;
+	}
+	CString buf = "";
+	buf.Format("\nlevelcount=%d\nnodescount=%d(include root)\n", levelcount, nodes);
+	xxx += buf;
+	buf.Format("\ngraphdata->x_split=%d,graphdata->y_split=%d\n", graphdata->x_split, graphdata->y_split);
+	xxx += buf;
+	MessageBoxA(xxx, "xxx data");
+	/////////////////////////////////////////////////////////////////////
 	//开始执行点集的转换
-	PWORDNODE lastlevel = trie->GetRoot();
-	int conversenodes = 0;
+	int conversenodes = 1;
 	int converslevel = 1;
 	CONVERSEQUEUE cq;
-	graphdata->nodeslist = new GRAPHNODE[nodes];
+	PWORDNODE lastlevel = trie->GetRoot();
+	graphdata->nodeslist = new GRAPHNODE[nodes+1];  //包括根节点 
+	//设置根节点
+	graphdata->nodeslist[0].level = 0;
+	graphdata->nodeslist[0].data = '*';
+	graphdata->nodeslist[0].x = level_width[max/2];
+	graphdata->nodeslist[0].y = 14;
+	graphdata->nodeslist[0].parent = nullptr;
+	cq.push(lastlevel);
+	int lastfill = 0;  //记录上一次的装载点
 	while (cq.empty() == false)
 	{
-		//遍历第一层（root为0层）
+		lastlevel = cq.front();
+		cq.pop();
+		//遍历层（root为0层）
 		for (int i = 0; i < lastlevel->nextlist_fill; i++)
 		{
 			graphdata->nodeslist[conversenodes].level = converslevel;
 			graphdata->nodeslist[conversenodes].data = lastlevel->pnextlist[i]->ch;
-			graphdata->nodeslist[conversenodes].x = graphdata->x_split*(i + 1);
-			graphdata->nodeslist[conversenodes].y = graphdata->y_split*(converslevel+1);
+			graphdata->nodeslist[conversenodes].x = level_width[level_node_looped[lastlevel->pnextlist[i]->level-1] ];
+			graphdata->nodeslist[conversenodes].y = level_height[lastlevel->pnextlist[i]->level-1];
+			graphdata->nodeslist[conversenodes].parent = &graphdata->nodeslist[lastfill];  //指向其父节点
+			conversenodes++;
+			level_node_looped[lastlevel->pnextlist[i]->level-1]++;
 			cq.push(lastlevel->pnextlist[i]);
 		}
+		lastfill++;
 		converslevel++;
-		//
-		lastlevel = cq.front();
-		cq.pop();
 	}
+	delete[] level_height;
+	delete[] level_width;
+	delete[] level_node_looped;
+	return graphdata;
 }
 
 
@@ -106,13 +143,12 @@ const bool CTrieGraph::InitGraph( CTrieTree * trie)
 		return false;
 	}
 	CString buf = "";
-	ConvertTrieToDrawable(trie);
+	graphdata =  ConvertTrieToDrawable(trie);
 	CPen pen;
-	CPaintDC dcd(this);
+	CClientDC dcd(this);
 	pen.CreatePen(PS_SOLID, 2, RGB(225,0,0));
 	dcd.SelectObject(&pen);
-	//循环绘制点集合
-	dcd.Ellipse(50,50,100,100);
+	/////////////////////////////////////////////////////////////////////////////////////////
 	CString xxx;
 	xxx.Format("<<<<<<<<<graphdata->nodessum=%d>>>>>>>\n", graphdata->nodessum);
 	for (int i = 0; i < graphdata->nodessum; i++)
@@ -122,9 +158,12 @@ const bool CTrieGraph::InitGraph( CTrieTree * trie)
 		xxx+=buf;
 	}
 	MessageBoxA(xxx, "xxx data");
+	/////////////////////////////////////////////////////////////////////////////////////////
+	//循环绘制点集合
 	for (int i = 0; i < graphdata->nodessum; i++)
 	{
-		dcd.Ellipse(graphdata->nodeslist[i].x - 25, graphdata->nodeslist[i].y - 25, graphdata->nodeslist[i].x + 25, graphdata->nodeslist[i].y + 25);
+		dcd.Ellipse(graphdata->nodeslist[i].x - 15, graphdata->nodeslist[i].y - 15, graphdata->nodeslist[i].x + 15, graphdata->nodeslist[i].y + 15);
+		dcd.TextOutA(graphdata->nodeslist[i].x - 8, graphdata->nodeslist[i].y - 8, CString(graphdata->nodeslist[i].data));
 	}
 	return true;
 }
@@ -169,8 +208,8 @@ void CTrieGraph::OnPaint()
 	GetClientRect(rect);
 	dc.FillSolidRect(rect, RGB(255, 255, 255));
 	//重新绘制Trie树
-	if (!InitGraph(trie))
-	{
-		MessageBoxA("Init Graph Failed!");
-	}
+	//if (!InitGraph(trie))
+	//{
+		//MessageBoxA("Init Graph Failed!");
+	//}
 }

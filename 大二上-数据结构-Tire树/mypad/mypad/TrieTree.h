@@ -10,6 +10,7 @@ typedef struct leafdata {
 
 typedef struct TNode{
 	char ch;				//储存的字符
+	int level;			//节点所在层数
 	int size_nextlist;		//节点索引大小
 	struct TNode* *pnextlist;	//节点索引指针数组
 	int nextlist_fill;		//节点索引装填量

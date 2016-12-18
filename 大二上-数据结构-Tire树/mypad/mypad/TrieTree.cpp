@@ -72,6 +72,7 @@ const bool CTrieTree::Insert(CString word, PWORDNODE tg,int level)
 		newnode->pdata = nullptr;
 		newnode->pnextlist = nullptr;
 		newnode->size_nextlist = 0;
+		newnode->level = ll;
 		int pos = AddToNextList(tg, newnode);
 		//buf.Format("\tadd to nextlist in the postion of %d at level %d", pos, level);
 		//log(buf);

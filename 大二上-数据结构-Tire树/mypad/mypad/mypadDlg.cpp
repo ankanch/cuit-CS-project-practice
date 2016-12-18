@@ -286,5 +286,5 @@ void CMypadDlg::OnMenuShowTrie()
 	// TODO: 在此添加命令处理程序代码
 	triegraphdlg->setTrieTree(&triedata);
 	triegraphdlg->ShowWindow(SW_SHOW);
-	triegraphdlg->setTrieTree(&triedata);
+	triegraphdlg->InitGraph(&triedata);
 }

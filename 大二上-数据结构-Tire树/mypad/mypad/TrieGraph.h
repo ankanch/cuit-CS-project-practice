@@ -10,6 +10,7 @@ typedef struct graphnode {
 	char data;	//该字母的数据
 	int x;	//绘图后的x位置
 	int y;	//绘图后的y位置
+	struct graphnode*parent;	//标记它应该指向谁
 }GRAPHNODE,*PGRAPHNODE;
 
 typedef struct graphdata {
@@ -40,7 +41,7 @@ protected:
 private:
 	PGRAPHDATA graphdata;	//储存图的数据
 	CTrieTree * trie;		//储存trie树的数据
-	void ConvertTrieToDrawable( CTrieTree * trie);	//该函数用来将Trie中的节点转换成GRAPHNODE，方便绘制
+	PGRAPHDATA  ConvertTrieToDrawable( CTrieTree * trie);	//该函数用来将Trie中的节点转换成GRAPHNODE，方便绘制
 
 public:
 	const bool UpdateGraph(PGRAPHNODE *pdellist);   //该函数用来更新图画
