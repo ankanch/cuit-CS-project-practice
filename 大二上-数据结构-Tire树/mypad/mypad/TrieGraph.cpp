@@ -8,6 +8,7 @@
 
 
 // CTrieGraph 对话框
+#define KDEBUGK
 
 IMPLEMENT_DYNAMIC(CTrieGraph, CDialogEx)
 
@@ -85,7 +86,9 @@ PGRAPHDATA CTrieGraph::ConvertTrieToDrawable( CTrieTree * trie)
 	xxx += buf;
 	buf.Format("\ngraphdata->x_split=%d,graphdata->y_split=%d\n", graphdata->x_split, graphdata->y_split);
 	xxx += buf;
+#ifdef KDEBUG
 	MessageBoxA(xxx, "xxx data");
+#endif
 	/////////////////////////////////////////////////////////////////////
 	//开始执行点集的转换
 	int conversenodes = 1;
@@ -136,6 +139,12 @@ END_MESSAGE_MAP()
 // CTrieGraph 消息处理程序
 
 
+const bool CTrieGraph::UpdateGraph()
+{
+	InitGraph(trie);
+	return true;
+}
+
 const bool CTrieGraph::InitGraph( CTrieTree * trie)
 {
 	if (trie->GetNodesCount() == 0)
@@ -146,25 +155,43 @@ const bool CTrieGraph::InitGraph( CTrieTree * trie)
 	graphdata =  ConvertTrieToDrawable(trie);
 	CPen pen;
 	CClientDC dcd(this);
+	CRect rect;
+	//设置对话框背景颜色为白色
+	GetClientRect(rect);
+	dcd.FillSolidRect(rect, RGB(255, 255, 255));
 	pen.CreatePen(PS_SOLID, 2, RGB(225,0,0));
 	dcd.SelectObject(&pen);
 	/////////////////////////////////////////////////////////////////////////////////////////
 	CString xxx;
 	xxx.Format("<<<<<<<<<graphdata->nodessum=%d>>>>>>>\n", graphdata->nodessum);
-	for (int i = 0; i < graphdata->nodessum; i++)
+	for (int i = 0; i <= graphdata->nodessum; i++)
 	{
 		CString buf = "";
 		buf.Format("Point %d:\tx=%d,y=%d\n", i + 1, graphdata->nodeslist[i].x, graphdata->nodeslist[i].y);
 		xxx+=buf;
 	}
-	MessageBoxA(xxx, "xxx data");
+#ifdef KDEBUG
+	MessageBoxA(xxx, "Nodes' Point Dataset");
+#endif
+	xxx = "";
 	/////////////////////////////////////////////////////////////////////////////////////////
 	//循环绘制点集合
-	for (int i = 0; i < graphdata->nodessum; i++)
+	for (int i = 0; i <= graphdata->nodessum; i++)
 	{
 		dcd.Ellipse(graphdata->nodeslist[i].x - 15, graphdata->nodeslist[i].y - 15, graphdata->nodeslist[i].x + 15, graphdata->nodeslist[i].y + 15);
 		dcd.TextOutA(graphdata->nodeslist[i].x - 8, graphdata->nodeslist[i].y - 8, CString(graphdata->nodeslist[i].data));
+		if (i)
+		{
+			CString buf = "";
+			buf.Format("Parent Point %d(%c):\tx=%d,y=%d\n", i,graphdata->nodeslist[i].data ,graphdata->nodeslist[i].parent->x, graphdata->nodeslist[i].parent->y);
+			xxx += buf;
+			dcd.MoveTo(CPoint(graphdata->nodeslist[i].x, graphdata->nodeslist[i].y-15));
+			dcd.LineTo(CPoint(graphdata->nodeslist[i].parent->x, graphdata->nodeslist[i].parent->y+15));
+		}
 	}
+#ifdef KDEBUG
+	MessageBoxA(xxx, "Parents' PointsDataset");
+#endif
 	return true;
 }
 

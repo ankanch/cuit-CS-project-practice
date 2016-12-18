@@ -44,7 +44,7 @@ private:
 	PGRAPHDATA  ConvertTrieToDrawable( CTrieTree * trie);	//该函数用来将Trie中的节点转换成GRAPHNODE，方便绘制
 
 public:
-	const bool UpdateGraph(PGRAPHNODE *pdellist);   //该函数用来更新图画
+	const bool UpdateGraph();   //该函数用来更新图画
 	const bool InitGraph( CTrieTree * trie);		//该函数用来绘制初始图画
 	void setTrieTree(CTrieTree * trieroot);
 	afx_msg void OnClose();

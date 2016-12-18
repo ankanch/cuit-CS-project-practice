@@ -9,6 +9,30 @@ in function Search:
 in function Search:
 	alphabet e 's searching result (root=*):postion=-1
 in function Search:
+	alphabet a 's searching result (root=*):postion=2
+in function Search:
+	alphabet p 's searching result (root=*):postion=-1
+in function Search:
 	alphabet b 's searching result (root=*):postion=-1
 in function Search:
 	alphabet k 's searching result (root=*):postion=-1
+in function Search:
+	alphabet l 's searching result (root=*):postion=-1
+in function Search:
+	alphabet l 's searching result (root=*):postion=5
+in function Search:
+	alphabet a 's searching result (root=*):postion=0
+in function Search:
+	alphabet b 's searching result (root=*):postion=-1
+in function Search:
+	alphabet l 's searching result (root=*):postion=5
+in function Search:
+	alphabet a 's searching result (root=*):postion=0
+in function Search:
+	alphabet c 's searching result (root=*):postion=-1
+in function Search:
+	alphabet t 's searching result (root=*):postion=0
+in function Search:
+	alphabet h 's searching result (root=*):postion=0
+in function Search:
+	alphabet a 's searching result (root=*):postion=-1

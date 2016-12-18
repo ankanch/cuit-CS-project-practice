@@ -258,6 +258,8 @@ void CMypadDlg::OnEnChangeEditContent()
 			//MessageBoxA("Insert:" + newdata);
 			triedata.Insert(newdata, triedata.GetRoot());
 		}
+		triegraphdlg->setTrieTree(&triedata);
+		triegraphdlg->UpdateGraph();
 	}
 }
 
