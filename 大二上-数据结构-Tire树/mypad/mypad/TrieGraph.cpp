@@ -116,6 +116,14 @@ PGRAPHDATA CTrieGraph::ConvertTrieToDrawable( CTrieTree * trie)
 			graphdata->nodeslist[conversenodes].x = level_width[level_node_looped[lastlevel->pnextlist[i]->level-1] ];
 			graphdata->nodeslist[conversenodes].y = level_height[lastlevel->pnextlist[i]->level-1];
 			graphdata->nodeslist[conversenodes].parent = &graphdata->nodeslist[lastfill];  //指向其父节点
+			if (lastlevel->pnextlist[i]->pdata != nullptr)
+			{
+				graphdata->nodeslist[conversenodes].wordscount = lastlevel->pnextlist[i]->pdata->word_count;
+			}
+			else
+			{
+				graphdata->nodeslist[conversenodes].wordscount = -1;
+			}
 			conversenodes++;
 			level_node_looped[lastlevel->pnextlist[i]->level-1]++;
 			cq.push(lastlevel->pnextlist[i]);
@@ -167,7 +175,7 @@ const bool CTrieGraph::InitGraph( CTrieTree * trie)
 	for (int i = 0; i <= graphdata->nodessum; i++)
 	{
 		CString buf = "";
-		buf.Format("Point %d:\tx=%d,y=%d\n", i + 1, graphdata->nodeslist[i].x, graphdata->nodeslist[i].y);
+		buf.Format("Point %d:\tx=%d,y=%d,count=%d\n", i + 1, graphdata->nodeslist[i].x, graphdata->nodeslist[i].y, graphdata->nodeslist[i].wordscount);
 		xxx+=buf;
 	}
 #ifdef KDEBUG
@@ -179,9 +187,15 @@ const bool CTrieGraph::InitGraph( CTrieTree * trie)
 	for (int i = 0; i <= graphdata->nodessum; i++)
 	{
 		dcd.Ellipse(graphdata->nodeslist[i].x - 15, graphdata->nodeslist[i].y - 15, graphdata->nodeslist[i].x + 15, graphdata->nodeslist[i].y + 15);
-		dcd.TextOutA(graphdata->nodeslist[i].x - 8, graphdata->nodeslist[i].y - 8, CString(graphdata->nodeslist[i].data));
 		if (i)
 		{
+			dcd.TextOutA(graphdata->nodeslist[i].x - 4, graphdata->nodeslist[i].y - 8, CString(graphdata->nodeslist[i].data));
+			if (graphdata->nodeslist[i].wordscount != -1)
+			{
+				CString countx;
+				countx.Format("%d", graphdata->nodeslist[i].wordscount);
+				dcd.TextOutA(graphdata->nodeslist[i].x - 4, graphdata->nodeslist[i].y + 16, countx);
+			}
 			CString buf = "";
 			buf.Format("Parent Point %d(%c):\tx=%d,y=%d\n", i,graphdata->nodeslist[i].data ,graphdata->nodeslist[i].parent->x, graphdata->nodeslist[i].parent->y);
 			xxx += buf;

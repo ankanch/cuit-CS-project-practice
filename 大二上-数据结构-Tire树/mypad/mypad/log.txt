@@ -6,10 +6,12 @@ in function Search:
 	alphabet a 's searching result (root=*):postion=-1
 in function Search:
 	alphabet t 's searching result (root=*):postion=0
+
 in function Search:
 	alphabet e 's searching result (root=*):postion=-1
 in function Search:
 	alphabet a 's searching result (root=*):postion=2
+d
 in function Search:
 	alphabet p 's searching result (root=*):postion=-1
 in function Search:
@@ -17,22 +19,125 @@ in function Search:
 in function Search:
 	alphabet k 's searching result (root=*):postion=-1
 in function Search:
-	alphabet l 's searching result (root=*):postion=-1
+	alphabet i 's searching result (root=*):postion=1
+u
 in function Search:
-	alphabet l 's searching result (root=*):postion=5
-in function Search:
-	alphabet a 's searching result (root=*):postion=0
-in function Search:
-	alphabet b 's searching result (root=*):postion=-1
-in function Search:
-	alphabet l 's searching result (root=*):postion=5
-in function Search:
-	alphabet a 's searching result (root=*):postion=0
-in function Search:
-	alphabet c 's searching result (root=*):postion=-1
+	alphabet n 's searching result (root=*):postion=-1
 in function Search:
 	alphabet t 's searching result (root=*):postion=0
+n
 in function Search:
 	alphabet h 's searching result (root=*):postion=0
+
+in function Search:
+	alphabet i 's searching result (root=*):postion=0
+
+in function Search:
+	alphabet s 's searching result (root=*):postion=0
+word[1] =
+ready to return£¬tg->data=i
+return in pdata
+in function Search:
+	alphabet k 's searching result (root=*):postion=4
+
+in function Search:
+	alphabet i 's searching result (root=*):postion=-1
+in function Search:
+	alphabet o 's searching result (root=*):postion=-1
+in function Search:
+	alphabet s 's searching result (root=*):postion=-1
+in function Search:
+	alphabet b 's searching result (root=*):postion=3
+
+in function Search:
+	alphabet y 's searching result (root=*):postion=0
+word[1] =
+ready to return£¬tg->data=b
+return in pdata
+in function Search:
+	alphabet t 's searching result (root=*):postion=0
+n
+in function Search:
+	alphabet h 's searching result (root=*):postion=0
+
+in function Search:
+	alphabet i 's searching result (root=*):postion=0
+
+in function Search:
+	alphabet s 's searching result (root=*):postion=0
+word[1] =
+ready to return£¬tg->data=i
+return in pdata
+in function Search:
+	alphabet t 's searching result (root=*):postion=0
+n
+in function Search:
+	alphabet h 's searching result (root=*):postion=0
+
 in function Search:
 	alphabet a 's searching result (root=*):postion=-1
+in function Search:
+	alphabet t 's searching result (root=*):postion=0
+n
+in function Search:
+	alphabet h 's searching result (root=*):postion=0
+
+in function Search:
+	alphabet a 's searching result (root=*):postion=1
+\
+in function Search:
+	alphabet t 's searching result (root=*):postion=0
+word[1] =
+ready to return£¬tg->data=a
+return in pdata
+in function Search:
+	alphabet b 's searching result (root=*):postion=3
+
+in function Search:
+	alphabet e 's searching result (root=*):postion=-1
+in function Search:
+	alphabet b 's searching result (root=*):postion=3
+
+in function Search:
+	alphabet e 's searching result (root=*):postion=1
+
+in function Search:
+	alphabet e 's searching result (root=*):postion=-1
+in function Search:
+	alphabet b 's searching result (root=*):postion=3
+
+in function Search:
+	alphabet e 's searching result (root=*):postion=1
+word[1] =
+ready to return£¬tg->data=b
+return in pdata
+in function Search:
+	alphabet b 's searching result (root=*):postion=3
+
+in function Search:
+	alphabet e 's searching result (root=*):postion=1
+
+in function Search:
+	alphabet e 's searching result (root=*):postion=0
+word[1] =
+ready to return£¬tg->data=e
+return in pdata
+in function Search:
+	alphabet b 's searching result (root=*):postion=3
+
+in function Search:
+	alphabet e 's searching result (root=*):postion=1
+word[1] =
+ready to return£¬tg->data=b
+return in pdata
+in function Search:
+	alphabet b 's searching result (root=*):postion=3
+
+in function Search:
+	alphabet e 's searching result (root=*):postion=1
+
+in function Search:
+	alphabet e 's searching result (root=*):postion=0
+word[1] =
+ready to return£¬tg->data=e
+return in pdata

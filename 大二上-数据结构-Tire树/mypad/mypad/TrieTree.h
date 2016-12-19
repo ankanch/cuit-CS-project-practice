@@ -24,13 +24,16 @@ class CTrieTree
 public:
 	CTrieTree();
 	~CTrieTree();
-	const bool Insert(CString word,PWORDNODE tg,int level=1);  //将一个单词插入Trie树
+	const bool Insert(CString word,PWORDNODE tg,int level=1);  //将一个单词插入Trie树。返回值：true插入或部分插入，false未插入（已存在，需要更新叶子数据）
 	const bool Search(CString word,PWORDNODE tg);		//查找一个单词是否已经在Trie树中
+	const bool Delete(CString word, PWORDNODE tg, int level = 1);	//该函数用来从树中删除一个单词，当然，是该单词计数为0才会被完全删除
 	const PROOT GetRoot();  //返回树根
 	//下面的函数为绘图接口
 	const int GetNodesCount();  //返回节点数
 	const int GetLevelCount();  //树的深度（包括树根）
 	const int*GetLLCList();		//获取每一层的节点数数组
+	const bool IncreaseWordCount();	//更新指定单词的计数，即将单词数增加1,只能在最近一次Search调用且返回true时调用
+	const PWORDNODE GetLastFoundEndingChar();	//获取最近一次Search执行之后找到的单词的最后一个字符对应的节点（用来更新LEAFDATA）
 private:
 	const bool AppendMemoryForLLCL();  //该函数用来向levelnodes_count_list追加空间
 	const int GetLLCLSize();  //获取levelnodes_count_list的大小
@@ -41,6 +44,7 @@ private:
 	void log(const CString data);//调试函数
 
 	PROOT proot;		//指向树根
+	PWORDNODE lastfoundendingchar;	//记录最近一次Search执行之后找到的单词的最后一个字符对应的节点
 	int diff_words_count; //记录不同单词个数
 	int nodes_count;	//记录总的节点数目
 	int level_count;   //记录树的深度

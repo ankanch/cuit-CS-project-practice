@@ -10,6 +10,7 @@ CTrieTree::CTrieTree()
 	proot->pnextlist = nullptr;
 	proot->size_nextlist = 0;
 	proot->nextlist_fill = 0;
+	proot->level = 0;
 	levelnodes_count_list = new int[BUFFER_LEVEL_COUNT];  //初始化层节点数数组
 	for (int i = 0; i < BUFFER_LEVEL_COUNT; i++)
 	{
@@ -69,10 +70,21 @@ const bool CTrieTree::Insert(CString word, PWORDNODE tg,int level)
 		PWORDNODE newnode = new WORDNODE;
 		newnode->ch = word[0];
 		newnode->nextlist_fill = 0;
-		newnode->pdata = nullptr;
 		newnode->pnextlist = nullptr;
 		newnode->size_nextlist = 0;
 		newnode->level = ll;
+		if (word[1] == '\0' || word[1] == ' ')
+		{
+			//如果是最后一个单词，则向最后一个字母所在节点增加叶子数据
+			PLEAFDATA lfd = new LEAFDATA;
+			lfd->word_count = 1;
+			lfd->word_length = ll;
+			newnode->pdata = lfd;
+		}
+		else
+		{
+			newnode->pdata = nullptr;
+		}
 		int pos = AddToNextList(tg, newnode);
 		//buf.Format("\tadd to nextlist in the postion of %d at level %d", pos, level);
 		//log(buf);
@@ -105,15 +117,23 @@ const bool CTrieTree::Insert(CString word, PWORDNODE tg,int level)
 		if (word.GetLength() == 1)
 		{
 			//单词已经添加完毕
-			return true;
+			return false;
 		}
 		Insert(word.Mid(1), tg->pnextlist[chindex],ll+1);
 	}
-	return true;
 }
 
 const bool CTrieTree::Search(CString word, PWORDNODE tg)
 {
+	/*/
+	查找逻辑，由于考虑到需要处理 诸如be和bee之类的单词，
+	所以在这里，
+	一个单词的定义是：从树根到一个带叶数据节点的一条路径即构成一个单词。
+	带叶数据节点是指pdata域非空
+	****
+	该函数查找存在问题，这里的解决办法是返回当前节点的下一个节点（因为总是从第二个节点就开始返回）
+	当当前节点的pnextlist存在多个节点的时候，就会出现bug
+	/*/
 	CString buf = "";
 	log("in function Search:");
 	int chindex = SearchForAlphabetIndex(word[0], *tg);
@@ -121,6 +141,8 @@ const bool CTrieTree::Search(CString word, PWORDNODE tg)
 	log(buf);
 	if (word[0] == '\0' || word[0] == ' ')
 	{
+		log("return in \\0 and SPACE");
+
 		return true;
 	}
 	//在当前节点寻找字符，未找到：则返回
@@ -130,16 +152,45 @@ const bool CTrieTree::Search(CString word, PWORDNODE tg)
 	}
 	else//找到，继续寻找下一个
 	{
+		log("word[1] ="+ word[1]);
+		if (word[1] == '\0' || word[1] == ' ' || tg->size_nextlist == 0)
+		{
+			//这种情况说明已经找到了一个符合条件的元单词（可能是一个单词，也可能是单词的一部分如be和bee），其中，be为元单词
+			log("ready to return，tg->data="+CString(tg->ch));
+			//只有pdata非空的情况下才说明这是一个单词，否则只能说明是其它单词的一部分
+			if (tg->pnextlist[0]->pdata != nullptr)
+			{
+				lastfoundendingchar = tg->pnextlist[0];
+				log("return in pdata");
+				return true;
+			}
+		}
+		/*/
 		if (tg->size_nextlist == 0)
 		{
-			//无子节点
+			//这种情况是走完从树根到叶子的一条路径，找到相应的单词
+			//最后一个单词无子节点
 			return true;
 		}
+		/*/
 		if (!Search(word.Mid(1), tg->pnextlist[chindex]))
 		{
 			return false;
 		}
+		else
+		{
+			return true;
+		}
 	}
+}
+
+const bool CTrieTree::IncreaseWordCount()
+{
+	//该函数的作用是将
+	//由于该函数的调用仅在一种情况下才会进行：
+	//	确认改单词存在的时候，该函数才会被调用
+	PWORDNODE p =  GetLastFoundEndingChar();
+	p->pdata->word_count++;
 	return true;
 }
 
@@ -161,6 +212,11 @@ const int CTrieTree::GetLevelCount()
 const int * CTrieTree::GetLLCList()
 {
 	return levelnodes_count_list;
+}
+
+const PWORDNODE CTrieTree::GetLastFoundEndingChar()
+{
+	return lastfoundendingchar;
 }
 
 const bool CTrieTree::AppendMemoryForLLCL()

@@ -10,6 +10,7 @@ typedef struct graphnode {
 	char data;	//该字母的数据
 	int x;	//绘图后的x位置
 	int y;	//绘图后的y位置
+	int wordscount;	//如果pdata非空，这里记录单词计数
 	struct graphnode*parent;	//标记它应该指向谁
 }GRAPHNODE,*PGRAPHNODE;
 

@@ -252,11 +252,18 @@ void CMypadDlg::OnEnChangeEditContent()
 		newdata.Replace(' ','\0');
 		ins_avb = false;
 		m_edit.GetSel(last_sel_pos,last_sel_pos);
-		//MessageBoxA("new data=/"+ newdata+"/");
+		newdata = newdata.TrimLeft();
+		//MessageBoxA("start search for=/"+ newdata+"/");
 		if (triedata.Search(newdata, triedata.GetRoot()) == false)
 		{
 			//MessageBoxA("Insert:" + newdata);
 			triedata.Insert(newdata, triedata.GetRoot());
+		}
+		else
+		{
+			//找到单词的话，就增加单词计数
+			//MessageBoxA("IncreaseWordCount");
+			triedata.IncreaseWordCount();
 		}
 		triegraphdlg->setTrieTree(&triedata);
 		triegraphdlg->UpdateGraph();
