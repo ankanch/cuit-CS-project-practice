@@ -84,6 +84,7 @@ BEGIN_MESSAGE_MAP(CMypadDlg, CDialogEx)
 	ON_WM_KEYDOWN()
 	ON_COMMAND(ID_MENU_SHOW_TRIE, &CMypadDlg::OnMenuShowTrie)
 	ON_COMMAND(ID_MENU_TF, &CMypadDlg::OnMenuTf)
+	ON_COMMAND(ID_MENU_SORT, &CMypadDlg::OnMenuSort)
 END_MESSAGE_MAP()
 
 
@@ -243,14 +244,16 @@ BOOL CMypadDlg::CanExit()
 void CMypadDlg::OnEnChangeEditContent()
 {
 	///*/
+	CString editstr = "";
+	m_edit.GetWindowTextA(editstr);
+	CTrieTree tpp;
 	if (ins_avb == true)   //如果按下了空格，判断之前是否有未插入Trie的单词
 	{
 		ins_avb = false;
-		CString editstr = "";
-		m_edit.GetWindowTextA(editstr);
+		//CString editstr = "";
+		//m_edit.GetWindowTextA(editstr);
 		const CString* pwordlist = RetriveWords(editstr);
 		int i = 0;
-		CTrieTree tpp;
 		while (pwordlist[i] != "\0")
 		{
 			if (tpp.Search(pwordlist[i], tpp.GetRoot()) == false)
@@ -270,13 +273,11 @@ void CMypadDlg::OnEnChangeEditContent()
 	if (del_pressed == true)
 	{
 		del_pressed = false;
-		CString editstr = "";
-		m_edit.GetWindowTextA(editstr);
 		if (editstr.Right(1) == ' ')
 		{
 			const CString* pwordlist = RetriveWords(editstr);
 			int i = 0;
-			CTrieTree tpp;
+			//CTrieTree tpp;
 			while (pwordlist[i] != "\0")
 			{
 				if (tpp.Search(pwordlist[i], tpp.GetRoot()) == false)
@@ -293,6 +294,35 @@ void CMypadDlg::OnEnChangeEditContent()
 			triegraphdlg->UpdateGraph();
 			delete[] pwordlist;
 		}
+	}
+	if (true)
+	{
+		//下面这段代码用来测试智能提示
+		const CString* pwordlist = RetriveWords(editstr);
+		int i = 0;
+		CTrieTree tpp;
+		while (pwordlist[i] != "\0")
+		{
+			if (tpp.Search(pwordlist[i], tpp.GetRoot()) == false)
+			{
+				tpp.Insert(pwordlist[i], tpp.GetRoot());
+			}
+			else
+			{
+				tpp.IncreaseWordCount();
+			}
+			i++;
+		}
+		WORDSTACK ws;
+		CString partword = editstr.Mid(editstr.ReverseFind(' '));
+		tpp.Suggest(partword, "", ws, tpp.GetRoot());
+		CString pp;
+		while (ws.empty())
+		{
+			pp += " " + ws.top();
+			ws.pop();
+		}
+		SetDlgItemTextA(IDC_STATIC_TIPS, pp);
 	}
 }
 
@@ -387,4 +417,30 @@ void CMypadDlg::OnMenuTf()
 	}
 	tfdlg.setTrie(tpp);
 	tfdlg.DoModal();
+}
+
+
+void CMypadDlg::OnMenuSort()
+{
+	// TODO: 在此添加命令处理程序代码
+	CString raw;
+	m_edit.GetWindowTextA(raw);
+	const CString* pwordlist = RetriveWords(raw);
+	int i = 0;
+	CTrieTree *tpp = new CTrieTree;
+	while (pwordlist[i] != "\0")
+	{
+		if (tpp->Search(pwordlist[i], tpp->GetRoot()) == false)
+		{
+			tpp->Insert(pwordlist[i], tpp->GetRoot());
+		}
+		else
+		{
+			tpp->IncreaseWordCount();
+		}
+		i++;
+	}
+	CString sortstr = tpp->Sort();
+	delete tpp;
+	MessageBoxA(sortstr);
 }

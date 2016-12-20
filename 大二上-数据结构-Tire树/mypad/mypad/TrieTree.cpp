@@ -207,6 +207,39 @@ const bool CTrieTree::Search(CString word, PWORDNODE tg)
 	}
 }
 
+void CTrieTree::Suggest(CString wordpart,CString pathword ,WORDSTACK &ws, PWORDNODE tg, int matchlevel)
+{
+	CString word = "";
+	if (matchlevel == wordpart.GetLength())
+	{
+		searchOutWord(tg, word, ws);
+		return;
+	}
+	if (tg->ch != '*')
+	{
+		word = pathword + tg->ch;
+	}
+	else
+	{
+		word = " ";
+	}
+	if (tg->ch != wordpart[matchlevel])
+	{
+		for (int i = 0; i < tg->nextlist_fill; i++)
+		{
+			Suggest(wordpart, word,ws, tg->pnextlist[i], matchlevel);
+		}
+	}
+	else
+	{
+		for (int i = 0; i < tg->nextlist_fill; i++)
+		{
+			Suggest(wordpart, word, ws, tg->pnextlist[i], matchlevel+1);
+		}
+	}
+	return;
+}
+
 const int CTrieTree::Delete(CString word, PWORDNODE tg, int level)
 {
 	/*/
@@ -311,7 +344,6 @@ const PWORDNODE CTrieTree::GetLastFoundEndingChar()
 	return lastfoundendingchar;
 }
 
-
 const bool CTrieTree::AppendMemoryForLLCL()
 {
 	try {
@@ -412,7 +444,17 @@ const int CTrieTree::ResolveWords(PWORDNODE tg,TFDLIST &tfdlist,CString wordsuff
 
 const CString CTrieTree::Sort()
 {
-	return CString();
+	WORDSTACK ws;
+	sortpnextlist(GetRoot());
+	dictsort(GetRoot(), ws);
+	//ÍËÕ»×éºÏ
+	CString dictstr = "";
+	while (!ws.empty())
+	{
+		dictstr = ws.top() + dictstr;
+		ws.pop();
+	}
+	return dictstr;
 }
 
 void CTrieTree::sortpnextlist(PWORDNODE tg)
@@ -440,5 +482,49 @@ void CTrieTree::sortpnextlist(PWORDNODE tg)
 		sortpnextlist(tg->pnextlist[i]);
 	}
 	return;
+}
+
+void CTrieTree::dictsort(PWORDNODE tg,WORDSTACK &wg, CString wordsuffix)
+{
+	CString word = "";
+	if (tg->ch != '*')
+	{
+		word = wordsuffix + tg->ch;
+	}
+	else
+	{
+		word = " ";
+	}
+	if (tg->nextlist_fill == 0 || tg->pdata != nullptr)
+	{
+		wg.push(word);
+	}
+	for (int i = 0; i<tg->nextlist_fill; i++)
+	{
+		dictsort(tg->pnextlist[i], wg, word);
+	}
+	return ;
+}
+
+void CTrieTree::searchOutWord(PWORDNODE tg, CString wordsuffix, WORDSTACK &ws)
+{
+	CString word = "";
+	if (tg->ch != '*')
+	{
+		word = wordsuffix + tg->ch;
+	}
+	else
+	{
+		word = " ";
+	}
+	if (tg->nextlist_fill == 0 || tg->pdata != nullptr)
+	{
+		ws.push(word);
+	}
+		for (int i = 0; i < tg->nextlist_fill; i++)
+		{
+			searchOutWord(tg->pnextlist[i], word, ws);
+		}
+		return;
 }
 

@@ -71,4 +71,5 @@ public:
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	afx_msg void OnMenuShowTrie();
 	afx_msg void OnMenuTf();
+	afx_msg void OnMenuSort();
 };

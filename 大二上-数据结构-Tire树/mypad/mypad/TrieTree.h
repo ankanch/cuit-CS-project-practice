@@ -1,5 +1,6 @@
 #pragma once
 #include<vector>
+#include<stack>
 #include<utility>
 #include<algorithm>
 #define BUFFER_LEVEL_COUNT 20   //每一层的节点数数组的初始长度（假设会有20层）
@@ -13,6 +14,7 @@
 
 typedef std::pair<CString,int> TFD;	//用于词频统计的自定义类型
 typedef std::vector<TFD> TFDLIST;		//用于词频统计
+typedef std::stack<CString> WORDSTACK;	//用于字典排序
 typedef struct leafdata {
 	int word_count;			//该单词出现的次数
 	int word_length;		//该单词的长度
@@ -39,6 +41,7 @@ public:
 	const PWORDNODE GetLastFoundEndingChar();	//获取最近一次Search执行之后找到的单词的最后一个字符对应的节点（用来更新LEAFDATA）
 	const bool Insert(CString word,PWORDNODE tg,int level=1);  //将一个单词插入Trie树。返回值：true插入或部分插入，false未插入（已存在，需要更新叶子数据）
 	const bool Search(CString word,PWORDNODE tg);		//查找一个单词是否已经在Trie树中
+	void Suggest(CString wordpart, CString pathword, WORDSTACK &ws, PWORDNODE tg,int matchlevel = 0);	//单词建议函数（给出单词的一部分，函数返回可能的单词（基于已有输入））
 	const int Delete(CString word, PWORDNODE tg, int level = 1);	//该函数用来从树中删除一个单词，当然，是该单词计数为0才会被完全删除,返回值是删除后的单词计数
 	const PROOT GetRoot();  //返回树根
 	//下面的函数为绘图接口
@@ -59,7 +62,8 @@ private:
 	const int deleteFromNextList(PWORDNODE desnode, const int delindex);	//该函数用于从一个节点的nextlist列表中删除指定index的街电视剧，然后，将其他值迁移
 	const int ResolveWords(PWORDNODE tg,TFDLIST &tfdlist,CString wordsuffix=" ");	//该函数的作用是从Trie中递归取出所有单词，然后放入TFDLIST中
 	void sortpnextlist(PWORDNODE tg);		//递归的针对每一个节点的pnextlist来排序
-
+	void dictsort(PWORDNODE tg,WORDSTACK &ws, CString wordsuffix = " ");	//将tg按字典排序然后压栈（最后需要推栈）
+	void searchOutWord(PWORDNODE tg, CString wordsuffix,WORDSTACK &ws);		//用于Suggest函数，当发现满足匹配的时候，用这个函数读取剩余的单词并接入ws中
 	void log(const CString data);//调试函数
 
 	PROOT proot;		//指向树根
