@@ -62,6 +62,7 @@ private:
 	const int deleteFromNextList(PWORDNODE desnode, const int delindex);	//该函数用于从一个节点的nextlist列表中删除指定index的街电视剧，然后，将其他值迁移
 	const int ResolveWords(PWORDNODE tg,TFDLIST &tfdlist,CString wordsuffix=" ");	//该函数的作用是从Trie中递归取出所有单词，然后放入TFDLIST中
 	void sortpnextlist(PWORDNODE tg);		//递归的针对每一个节点的pnextlist来排序
+	static bool compLarge( TFD a,  TFD b);	//比较函数
 	void dictsort(PWORDNODE tg,WORDSTACK &ws, CString wordsuffix = " ");	//将tg按字典排序然后压栈（最后需要推栈）
 	void searchOutWord(PWORDNODE tg, CString wordsuffix,WORDSTACK &ws);		//用于Suggest函数，当发现满足匹配的时候，用这个函数读取剩余的单词并接入ws中
 	void log(const CString data);//调试函数

@@ -48,7 +48,7 @@ protected:
 public:
 	afx_msg void OnEnChangeEditContent();
 private:
-	const CString * RetriveWords(const CString raw);	//返回一个数组，包含了所有单词，最后一个单词以"\0"结尾，单词以空格分割
+	const WORDSTACK  RetriveWords(const CString raw);	//返回一个数组，包含了所有单词，最后一个单词以"\0"结尾，单词以空格分割
 	CTrieTree triedata;
 public:
 	// 主编辑框

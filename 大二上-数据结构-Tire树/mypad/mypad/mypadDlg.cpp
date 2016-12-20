@@ -252,117 +252,118 @@ void CMypadDlg::OnEnChangeEditContent()
 		ins_avb = false;
 		//CString editstr = "";
 		//m_edit.GetWindowTextA(editstr);
-		const CString* pwordlist = RetriveWords(editstr);
+		WORDSTACK ws = RetriveWords(editstr);
 		int i = 0;
-		while (pwordlist[i] != "\0")
+		while (!ws.empty())
 		{
-			if (tpp.Search(pwordlist[i], tpp.GetRoot()) == false)
+			if (tpp.Search(ws.top(), tpp.GetRoot()) == false)
 			{
-				tpp.Insert(pwordlist[i], tpp.GetRoot());
+				tpp.Insert(ws.top(), tpp.GetRoot());
 			}
 			else
 			{
 				tpp.IncreaseWordCount();
 			}
+			ws.pop();
 			i++;
 		}
 		triegraphdlg->setTrieTree(&tpp);
 		triegraphdlg->UpdateGraph();
-		delete[] pwordlist;
 	}
 	if (del_pressed == true)
 	{
 		del_pressed = false;
 		if (editstr.Right(1) == ' ')
 		{
-			const CString* pwordlist = RetriveWords(editstr);
+			WORDSTACK ws = RetriveWords(editstr);
 			int i = 0;
 			//CTrieTree tpp;
-			while (pwordlist[i] != "\0")
+			while (!ws.empty())
 			{
-				if (tpp.Search(pwordlist[i], tpp.GetRoot()) == false)
+				if (tpp.Search(ws.top(), tpp.GetRoot()) == false)
 				{
-					tpp.Insert(pwordlist[i], tpp.GetRoot());
+					tpp.Insert(ws.top(), tpp.GetRoot());
 				}
 				else
 				{
 					tpp.IncreaseWordCount();
 				}
+				ws.pop();
 				i++;
 			}
 			triegraphdlg->setTrieTree(&tpp);
 			triegraphdlg->UpdateGraph();
-			delete[] pwordlist;
 		}
 	}
-	if (true)
+	if (false)
 	{
 		//下面这段代码用来测试智能提示
-		const CString* pwordlist = RetriveWords(editstr);
+		WORDSTACK ws = RetriveWords(editstr);
 		int i = 0;
 		CTrieTree tpp;
-		while (pwordlist[i] != "\0")
+		while (!ws.empty())
 		{
-			if (tpp.Search(pwordlist[i], tpp.GetRoot()) == false)
+			if (tpp.Search(ws.top(), tpp.GetRoot()) == false)
 			{
-				tpp.Insert(pwordlist[i], tpp.GetRoot());
+				tpp.Insert(ws.top(), tpp.GetRoot());
 			}
 			else
 			{
 				tpp.IncreaseWordCount();
 			}
+			ws.pop();
 			i++;
 		}
-		WORDSTACK ws;
+		WORDSTACK wss;
 		CString partword = editstr.Mid(editstr.ReverseFind(' '));
-		tpp.Suggest(partword, "", ws, tpp.GetRoot());
+		tpp.Suggest(partword, "", wss, tpp.GetRoot());
 		CString pp;
-		while (ws.empty())
+		while (wss.empty())
 		{
-			pp += " " + ws.top();
-			ws.pop();
+			pp += " " + wss.top();
+			wss.pop();
 		}
 		SetDlgItemTextA(IDC_STATIC_TIPS, pp);
 	}
 }
 
-const CString * CMypadDlg::RetriveWords(const CString raw)
+const WORDSTACK  CMypadDlg::RetriveWords(const CString raw)
 {
-	CString pstr = "";
-	//空格缩进，只保留一个空格，每个单词之间
-	int commacount = 0;
+	WORDSTACK ws;
+	
+	CString word = "",mm;
+	int spacebeg = 0, spaceend = -1;
 	for (int i = 0; i < raw.GetLength(); i++)
 	{
-		if (raw[i] != ' ')
+		if (raw[i] == ' ' && spaceend == -1)
 		{
-			pstr += raw[i];
+			spacebeg = i;
+			continue;
+		}
+		else if (raw[i] != ' ')
+		{
+			spaceend = -2;
+			continue;
+		}
+		if (raw[i] == ' ' && spaceend == -2)
+		{
+			spaceend = i;
+		}
+		if (!spacebeg)
+		{
+			word = raw.Mid(spacebeg, spaceend - spacebeg);
 		}
 		else
 		{
-			if (pstr[i - 1] != ' ')
-			{
-				pstr += ",";
-				commacount++;
-			}
+			word = raw.Mid(spacebeg+1, spaceend - spacebeg-1);
 		}
-	}
-	if (raw[raw.GetLength() - 1] != ' ')
-	{
-		commacount++;
-		pstr += ",";
-	}
-	CString *s = new CString[commacount + 1];
-	CString mm = "";
-	for (int i = 0; i < commacount; i++)
-	{
-		CString word = pstr.Left(pstr.Find(","));
-		pstr = pstr.Mid(pstr.Find(",")+1);
-		s[i] = word;
-		mm = mm + word + "\n";
+		spacebeg = spaceend;
+		spaceend = -1;
+		ws.push(word);
+		//mm += "/" + word + "/\n";
 	}
 	//MessageBoxA(mm);
-	s[commacount] = "\0";
-	return s;
+	return ws;
 }
 
 
@@ -400,19 +401,20 @@ void CMypadDlg::OnMenuTf()
 	CTermFrequencyDlg tfdlg;
 	CString raw;
 	m_edit.GetWindowTextA(raw);
-	const CString* pwordlist = RetriveWords(raw);
+	WORDSTACK ws = RetriveWords(raw);
 	int i = 0;
 	CTrieTree *tpp = new CTrieTree;
-	while (pwordlist[i] != "\0")
+	while (!ws.empty())
 	{
-		if (tpp->Search(pwordlist[i], tpp->GetRoot()) == false)
+		if (tpp->Search(ws.top(), tpp->GetRoot()) == false)
 		{
-			tpp->Insert(pwordlist[i], tpp->GetRoot());
+			tpp->Insert(ws.top(), tpp->GetRoot());
 		}
 		else
 		{
 			tpp->IncreaseWordCount();
 		}
+		ws.pop();
 		i++;
 	}
 	tfdlg.setTrie(tpp);
@@ -425,22 +427,24 @@ void CMypadDlg::OnMenuSort()
 	// TODO: 在此添加命令处理程序代码
 	CString raw;
 	m_edit.GetWindowTextA(raw);
-	const CString* pwordlist = RetriveWords(raw);
+	WORDSTACK ws = RetriveWords(raw);
 	int i = 0;
 	CTrieTree *tpp = new CTrieTree;
-	while (pwordlist[i] != "\0")
+	while (!ws.empty())
 	{
-		if (tpp->Search(pwordlist[i], tpp->GetRoot()) == false)
+		if (tpp->Search(ws.top(), tpp->GetRoot()) == false)
 		{
-			tpp->Insert(pwordlist[i], tpp->GetRoot());
+			tpp->Insert(ws.top(), tpp->GetRoot());
 		}
 		else
 		{
 			tpp->IncreaseWordCount();
 		}
+		ws.pop();
 		i++;
 	}
 	CString sortstr = tpp->Sort();
 	delete tpp;
-	MessageBoxA(sortstr);
+	m_edit.SetWindowTextA(sortstr);
+	//MessageBoxA(sortstr);
 }

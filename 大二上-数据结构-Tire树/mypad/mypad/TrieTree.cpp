@@ -423,6 +423,7 @@ const TFDLIST CTrieTree::GetTermFrequencyList()
 {
 	TFDLIST ld;
 	ResolveWords(GetRoot(),ld);
+	std::sort(ld.begin(), ld.end(), &(CTrieTree::compLarge));
 	return ld;
 }
 
@@ -482,6 +483,11 @@ void CTrieTree::sortpnextlist(PWORDNODE tg)
 		sortpnextlist(tg->pnextlist[i]);
 	}
 	return;
+}
+
+ bool CTrieTree::compLarge( TFD a,  TFD b)
+{
+	return (a.second > b.second);
 }
 
 void CTrieTree::dictsort(PWORDNODE tg,WORDSTACK &wg, CString wordsuffix)

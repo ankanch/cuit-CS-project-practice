@@ -46,9 +46,18 @@ BOOL CTermFrequencyDlg::OnInitDialog()
 
 	CString buf;
 	TFDLIST tl = pt->GetTermFrequencyList();
+	CString longest;
+	int len = 0;
+	longest = tl.at(0).first;
+	len = longest.GetLength();
 	for (int i = 0; i < tl.size(); i++)
 	{
 		TFD tfd = tl.at(i);
+		if (tfd.first.GetLength() > len)
+		{
+			longest = tfd.first;
+			len = longest.GetLength();
+		}
 		buf.Format("%s,%d\n", tfd.first, tfd.second);
 		m_tflist.InsertItem(i,buf.Mid(2));
 		buf.Format("%d", tfd.second);
@@ -56,7 +65,7 @@ BOOL CTermFrequencyDlg::OnInitDialog()
 		m_tflist.SetItemText(i, 1, buf);
 	}
 	CString pp;
-	pp.Format("共 %d 个单词，其中最长的为 %d ，频率最高的为 %s", tl.size(), 0, "NULL");
+	pp.Format("共 %d 个单词，其中最长的为 %s 长度为 %d ，频率最高的为 %s ,共出现 %d 次。", tl.size(),longest.Mid(1) ,len, tl.at(0).first.Mid(1), tl.at(0).second);
 	m_tipsx.SetWindowTextA(pp);
 
 	return TRUE;  // return TRUE unless you set the focus to a control
