@@ -82,6 +82,7 @@ BEGIN_MESSAGE_MAP(CMypadDlg, CDialogEx)
 	ON_EN_CHANGE(IDC_EDIT_CONTENT, &CMypadDlg::OnEnChangeEditContent)
 	ON_WM_KEYDOWN()
 	ON_COMMAND(ID_MENU_SHOW_TRIE, &CMypadDlg::OnMenuShowTrie)
+	ON_COMMAND(ID_MENU_SETUP_TRIE, &CMypadDlg::OnMenuSetupTrie)
 END_MESSAGE_MAP()
 
 
@@ -119,6 +120,8 @@ BOOL CMypadDlg::OnInitDialog()
 	// TODO: Add extra initialization here
 	last_sel_pos = 0;
 	ins_avb = false;
+	del_pressed = false;
+	lastword = "";
 	f = new CFont;
 	f->CreateFont(22, // nHeight 
 		0, // nWidth 
@@ -238,36 +241,118 @@ BOOL CMypadDlg::CanExit()
 
 void CMypadDlg::OnEnChangeEditContent()
 {
-	// TODO:  如果该控件是 RICHEDIT 控件，它将不
-	// 发送此通知，除非重写 CDialogEx::OnInitDialog()
-	// 函数并调用 CRichEditCtrl().SetEventMask()，
-	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
-
-	// TODO:  在此添加控件通知处理程序代码
-	m_edit.GetWindowTextA(last_edit_data);
-	SetDlgItemTextA(IDC_STATIC_WORDS_COUNT, last_edit_data);
+	///*/
 	if (ins_avb == true)   //如果按下了空格，判断之前是否有未插入Trie的单词
 	{
-		CString newdata = last_edit_data.Mid(last_sel_pos);
-		newdata.Replace(' ','\0');
 		ins_avb = false;
-		m_edit.GetSel(last_sel_pos,last_sel_pos);
-		newdata = newdata.TrimLeft();
-		//MessageBoxA("start search for=/"+ newdata+"/");
-		if (triedata.Search(newdata, triedata.GetRoot()) == false)
+		CString editstr = "";
+		m_edit.GetWindowTextA(editstr);
+		const CString* pwordlist = RetriveWords(editstr);
+		int i = 0;
+		CTrieTree tpp;
+		while (pwordlist[i] != "\0")
 		{
-			//MessageBoxA("Insert:" + newdata);
-			triedata.Insert(newdata, triedata.GetRoot());
+			if (tpp.Search(pwordlist[i], tpp.GetRoot()) == false)
+			{
+				tpp.Insert(pwordlist[i], tpp.GetRoot());
+			}
+			else
+			{
+				tpp.IncreaseWordCount();
+			}
+			i++;
+		}
+		triegraphdlg->setTrieTree(&tpp);
+		triegraphdlg->UpdateGraph();
+		delete[] pwordlist;
+	}
+	if (del_pressed == true)
+	{
+		del_pressed = false;
+		CString editstr = "";
+		m_edit.GetWindowTextA(editstr);
+		if (editstr.Right(1) == ' ')
+		{
+			const CString* pwordlist = RetriveWords(editstr);
+			int i = 0;
+			CTrieTree tpp;
+			while (pwordlist[i] != "\0")
+			{
+				if (tpp.Search(pwordlist[i], tpp.GetRoot()) == false)
+				{
+					tpp.Insert(pwordlist[i], tpp.GetRoot());
+				}
+				else
+				{
+					tpp.IncreaseWordCount();
+				}
+				i++;
+			}
+			triegraphdlg->setTrieTree(&tpp);
+			triegraphdlg->UpdateGraph();
+			delete[] pwordlist;
+		}
+}
+	/*/
+
+			const CString* pwordlist = RetriveWords(last_edit_data);
+			int i = 0;
+			CTrieTree tpp;
+			while (pwordlist[i] != "\0")
+			{
+				if (tpp.Search(pwordlist[i], tpp.GetRoot()) == false)
+				{
+					tpp.Insert(pwordlist[i], tpp.GetRoot());
+				}
+				else
+				{
+					tpp.IncreaseWordCount();
+				}
+				i++;
+			}
+			triegraphdlg->setTrieTree(&tpp);
+			triegraphdlg->UpdateGraph();
+			delete[] pwordlist;
+/*/
+}
+
+const CString * CMypadDlg::RetriveWords(const CString raw)
+{
+	CString pstr = "";
+	//空格缩进，只保留一个空格，每个单词之间
+	int commacount = 0;
+	for (int i = 0; i < raw.GetLength(); i++)
+	{
+		if (raw[i] != ' ')
+		{
+			pstr += raw[i];
 		}
 		else
 		{
-			//找到单词的话，就增加单词计数
-			//MessageBoxA("IncreaseWordCount");
-			triedata.IncreaseWordCount();
+			if (pstr[i - 1] != ' ')
+			{
+				pstr += ",";
+				commacount++;
+			}
 		}
-		triegraphdlg->setTrieTree(&triedata);
-		triegraphdlg->UpdateGraph();
 	}
+	if (raw[raw.GetLength() - 1] != ' ')
+	{
+		commacount++;
+		pstr += ",";
+	}
+	CString *s = new CString[commacount + 1];
+	CString mm = "";
+	for (int i = 0; i < commacount; i++)
+	{
+		CString word = pstr.Left(pstr.Find(","));
+		pstr = pstr.Mid(pstr.Find(",")+1);
+		s[i] = word;
+		mm = mm + word + "\n";
+	}
+	//MessageBoxA(mm);
+	s[commacount] = "\0";
+	return s;
 }
 
 
@@ -278,12 +363,11 @@ BOOL CMypadDlg::PreTranslateMessage(MSG* pMsg)
 	{
 		if (pMsg->wParam == VK_SPACE)
 		{
-			int spos, epos = 0;
-			m_edit.GetSel(spos, epos);
-			CString buf = "";
-			buf.Format("sel start pos=%d,sel ending pos=%d", spos, epos);
-			//MessageBoxA(buf);
 			ins_avb = true;
+		}
+		else if (pMsg->wParam == VK_BACK)
+		{
+			del_pressed = true;
 		}
 	}
 	return CDialogEx::PreTranslateMessage(pMsg);
@@ -296,4 +380,33 @@ void CMypadDlg::OnMenuShowTrie()
 	triegraphdlg->setTrieTree(&triedata);
 	triegraphdlg->ShowWindow(SW_SHOW);
 	triegraphdlg->InitGraph(&triedata);
+}
+
+
+void CMypadDlg::OnMenuSetupTrie()
+{
+	// TODO: 在此添加命令处理程序代码
+	/*/
+	CString editstr;
+	m_edit.GetWindowTextA(editstr);
+	const CString* pwordlist = RetriveWords(editstr);
+	int i = 0;
+	CTrieTree tpp;
+	while (pwordlist[i] != "\0")
+	{
+		if (tpp.Search(pwordlist[i], tpp.GetRoot()) == false)
+		{
+			tpp.Insert(pwordlist[i], tpp.GetRoot());
+		}
+		else
+		{
+			tpp.IncreaseWordCount();
+		}
+		i++;
+	}
+	triegraphdlg->ShowWindow(SW_SHOW);
+	triegraphdlg->setTrieTree(&tpp);
+	triegraphdlg->UpdateGraph();
+	delete[] pwordlist;
+	/*/
 }

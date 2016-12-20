@@ -9,7 +9,6 @@
 
 class CmypadDlgAutoProxy;
 
-
 // CMypadDlg dialog
 class CMypadDlg : public CDialogEx
 {
@@ -49,6 +48,7 @@ protected:
 public:
 	afx_msg void OnEnChangeEditContent();
 private:
+	const CString * RetriveWords(const CString raw);	//返回一个数组，包含了所有单词，最后一个单词以"\0"结尾，单词以空格分割
 	CTrieTree triedata;
 public:
 	// 主编辑框
@@ -59,10 +59,15 @@ public:
 	CString last_edit_data;
 	//标记是否需要插入Trie
 	bool ins_avb;
+	//标记删除被按下
+	bool del_pressed;
+	//记录上一个输入的单词
+	CString lastword;
 	//记录上一次按下空格时候光标的位置
 	int last_sel_pos;
 	//绘制Trie树的对话框指针
 	CTrieGraph *triegraphdlg;
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	afx_msg void OnMenuShowTrie();
+	afx_msg void OnMenuSetupTrie();
 };

@@ -5,7 +5,10 @@
 #include "mypad.h"
 #include "TrieGraph.h"
 #include "afxdialogex.h"
-
+//大二上-工程实践-2-Trie树
+//张龙 2015051152 应用153
+//mailto://kanchisme@gmail.com
+//http://akakanch.com
 
 // CTrieGraph 对话框
 #define KDEBUGK
@@ -249,7 +252,7 @@ void CTrieGraph::OnPaint()
 	GetClientRect(rect);
 	dc.FillSolidRect(rect, RGB(255, 255, 255));
 	//重新绘制Trie树
-	//if (!InitGraph(trie))
+	InitGraph(trie);
 	//{
 		//MessageBoxA("Init Graph Failed!");
 	//}

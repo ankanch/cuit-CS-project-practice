@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "TrieTree.h"
-
+//大二上-工程实践-2-Trie树
+//张龙 2015051152 应用153
+//mailto://kanchisme@gmail.com
+//http://akakanch.com
 
 CTrieTree::CTrieTree()
 {
@@ -41,6 +44,28 @@ const void CTrieTree::deleteTrieTree(PROOT root)
 	}
 	delete[] root->pnextlist;
 	return;
+}
+
+const int CTrieTree::deleteFromNextList(PWORDNODE desnode, const int delindex)
+{
+	if (desnode->pnextlist[delindex]->pdata != nullptr)
+	{
+		if (desnode->pnextlist[delindex]->pdata->word_count == 0)
+		{
+			delete desnode->pnextlist[delindex]->pdata;
+		}
+	}
+	delete desnode->pnextlist[delindex];
+	for (int i = 0; i < desnode->nextlist_fill; i++)
+	{
+		if (i > delindex)
+		{
+			desnode->pnextlist[i - 1] = desnode->pnextlist[i];
+		}
+	}
+	desnode->nextlist_fill--;
+	desnode->pnextlist[desnode->nextlist_fill] = nullptr;
+	return desnode->nextlist_fill;
 }
 
 void CTrieTree::log(const CString data)
@@ -130,9 +155,6 @@ const bool CTrieTree::Search(CString word, PWORDNODE tg)
 	所以在这里，
 	一个单词的定义是：从树根到一个带叶数据节点的一条路径即构成一个单词。
 	带叶数据节点是指pdata域非空
-	****
-	该函数查找存在问题，这里的解决办法是返回当前节点的下一个节点（因为总是从第二个节点就开始返回）
-	当当前节点的pnextlist存在多个节点的时候，就会出现bug
 	/*/
 	//CString buf = "";
 	//log("in function Search:");
@@ -184,6 +206,75 @@ const bool CTrieTree::Search(CString word, PWORDNODE tg)
 	}
 }
 
+const int CTrieTree::Delete(CString word, PWORDNODE tg, int level)
+{
+	/*/
+	删除逻辑，当找到单词后删除pdata中的计数数据，然后在判断计数数据是否为0，如果为0
+	且改单词非其它单词的一部分则删除所有路径节点，否则仅删除pdata，然后设置pdata为nullptr
+	/*/
+	int chindex = SearchForAlphabetIndex(word[0], *tg);
+	//在当前节点寻找字符，未找到：则返回
+	if (chindex == -1)
+	{
+		return -1;  //返回-1代表未找到要删除的单词
+	}
+	else//找到，继续寻找下一个
+	{
+		if (tg->pnextlist[chindex]->pdata != nullptr)
+		{
+			tg->pnextlist[chindex]->pdata->word_count--;
+			if (tg->pnextlist[chindex]->pdata->word_count == 0)
+			{
+				//判断该单词是否为其它单词的一部分
+				if (tg->pnextlist[chindex]->nextlist_fill == 0)
+				{
+					//不是其它单词的一部分
+					deleteFromNextList(tg, chindex);
+					return 0;
+				}
+				else
+				{
+					//是其它单词的一部分
+					delete tg->pnextlist[chindex]->pdata;
+					tg->pnextlist[chindex]->pdata = nullptr;
+					return -10;		//-10代表由于该单词是其它单词的一部分，所以接下来的所有节点都不用删除
+				}
+			}
+			else
+			{
+				return tg->pnextlist[chindex]->pdata->word_count;
+			}
+		}
+		int sc = Delete(word.Mid(1), tg->pnextlist[chindex]);
+		if ( sc== 0)
+		{
+			//删除当前节点且返回0
+			//删除之前还是要判断下当前字母节点是否为其它单词的一部分
+			if (tg->pnextlist[chindex]->nextlist_fill == 0)
+			{
+				//不是其它单词的一部分
+				deleteFromNextList(tg, chindex);
+				return 0;
+			}
+			else
+			{
+				//是其它单词的一部分
+				delete tg->pnextlist[chindex]->pdata;
+				tg->pnextlist[chindex]->pdata = nullptr;
+				return -10;		//-10代表由于该单词是其它单词的一部分，所以接下来的所有节点都不用删除
+			}
+			return 0;
+		}
+		else
+		{
+			//单次数目多于1个，则返回删除该单词后剩余单词数目
+			//或返回了-1
+			//或者返回了-10
+			return sc;
+		}
+	}
+}
+
 const bool CTrieTree::IncreaseWordCount()
 {
 	//该函数的作用是将
@@ -218,6 +309,7 @@ const PWORDNODE CTrieTree::GetLastFoundEndingChar()
 {
 	return lastfoundendingchar;
 }
+
 
 const bool CTrieTree::AppendMemoryForLLCL()
 {

@@ -1,7 +1,10 @@
 #pragma once
 #include"TrieTree.h"
 #include<queue>
-
+//大二上-工程实践-2-Trie树
+//张龙 2015051152 应用153
+//mailto://kanchisme@gmail.com
+//http://akakanch.com
 // CTrieGraph 对话框
 typedef std::queue<PWORDNODE> CONVERSEQUEUE;
 //绘制图点的结构
