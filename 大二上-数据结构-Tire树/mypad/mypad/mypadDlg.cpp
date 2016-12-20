@@ -5,6 +5,7 @@
 #include "stdafx.h"
 #include "mypad.h"
 #include "mypadDlg.h"
+#include "TermFrequencyDlg.h"
 #include "DlgProxy.h"
 #include "afxdialogex.h"
 
@@ -82,7 +83,7 @@ BEGIN_MESSAGE_MAP(CMypadDlg, CDialogEx)
 	ON_EN_CHANGE(IDC_EDIT_CONTENT, &CMypadDlg::OnEnChangeEditContent)
 	ON_WM_KEYDOWN()
 	ON_COMMAND(ID_MENU_SHOW_TRIE, &CMypadDlg::OnMenuShowTrie)
-	ON_COMMAND(ID_MENU_SETUP_TRIE, &CMypadDlg::OnMenuSetupTrie)
+	ON_COMMAND(ID_MENU_TF, &CMypadDlg::OnMenuTf)
 END_MESSAGE_MAP()
 
 
@@ -292,28 +293,7 @@ void CMypadDlg::OnEnChangeEditContent()
 			triegraphdlg->UpdateGraph();
 			delete[] pwordlist;
 		}
-}
-	/*/
-
-			const CString* pwordlist = RetriveWords(last_edit_data);
-			int i = 0;
-			CTrieTree tpp;
-			while (pwordlist[i] != "\0")
-			{
-				if (tpp.Search(pwordlist[i], tpp.GetRoot()) == false)
-				{
-					tpp.Insert(pwordlist[i], tpp.GetRoot());
-				}
-				else
-				{
-					tpp.IncreaseWordCount();
-				}
-				i++;
-			}
-			triegraphdlg->setTrieTree(&tpp);
-			triegraphdlg->UpdateGraph();
-			delete[] pwordlist;
-/*/
+	}
 }
 
 const CString * CMypadDlg::RetriveWords(const CString raw)
@@ -383,30 +363,28 @@ void CMypadDlg::OnMenuShowTrie()
 }
 
 
-void CMypadDlg::OnMenuSetupTrie()
+
+void CMypadDlg::OnMenuTf()
 {
 	// TODO: 在此添加命令处理程序代码
-	/*/
-	CString editstr;
-	m_edit.GetWindowTextA(editstr);
-	const CString* pwordlist = RetriveWords(editstr);
+	CTermFrequencyDlg tfdlg;
+	CString raw;
+	m_edit.GetWindowTextA(raw);
+	const CString* pwordlist = RetriveWords(raw);
 	int i = 0;
-	CTrieTree tpp;
+	CTrieTree *tpp = new CTrieTree;
 	while (pwordlist[i] != "\0")
 	{
-		if (tpp.Search(pwordlist[i], tpp.GetRoot()) == false)
+		if (tpp->Search(pwordlist[i], tpp->GetRoot()) == false)
 		{
-			tpp.Insert(pwordlist[i], tpp.GetRoot());
+			tpp->Insert(pwordlist[i], tpp->GetRoot());
 		}
 		else
 		{
-			tpp.IncreaseWordCount();
+			tpp->IncreaseWordCount();
 		}
 		i++;
 	}
-	triegraphdlg->ShowWindow(SW_SHOW);
-	triegraphdlg->setTrieTree(&tpp);
-	triegraphdlg->UpdateGraph();
-	delete[] pwordlist;
-	/*/
+	tfdlg.setTrie(tpp);
+	tfdlg.DoModal();
 }

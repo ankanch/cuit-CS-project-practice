@@ -146,6 +146,7 @@ const bool CTrieTree::Insert(CString word, PWORDNODE tg,int level)
 		}
 		Insert(word.Mid(1), tg->pnextlist[chindex],ll+1);
 	}
+	return true;
 }
 
 const bool CTrieTree::Search(CString word, PWORDNODE tg)
@@ -384,5 +385,60 @@ const int CTrieTree::AddToNextList(WORDNODE * desnode, PWORDNODE srcnode)
 	desnode->pnextlist[desnode->nextlist_fill] = srcnode;
 	desnode->nextlist_fill++;
 	return desnode->nextlist_fill-1;
+}
+
+const TFDLIST CTrieTree::GetTermFrequencyList()
+{
+	TFDLIST ld;
+	ResolveWords(GetRoot(),ld);
+	return ld;
+}
+
+
+const int CTrieTree::ResolveWords(PWORDNODE tg,TFDLIST &tfdlist,CString wordsuffix)
+{
+	CString word = wordsuffix+tg->ch;
+	if(tg->nextlist_fill == 0 || tg->pdata != nullptr)
+	{
+		TFD p(word,tg->pdata->word_count);
+		tfdlist.push_back(p);
+	}
+		for(int i=0;i<tg->nextlist_fill;i++)
+		{
+			ResolveWords(tg->pnextlist[i],tfdlist,word);
+		}
+	return 0;
+}
+
+const CString CTrieTree::Sort()
+{
+	return CString();
+}
+
+void CTrieTree::sortpnextlist(PWORDNODE tg)
+{
+	if (tg->pnextlist != nullptr)
+	{
+		PWORDNODE p1;
+		for (int i = 0; i < tg->nextlist_fill; i++)
+		{
+			int minpos = i;
+			for (int t = i; t < tg->nextlist_fill; t++)
+			{
+				if (tg->pnextlist[t]->ch <= tg->pnextlist[minpos]->ch)
+				{
+					minpos = t;
+				}
+			}
+			p1 = tg->pnextlist[i];
+			tg->pnextlist[i] = tg->pnextlist[minpos];
+			tg->pnextlist[minpos] = p1;
+		}
+	}
+	for (int i = 0; i < tg->nextlist_fill; i++)
+	{
+		sortpnextlist(tg->pnextlist[i]);
+	}
+	return;
 }
 

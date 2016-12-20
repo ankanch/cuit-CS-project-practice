@@ -67,7 +67,8 @@ public:
 	int last_sel_pos;
 	//绘制Trie树的对话框指针
 	CTrieGraph *triegraphdlg;
+
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	afx_msg void OnMenuShowTrie();
-	afx_msg void OnMenuSetupTrie();
+	afx_msg void OnMenuTf();
 };
