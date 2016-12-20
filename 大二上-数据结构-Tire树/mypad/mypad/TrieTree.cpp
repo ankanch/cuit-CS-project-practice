@@ -134,14 +134,14 @@ const bool CTrieTree::Search(CString word, PWORDNODE tg)
 	该函数查找存在问题，这里的解决办法是返回当前节点的下一个节点（因为总是从第二个节点就开始返回）
 	当当前节点的pnextlist存在多个节点的时候，就会出现bug
 	/*/
-	CString buf = "";
-	log("in function Search:");
+	//CString buf = "";
+	//log("in function Search:");
 	int chindex = SearchForAlphabetIndex(word[0], *tg);
-	buf.Format("\talphabet %c 's searching result (root=%c):postion=%d", word[0],GetRoot()->ch,chindex);
-	log(buf);
+	//buf.Format("\talphabet %c 's searching result (root=%c):postion=%d", word[0],GetRoot()->ch,chindex);
+	//log(buf);
 	if (word[0] == '\0' || word[0] == ' ')
 	{
-		log("return in \\0 and SPACE");
+		//log("return in \\0 and SPACE");
 
 		return true;
 	}
@@ -152,16 +152,16 @@ const bool CTrieTree::Search(CString word, PWORDNODE tg)
 	}
 	else//找到，继续寻找下一个
 	{
-		log("word[1] ="+ word[1]);
+		//log("word =/"+ word+"/");
 		if (word[1] == '\0' || word[1] == ' ' || tg->size_nextlist == 0)
 		{
 			//这种情况说明已经找到了一个符合条件的元单词（可能是一个单词，也可能是单词的一部分如be和bee），其中，be为元单词
-			log("ready to return，tg->data="+CString(tg->ch));
+			//log("ready to return，tg->data="+CString(tg->ch));
 			//只有pdata非空的情况下才说明这是一个单词，否则只能说明是其它单词的一部分
-			if (tg->pnextlist[0]->pdata != nullptr)
+			if (tg->pnextlist[chindex]->pdata != nullptr)
 			{
-				lastfoundendingchar = tg->pnextlist[0];
-				log("return in pdata");
+				lastfoundendingchar = tg->pnextlist[chindex];
+				//log("return in pdata");
 				return true;
 			}
 		}
