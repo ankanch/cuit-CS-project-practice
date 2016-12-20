@@ -1,1 +1,30 @@
-﻿
+﻿  Processing .\mypad.idl
+  mypad.idl
+  Processing C:\Program Files (x86)\Windows Kits\8.1\Include\um\oaidl.idl
+  oaidl.idl
+  Processing C:\Program Files (x86)\Windows Kits\8.1\Include\um\objidl.idl
+  objidl.idl
+  Processing C:\Program Files (x86)\Windows Kits\8.1\Include\um\unknwn.idl
+  unknwn.idl
+  Processing C:\Program Files (x86)\Windows Kits\8.1\Include\shared\wtypes.idl
+  wtypes.idl
+  Processing C:\Program Files (x86)\Windows Kits\8.1\Include\shared\wtypesbase.idl
+  wtypesbase.idl
+  Processing C:\Program Files (x86)\Windows Kits\8.1\Include\shared\basetsd.h
+  basetsd.h
+  Processing C:\Program Files (x86)\Windows Kits\8.1\Include\shared\guiddef.h
+  guiddef.h
+  Processing C:\Program Files (x86)\Windows Kits\8.1\Include\um\oaidl.acf
+  oaidl.acf
+  stdafx.cpp
+p:\visual studio 2015 cv\vc\atlmfc\include\afx.h(38): warning C4996: 'MBCS_Support_Deprecated_In_MFC': MBCS support in MFC is deprecated and may be removed in a future version of MFC.
+  p:\visual studio 2015 cv\vc\atlmfc\include\afx.h(33): note: 参见“MBCS_Support_Deprecated_In_MFC”的声明
+  TrieTree.cpp
+  TrieGraph.cpp
+  mypadDlg.cpp
+  mypad.cpp
+  DlgProxy.cpp
+  正在生成代码...
+q:\0_作业\工程实践\大二上-数据结构-tire树\mypad\mypad\trietree.cpp(149): warning C4715: “CTrieTree::Insert”: 不是所有的控件路径都返回值
+  mypad.vcxproj -> Q:\0_作业\工程实践\大二上-数据结构-Tire树\mypad\mypad\Debug\mypad.exe
+  mypad.vcxproj -> Q:\0_作业\工程实践\大二上-数据结构-Tire树\mypad\mypad\Debug\mypad.pdb (Partial PDB)
