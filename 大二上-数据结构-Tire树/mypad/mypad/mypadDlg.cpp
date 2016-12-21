@@ -73,6 +73,7 @@ void CMypadDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_EDIT_CONTENT, m_edit);
+	DDX_Control(pDX, IDC_STATIC_WORDS_COUNT, m_tipsxx);
 }
 
 BEGIN_MESSAGE_MAP(CMypadDlg, CDialogEx)
@@ -144,6 +145,8 @@ BOOL CMypadDlg::OnInitDialog()
 	//
 	triegraphdlg = new CTrieGraph();
 	triegraphdlg->Create(IDD_DIALOG_TRIE_GRAPH, this);
+	intdlg = new CInteliDlg();
+	intdlg->Create(IDD_DIALOG_INTEL, this);
 	//
 	CStdioFile ff;
 	ff.Open("log.txt",CFile::modeWrite);
@@ -245,9 +248,66 @@ BOOL CMypadDlg::CanExit()
 void CMypadDlg::OnEnChangeEditContent()
 {
 	///*/
+	intdlg->ShowWindow(SW_HIDE);
 	CString editstr = "";
 	m_edit.GetWindowTextA(editstr);
 	CTrieTree tpp;
+	CString partword = "";
+	int bno = editstr.ReverseFind(' ');
+	bool INK = false;
+	if (bno != editstr.GetLength() && bno != -1)
+	{
+		partword = editstr.Mid(bno + 1);
+		editstr = editstr.Left(bno);
+		INK = true;
+	}
+	WORDSTACK ws = RetriveWords(editstr);
+	int i = 0;
+	while (!ws.empty())
+	{
+		if (tpp.Search(ws.top(), tpp.GetRoot()) == false)
+		{
+			tpp.Insert(ws.top(), tpp.GetRoot());
+		}
+		else
+		{
+			tpp.IncreaseWordCount();
+		}
+		ws.pop();
+		i++;
+	}
+	triegraphdlg->setTrieTree(&tpp);
+	triegraphdlg->UpdateGraph();
+
+	//检测智能提示
+	if (INK)
+	{
+		WORDSTACK wss,wsg;
+		tpp.Suggest(partword, "", wss, tpp.GetRoot());
+		int i = 0;
+		CString ppp;
+		while (!wss.empty())
+		{
+			CString word = partword + wss.top();
+			wsg.push(word);
+			ppp += word + "\t";
+			i++;
+			wss.pop();
+		}
+		m_tipsxx.SetWindowTextA(ppp);
+		int selposs, selpose;
+		m_edit.GetSel(selposs, selpose);
+		int linecount = m_edit.GetLineCount();
+		(linecount *= 22)+=22;
+		CRect pos(140, linecount, 280, linecount + 140);
+		intdlg->SetWORDData(wsg);
+		intdlg->MoveWindow(pos);
+		intdlg->ShowWindow(SW_SHOW);
+		m_edit.SetFocus();
+	}
+
+	/*/
+
 	if (ins_avb == true)   //如果按下了空格，判断之前是否有未插入Trie的单词
 	{
 		ins_avb = false;
@@ -330,6 +390,8 @@ void CMypadDlg::OnEnChangeEditContent()
 		}
 		SetDlgItemTextA(IDC_STATIC_TIPS, pp);
 	}
+
+	/*/
 }
 
 const WORDSTACK  CMypadDlg::RetriveWords(const CString raw)

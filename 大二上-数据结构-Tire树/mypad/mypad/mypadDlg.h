@@ -5,6 +5,7 @@
 #pragma once
 #include "TrieTree.h"
 #include "TrieGraph.h"
+#include "InteliDlg.h"
 #include "afxwin.h"
 
 class CmypadDlgAutoProxy;
@@ -67,10 +68,13 @@ public:
 	int last_sel_pos;
 	//绘制Trie树的对话框指针
 	CTrieGraph *triegraphdlg;
+	//智能提示对话框指针
+	CInteliDlg *intdlg;
 
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	afx_msg void OnMenuShowTrie();
 	afx_msg void OnMenuTf();
 	afx_msg void OnMenuSort();
 	afx_msg void OnMenuSearch();
+	CStatic m_tipsxx;
 };
