@@ -72,4 +72,5 @@ public:
 	afx_msg void OnMenuShowTrie();
 	afx_msg void OnMenuTf();
 	afx_msg void OnMenuSort();
+	afx_msg void OnMenuSearch();
 };

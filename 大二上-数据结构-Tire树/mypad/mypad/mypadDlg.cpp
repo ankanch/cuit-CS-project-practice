@@ -6,6 +6,7 @@
 #include "mypad.h"
 #include "mypadDlg.h"
 #include "TermFrequencyDlg.h"
+#include "SearchSuggestDlg.h"
 #include "DlgProxy.h"
 #include "afxdialogex.h"
 
@@ -64,7 +65,6 @@ CMypadDlg::~CMypadDlg()
 	// If there is an automation proxy for this dialog, set
 	//  its back pointer to this dialog to NULL, so it knows
 	//  the dialog has been deleted.
-	delete triegraphdlg;
 	if (m_pAutoProxy != NULL)
 		m_pAutoProxy->m_pDialog = NULL;
 }
@@ -85,6 +85,7 @@ BEGIN_MESSAGE_MAP(CMypadDlg, CDialogEx)
 	ON_COMMAND(ID_MENU_SHOW_TRIE, &CMypadDlg::OnMenuShowTrie)
 	ON_COMMAND(ID_MENU_TF, &CMypadDlg::OnMenuTf)
 	ON_COMMAND(ID_MENU_SORT, &CMypadDlg::OnMenuSort)
+	ON_COMMAND(ID_MENU_SEARCH, &CMypadDlg::OnMenuSearch)
 END_MESSAGE_MAP()
 
 
@@ -449,6 +450,33 @@ void CMypadDlg::OnMenuSort()
 	}
 	CString sortstr = tpp->Sort();
 	delete tpp;
-	m_edit.SetWindowTextA(sortstr);
-	//MessageBoxA(sortstr);
+	//m_edit.SetWindowTextA(sortstr);
+	MessageBoxA(sortstr);
+}
+
+
+void CMypadDlg::OnMenuSearch()
+{
+	// TODO: 在此添加命令处理程序代码
+	CSearchSuggestDlg ssdlg;
+	CString raw;
+	m_edit.GetWindowTextA(raw);
+	WORDSTACK ws = RetriveWords(raw);
+	int i = 0;
+	CTrieTree *tpp = new CTrieTree;
+	while (!ws.empty())
+	{
+		if (tpp->Search(ws.top(), tpp->GetRoot()) == false)
+		{
+			tpp->Insert(ws.top(), tpp->GetRoot());
+		}
+		else
+		{
+			tpp->IncreaseWordCount();
+		}
+		ws.pop();
+		i++;
+	}
+	ssdlg.SetTrieData(tpp);
+	ssdlg.DoModal();
 }
