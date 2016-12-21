@@ -269,6 +269,7 @@ void CMypadDlg::OnEnChangeEditContent()
 		}
 		triegraphdlg->setTrieTree(&tpp);
 		triegraphdlg->UpdateGraph();
+		return;
 	}
 	if (del_pressed == true)
 	{
@@ -293,11 +294,14 @@ void CMypadDlg::OnEnChangeEditContent()
 			}
 			triegraphdlg->setTrieTree(&tpp);
 			triegraphdlg->UpdateGraph();
+			return;
 		}
 	}
 	if (false)
 	{
 		//下面这段代码用来测试智能提示
+		//逻辑：每次编辑框内容改变的时候建立一次Trie树，然后再在Trie树查找是否有部分匹配的单词
+		//当然，建立Trie树之前要判断是否可以建立（即存在空格）
 		WORDSTACK ws = RetriveWords(editstr);
 		int i = 0;
 		CTrieTree tpp;

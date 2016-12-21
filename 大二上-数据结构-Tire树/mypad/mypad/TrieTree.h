@@ -51,6 +51,8 @@ public:
 	//下面的函数为统计/应用接口
 	const TFDLIST GetTermFrequencyList(); 	//用于显示词频
 	const CString Sort();		//对Trie树进行排序,按照ASCII码大小顺序
+	//下面为数据共享接口
+	void Synchorize(CTrieTree & trie);		//该函数的作用是将当前对象的数据同步到指定CTrieTree对象中
 	
 private:
 	const bool AppendMemoryForLLCL();  //该函数用来向levelnodes_count_list追加空间
