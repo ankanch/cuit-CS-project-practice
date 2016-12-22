@@ -147,11 +147,13 @@ BOOL CMypadDlg::OnInitDialog()
 	triegraphdlg->Create(IDD_DIALOG_TRIE_GRAPH, this);
 	intdlg = new CInteliDlg();
 	intdlg->Create(IDD_DIALOG_INTEL, this);
+	intdlg->SetOwner(this);
 	//
 	CStdioFile ff;
 	ff.Open("log.txt",CFile::modeWrite);
 	ff.SetLength(0);
 	ff.Close();
+	
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -254,12 +256,15 @@ void CMypadDlg::OnEnChangeEditContent()
 	CTrieTree tpp;
 	CString partword = "";
 	int bno = editstr.ReverseFind(' ');
-	bool INK = false;
-	if (bno != editstr.GetLength() && bno != -1)
+	INK = false;
+	if (  bno != editstr.GetLength() && bno != -1)
 	{
-		partword = editstr.Mid(bno + 1);
-		editstr = editstr.Left(bno);
-		INK = true;
+		if (editstr[bno - 1] != ' ')
+		{
+			partword = editstr.Mid(bno + 1);
+			editstr = editstr.Left(bno);
+			INK = true;
+		}
 	}
 	WORDSTACK ws = RetriveWords(editstr);
 	int i = 0;
@@ -295,11 +300,36 @@ void CMypadDlg::OnEnChangeEditContent()
 			wss.pop();
 		}
 		m_tipsxx.SetWindowTextA(ppp);
-		int selposs, selpose;
-		m_edit.GetSel(selposs, selpose);
+		//计算位置显示智能提示框
+		//获取父对话框相对于屏幕的位置
+		WINDOWPLACEMENT wndpl;
+		GetWindowPlacement(&wndpl);
+		//计算CEdit中的位置
+		//计算相对高度（y位置）
 		int linecount = m_edit.GetLineCount();
-		(linecount *= 22)+=22;
-		CRect pos(140, linecount, 280, linecount + 140);
+		if (m_edit.GetLineCount() <= 3)
+		{
+			(linecount *= 24) += 24 + 24;
+		}
+		else
+		{
+			(linecount *= 22) += 22 + 22;
+		}
+		//计算相对宽度（x位置）(5.5像素对应1字符宽度)
+		CRect editboxrexct;
+		m_edit.GetWindowRect(editboxrexct);
+		int editwidth = editboxrexct.right - editboxrexct.left;
+		CString px;
+		px.Format("%d", editwidth);
+		m_tipsxx.SetWindowTextA(px);
+		int selposs, rwidth;
+		m_edit.GetSel(selposs, rwidth);
+		editwidth /= 5.5;
+		rwidth = (selposs%(editwidth));
+		rwidth *= 5.5;
+		//CRect pos(140, linecount, 280, linecount + 140);
+		//下面这个rect控制了智能提示对话框的显示位置
+		CRect pos(wndpl.rcNormalPosition.left+ rwidth,wndpl.rcNormalPosition.top+ linecount,wndpl.rcNormalPosition.left+ rwidth +120,wndpl.rcNormalPosition.top+ linecount +115);
 		intdlg->SetWORDData(wsg);
 		intdlg->MoveWindow(pos);
 		intdlg->ShowWindow(SW_SHOW);
@@ -446,6 +476,13 @@ BOOL CMypadDlg::PreTranslateMessage(MSG* pMsg)
 		else if (pMsg->wParam == VK_BACK)
 		{
 			del_pressed = true;
+		}
+		else if (pMsg->wParam == VK_DOWN)
+		{
+			if (INK)
+			{
+				(intdlg->GetDlgItem(IDC_LIST_INTEL)->SetFocus());
+			}
 		}
 	}
 	return CDialogEx::PreTranslateMessage(pMsg);

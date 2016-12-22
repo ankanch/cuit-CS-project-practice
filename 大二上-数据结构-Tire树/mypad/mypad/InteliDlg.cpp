@@ -29,14 +29,10 @@ void CInteliDlg::DoDataExchange(CDataExchange* pDX)
 
 void CInteliDlg::SetWORDData(WORDSTACK & ws)
 {
-	for (int i = 0; i < m_intellist.GetCount(); i++)
-	{
-		m_intellist.DeleteString(i);
-	}
-	int i = 0;
+	m_intellist.ResetContent();
 	while (!ws.empty())
 	{
-		m_intellist.InsertString(i, ws.top());
+		m_intellist.AddString( ws.top());
 		ws.pop();
 	}
 }

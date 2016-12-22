@@ -70,6 +70,8 @@ public:
 	CTrieGraph *triegraphdlg;
 	//智能提示对话框指针
 	CInteliDlg *intdlg;
+	//标记智能提示框状态
+	bool INK;
 
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	afx_msg void OnMenuShowTrie();
