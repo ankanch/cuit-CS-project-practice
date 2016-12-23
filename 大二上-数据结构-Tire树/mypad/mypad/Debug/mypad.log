@@ -1,10 +1,2 @@
-﻿  mypadDlg.cpp
-q:\0_作业\工程实践\大二上-数据结构-tire树\mypad\mypad\mypaddlg.cpp(327): warning C4244: “/=”: 从“double”转换到“int”，可能丢失数据
-q:\0_作业\工程实践\大二上-数据结构-tire树\mypad\mypad\mypaddlg.cpp(329): warning C4244: “*=”: 从“double”转换到“int”，可能丢失数据
-  正在生成代码...
-  正在跳过...(未检测到相关更改)
-  mypad.cpp
-  SearchSuggestDlg.cpp
-  DlgProxy.cpp
-  mypad.vcxproj -> Q:\0_作业\工程实践\大二上-数据结构-Tire树\mypad\mypad\Debug\mypad.exe
+﻿  mypad.vcxproj -> Q:\0_作业\工程实践\大二上-数据结构-Tire树\mypad\mypad\Debug\mypad.exe
   mypad.vcxproj -> Q:\0_作业\工程实践\大二上-数据结构-Tire树\mypad\mypad\Debug\mypad.pdb (Partial PDB)

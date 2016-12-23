@@ -259,14 +259,19 @@ void CMypadDlg::OnEnChangeEditContent()
 	INK = false;
 	if (  bno != editstr.GetLength() && bno != -1)
 	{
-		if (editstr[bno - 1] != ' ')
+		//MessageBoxA("A");
+		if (bno>0 && editstr[bno - 1] != ' ')
 		{
+			//MessageBoxA("B");
 			partword = editstr.Mid(bno + 1);
-			editstr = editstr.Left(bno);
+			editstr = editstr.Left(bno+1);   //加1去掉效果更棒，可是有bug
 			INK = true;
 		}
 	}
 	WORDSTACK ws = RetriveWords(editstr);
+	CString qwe;
+	qwe.Format("共 %d 个单词", ws.size());
+	m_tipsxx.SetWindowTextA(qwe);
 	int i = 0;
 	while (!ws.empty())
 	{
@@ -281,9 +286,8 @@ void CMypadDlg::OnEnChangeEditContent()
 		ws.pop();
 		i++;
 	}
-	triegraphdlg->setTrieTree(&tpp);
-	triegraphdlg->UpdateGraph();
-
+		triegraphdlg->setTrieTree(&tpp);
+		triegraphdlg->UpdateGraph();
 	//检测智能提示
 	if (INK)
 	{
@@ -299,11 +303,12 @@ void CMypadDlg::OnEnChangeEditContent()
 			i++;
 			wss.pop();
 		}
-		m_tipsxx.SetWindowTextA(ppp);
+		///m_tipsxx.SetWindowTextA(ppp);
 		//计算位置显示智能提示框
 		//获取父对话框相对于屏幕的位置
 		WINDOWPLACEMENT wndpl;
 		GetWindowPlacement(&wndpl);
+		CRect EDITTOSCREEN;
 		//计算CEdit中的位置
 		//计算相对高度（y位置）
 		int linecount = m_edit.GetLineCount();
@@ -321,7 +326,7 @@ void CMypadDlg::OnEnChangeEditContent()
 		int editwidth = editboxrexct.right - editboxrexct.left;
 		CString px;
 		px.Format("%d", editwidth);
-		m_tipsxx.SetWindowTextA(px);
+		///m_tipsxx.SetWindowTextA(px);
 		int selposs, rwidth;
 		m_edit.GetSel(selposs, rwidth);
 		editwidth /= 5.5;
@@ -478,10 +483,10 @@ BOOL CMypadDlg::PreTranslateMessage(MSG* pMsg)
 			del_pressed = true;
 		}
 		else if (pMsg->wParam == VK_DOWN)
-		{
+		{ 
 			if (INK)
 			{
-				(intdlg->GetDlgItem(IDC_LIST_INTEL)->SetFocus());
+				(intdlg->SetFocus());
 			}
 		}
 	}

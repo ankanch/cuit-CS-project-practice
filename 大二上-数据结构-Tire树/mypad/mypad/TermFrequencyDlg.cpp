@@ -42,7 +42,8 @@ BOOL CTermFrequencyDlg::OnInitDialog()
 
 	// TODO:  在此添加额外的初始化
 	m_tflist.InsertColumn(0, "单词",LVCFMT_CENTER, 140);
-	m_tflist.InsertColumn(1, "频率", LVCFMT_CENTER, 60);
+	m_tflist.InsertColumn(1, "频次", LVCFMT_CENTER, 60);
+	m_tflist.InsertColumn(2, "频率", LVCFMT_CENTER, 60);
 
 	CString buf;
 	TFDLIST tl = pt->GetTermFrequencyList();
@@ -50,6 +51,7 @@ BOOL CTermFrequencyDlg::OnInitDialog()
 	int len = 0;
 	longest = tl.at(0).first;
 	len = longest.GetLength();
+	int sum = 0;
 	for (int i = 0; i < tl.size(); i++)
 	{
 		TFD tfd = tl.at(i);
@@ -63,9 +65,16 @@ BOOL CTermFrequencyDlg::OnInitDialog()
 		buf.Format("%d", tfd.second);
 		m_tflist.SetItemText(i, 0, tfd.first.Mid(2));
 		m_tflist.SetItemText(i, 1, buf);
+		sum += tfd.second;
+	}
+	for (int i = 0; i < tl.size(); i++)
+	{
+		double t = tl.at(i).second / sum* 100;
+		buf.Format("%.2f", t);
+		m_tflist.SetItemText(i, 2, buf);
 	}
 	CString pp;
-	pp.Format("共 %d 个单词，其中最长的为 %s 长度为 %d ，频率最高的为 %s ,共出现 %d 次。", tl.size(),longest.Mid(1) ,len, tl.at(0).first.Mid(1), tl.at(0).second);
+	pp.Format("共 %d 个单词，其中最长的为 %s 长度为 %d ，频率最高的为 %s ,共出现 %d 次。", tl.size(),longest.Mid(2) ,len, tl.at(0).first.Mid(2), tl.at(0).second);
 	m_tipsx.SetWindowTextA(pp);
 
 	return TRUE;  // return TRUE unless you set the focus to a control

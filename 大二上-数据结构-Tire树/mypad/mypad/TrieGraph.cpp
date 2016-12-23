@@ -158,18 +158,20 @@ const bool CTrieGraph::UpdateGraph()
 
 const bool CTrieGraph::InitGraph( CTrieTree * trie)
 {
-	if (trie->GetNodesCount() == 0)
-	{
-		return false;
-	}
-	CString buf = "";
-	graphdata =  ConvertTrieToDrawable(trie);
-	CPen pen;
 	CClientDC dcd(this);
 	CRect rect;
 	//设置对话框背景颜色为白色
 	GetClientRect(rect);
 	dcd.FillSolidRect(rect, RGB(255, 255, 255));
+	//MessageBoxA("C");
+	if (trie->GetNodesCount() == 0)
+	{
+		return false;
+	}
+	//MessageBoxA("D");
+	CString buf = "";
+	graphdata =  ConvertTrieToDrawable(trie);
+	CPen pen;
 	pen.CreatePen(PS_SOLID, 2, RGB(225,0,0));
 	dcd.SelectObject(&pen);
 	/////////////////////////////////////////////////////////////////////////////////////////
