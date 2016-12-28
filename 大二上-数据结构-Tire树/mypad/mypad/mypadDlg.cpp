@@ -9,6 +9,8 @@
 #include "SearchSuggestDlg.h"
 #include "DlgProxy.h"
 #include "afxdialogex.h"
+#include "SkinH.h"
+#pragma comment(lib,"SkinH.lib")
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -122,6 +124,8 @@ BOOL CMypadDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 
 	// TODO: Add extra initialization here
+	SkinH_Attach();
+
 	last_sel_pos = 0;
 	ins_avb = false;
 	del_pressed = false;
@@ -148,11 +152,9 @@ BOOL CMypadDlg::OnInitDialog()
 	intdlg = new CInteliDlg();
 	intdlg->Create(IDD_DIALOG_INTEL, this);
 	intdlg->SetOwner(this);
+	lb = (CListBox*)intdlg->GetDlgItem(IDC_LIST_INTEL);
 	//
-	CStdioFile ff;
-	ff.Open("log.txt",CFile::modeWrite);
-	ff.SetLength(0);
-	ff.Close();
+	clkvkdown = false;
 	
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
@@ -275,21 +277,14 @@ void CMypadDlg::OnEnChangeEditContent()
 	int i = 0;
 	while (!ws.empty())
 	{
-		if (tpp.Search(ws.top(), tpp.GetRoot()) == false)
-		{
 			tpp.Insert(ws.top(), tpp.GetRoot());
-		}
-		else
-		{
-			tpp.IncreaseWordCount();
-		}
 		ws.pop();
 		i++;
 	}
 		triegraphdlg->setTrieTree(&tpp);
 		triegraphdlg->UpdateGraph();
 	//检测智能提示
-	if (INK)
+	if ( INK)
 	{
 		WORDSTACK wss,wsg;
 		tpp.Suggest(partword, "", wss, tpp.GetRoot());
@@ -324,17 +319,18 @@ void CMypadDlg::OnEnChangeEditContent()
 		CRect editboxrexct;
 		m_edit.GetWindowRect(editboxrexct);
 		int editwidth = editboxrexct.right - editboxrexct.left;
+		int editheight = editboxrexct.bottom - editboxrexct.top;
 		CString px;
 		px.Format("%d", editwidth);
 		///m_tipsxx.SetWindowTextA(px);
 		int selposs, rwidth;
 		m_edit.GetSel(selposs, rwidth);
-		editwidth /= 5.5;
+		editwidth /= 8.5;
 		rwidth = (selposs%(editwidth));
-		rwidth *= 5.5;
+		rwidth *= 7.5;
 		//CRect pos(140, linecount, 280, linecount + 140);
 		//下面这个rect控制了智能提示对话框的显示位置
-		CRect pos(wndpl.rcNormalPosition.left+ rwidth,wndpl.rcNormalPosition.top+ linecount,wndpl.rcNormalPosition.left+ rwidth +120,wndpl.rcNormalPosition.top+ linecount +115);
+		CRect pos(wndpl.rcNormalPosition.left+ rwidth,wndpl.rcNormalPosition.top+ linecount%editheight,wndpl.rcNormalPosition.left+ rwidth +120,wndpl.rcNormalPosition.top+ linecount +115);
 		intdlg->SetWORDData(wsg);
 		intdlg->MoveWindow(pos);
 		intdlg->ShowWindow(SW_SHOW);
@@ -465,7 +461,13 @@ const WORDSTACK  CMypadDlg::RetriveWords(const CString raw)
 		//mm += "/" + word + "/\n";
 	}
 	//MessageBoxA(mm);
-	return ws;
+	WORDSTACK wws;
+	while (!ws.empty())
+	{
+		wws.push(ws.top());
+		ws.pop();
+	}
+	return wws;
 }
 
 
@@ -484,9 +486,12 @@ BOOL CMypadDlg::PreTranslateMessage(MSG* pMsg)
 		}
 		else if (pMsg->wParam == VK_DOWN)
 		{ 
+			clkvkdown = true;
 			if (INK)
 			{
-				(intdlg->SetFocus());
+				int sel = 0;
+				lb->GetSel(sel);
+				lb->SetSel( sel + 1);
 			}
 		}
 	}
@@ -509,23 +514,31 @@ void CMypadDlg::OnMenuTf()
 	// TODO: 在此添加命令处理程序代码
 	CTermFrequencyDlg tfdlg;
 	CString raw;
-	m_edit.GetWindowTextA(raw);
-	WORDSTACK ws = RetriveWords(raw);
-	int i = 0;
 	CTrieTree *tpp = new CTrieTree;
+	m_edit.GetWindowTextA(raw);
+	//为了防止出错，这里要去除所有非英语字符
+	tpp->log("<<<开始去除所有非英文字符");
+	CString dstr = "";
+	for (int i = 0; i < raw.GetLength(); i++)
+	{
+		if ((raw[i] >= 'a'&&raw[i] <= 'z') || (raw[i] >= 'A' && raw[i] <= 'Z') || raw[i]==' ')
+		{
+			dstr += raw[i];
+		}
+	}
+	//MessageBox(dstr);
+	//去除完毕
+	tpp->log("开始分词");
+	WORDSTACK ws = RetriveWords(dstr);
+	int i = 0;
+	tpp->log("建立trie树");
 	while (!ws.empty())
 	{
-		if (tpp->Search(ws.top(), tpp->GetRoot()) == false)
-		{
 			tpp->Insert(ws.top(), tpp->GetRoot());
-		}
-		else
-		{
-			tpp->IncreaseWordCount();
-		}
 		ws.pop();
 		i++;
 	}
+	tpp->log("显示数据");
 	tfdlg.setTrie(tpp);
 	tfdlg.DoModal();
 }
@@ -541,20 +554,12 @@ void CMypadDlg::OnMenuSort()
 	CTrieTree *tpp = new CTrieTree;
 	while (!ws.empty())
 	{
-		if (tpp->Search(ws.top(), tpp->GetRoot()) == false)
-		{
 			tpp->Insert(ws.top(), tpp->GetRoot());
-		}
-		else
-		{
-			tpp->IncreaseWordCount();
-		}
 		ws.pop();
 		i++;
 	}
 	CString sortstr = tpp->Sort();
 	delete tpp;
-	//m_edit.SetWindowTextA(sortstr);
 	MessageBoxA(sortstr);
 }
 
@@ -570,14 +575,7 @@ void CMypadDlg::OnMenuSearch()
 	CTrieTree *tpp = new CTrieTree;
 	while (!ws.empty())
 	{
-		if (tpp->Search(ws.top(), tpp->GetRoot()) == false)
-		{
 			tpp->Insert(ws.top(), tpp->GetRoot());
-		}
-		else
-		{
-			tpp->IncreaseWordCount();
-		}
 		ws.pop();
 		i++;
 	}

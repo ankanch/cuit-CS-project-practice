@@ -1,4 +1,6 @@
 #pragma once
+#include "types.h"
+#include<iostream>
 #include<vector>
 #include<stack>
 #include<utility>
@@ -37,7 +39,7 @@ public:
 	CTrieTree();
 	~CTrieTree();
 	//下面的函数为插入/删除接口
-	const bool IncreaseWordCount();	//更新指定单词的计数，即将单词数增加1,只能在最近一次Search调用且返回true时调用
+	//【已弃用】const bool IncreaseWordCount();	//更新指定单词的计数，即将单词数增加1,只能在最近一次Search调用且返回true时调用
 	const PWORDNODE GetLastFoundEndingChar();	//获取最近一次Search执行之后找到的单词的最后一个字符对应的节点（用来更新LEAFDATA）
 	const bool Insert(CString word,PWORDNODE tg,int level=1);  //将一个单词插入Trie树。返回值：true插入或部分插入，false未插入（已存在，需要更新叶子数据）
 	const bool Search(CString word,PWORDNODE tg);		//查找一个单词是否已经在Trie树中
@@ -51,13 +53,12 @@ public:
 	//下面的函数为统计/应用接口
 	const TFDLIST GetTermFrequencyList(); 	//用于显示词频
 	const CString Sort();		//对Trie树进行排序,按照ASCII码大小顺序
-	//下面为数据共享接口
-	void Synchorize(CTrieTree & trie);		//该函数的作用是将当前对象的数据同步到指定CTrieTree对象中
+	void log(const CString data);//调试函数
 	
 private:
 	const bool AppendMemoryForLLCL();  //该函数用来向levelnodes_count_list追加空间
 	const int GetLLCLSize();  //获取levelnodes_count_list的大小
-	const int SearchForAlphabetIndex(const char ch,const WORDNODE & node); //该函数用来查找数据为ch的节点在当前node中的pnexlist索引,未找到：-1
+	const int SearchForAlphabetIndex(const char ch,const PWORDNODE node); //该函数用来查找数据为ch的节点在当前node中的pnexlist索引,未找到：-1
 	const PWORDNODE CreateNode(const char chr, PLEAFDATA leafdata = nullptr);   //创建新节点
 	const int AddToNextList(WORDNODE * desnode,PWORDNODE srcnode);  //将一个新的节点添加到指定节点的pnextlist域中
 	const void deleteTrieTree(PROOT root);   //删除所有Trie树的数据
@@ -67,7 +68,7 @@ private:
 	static bool compLarge( TFD a,  TFD b);	//比较函数
 	void dictsort(PWORDNODE tg,WORDSTACK &ws, CString wordsuffix = " ");	//将tg按字典排序然后压栈（最后需要推栈）
 	void searchOutWord(PWORDNODE tg, CString wordsuffix,WORDSTACK &ws);		//用于Suggest函数，当发现满足匹配的时候，用这个函数读取剩余的单词并接入ws中
-	void log(const CString data);//调试函数
+	inline const bool isAlphabert(const char ch) { if ((ch >= 'a'&& ch <= 'z') || (ch >= 'A'&&ch <= 'Z')) { return true; } else { return false; } }
 
 	PROOT proot;		//指向树根
 	PWORDNODE lastfoundendingchar;	//记录最近一次Search执行之后找到的单词的最后一个字符对应的节点

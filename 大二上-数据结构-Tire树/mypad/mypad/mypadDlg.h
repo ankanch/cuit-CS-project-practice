@@ -62,6 +62,8 @@ public:
 	bool ins_avb;
 	//标记删除被按下
 	bool del_pressed;
+	//VK_DOWN 
+	bool clkvkdown;
 	//记录上一个输入的单词
 	CString lastword;
 	//记录上一次按下空格时候光标的位置
@@ -70,6 +72,7 @@ public:
 	CTrieGraph *triegraphdlg;
 	//智能提示对话框指针
 	CInteliDlg *intdlg;
+	CListBox *lb;
 	//标记智能提示框状态
 	bool INK;
 

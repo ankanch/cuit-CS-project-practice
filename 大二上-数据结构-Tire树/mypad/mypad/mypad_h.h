@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 8.00.0603 */
-/* at Wed Dec 21 10:22:03 2016
+/* at Wed Dec 28 17:04:15 2016
  */
 /* Compiler settings for mypad.idl:
     Oicf, W1, Zp8, env=Win32 (32b run), target_arch=X86 8.00.0603 

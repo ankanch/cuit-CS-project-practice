@@ -46,7 +46,7 @@ private:
 	PGRAPHDATA graphdata;	//储存图的数据
 	CTrieTree * trie;		//储存trie树的数据
 	PGRAPHDATA  ConvertTrieToDrawable( CTrieTree * trie);	//该函数用来将Trie中的节点转换成GRAPHNODE，方便绘制
-
+	bool vf;
 public:
 	const bool UpdateGraph();   //该函数用来更新图画
 	const bool InitGraph( CTrieTree * trie);		//该函数用来绘制初始图画
@@ -54,4 +54,6 @@ public:
 	afx_msg void OnClose();
 	virtual BOOL OnInitDialog();
 	afx_msg void OnPaint();
+	afx_msg void OnSizing(UINT fwSide, LPRECT pRect);
+	afx_msg void OnSize(UINT nType, int cx, int cy);
 };

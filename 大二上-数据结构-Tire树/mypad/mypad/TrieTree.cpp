@@ -23,6 +23,7 @@ CTrieTree::CTrieTree()
 	nodes_count = 0;
 	diff_words_count = 0;
 	size_LLCL = 0;
+	log(">>>Trie容器构建完毕。");
 }
 
 CTrieTree::~CTrieTree()
@@ -30,6 +31,7 @@ CTrieTree::~CTrieTree()
 	deleteTrieTree(proot);
 	delete proot;
 	delete[] levelnodes_count_list;
+	log(">>>Trie容器已经销毁。");
 }
 const void CTrieTree::deleteTrieTree(PROOT root)
 {
@@ -70,23 +72,19 @@ const int CTrieTree::deleteFromNextList(PWORDNODE desnode, const int delindex)
 
 void CTrieTree::log(const CString data)
 {
-	CStdioFile ff;
-	ff.Open("log.txt", CFile::modeNoTruncate | CFile::modeWrite|CFile::modeCreate);
-	ff.SeekToEnd();
-	ff.WriteString(data + "\r\n");
-	ff.Close();
+	std::cout << data << std::endl;
 }
 
 const bool CTrieTree::Insert(CString word, PWORDNODE tg,int level)
 {
-	//CString buf = "";
-	//log("in function Insert:");
+	CString buf = "";
 	int ll = level;
-	int chindex = SearchForAlphabetIndex(word[0], *tg);
-	//buf.Format("\talphabet %c 's searching result (root=%c):postion=%d at level %d", word[0],GetRoot()->ch,chindex, level);
+	int chindex = SearchForAlphabetIndex(word[0], tg);
+	buf.Format("\t函数INSERT:字符 %c 在源表中的搜索结果 (上一节点的值=%c):pnextlist中的位置=%d 层数 %d", word[0],tg->ch,chindex, level);
 	//log(buf);
-	if (word[0] == '\0' || word[0] == ' ')
+	if (!isAlphabert(word[0]))
 	{
+		//log("^^^^return:non-alphabert characters.(INSERT)");
 		return true;
 	}
 	//在当前节点寻找字符，未找到：
@@ -98,7 +96,7 @@ const bool CTrieTree::Insert(CString word, PWORDNODE tg,int level)
 		newnode->pnextlist = nullptr;
 		newnode->size_nextlist = 0;
 		newnode->level = ll;
-		if (word[1] == '\0' || word[1] == ' ')
+		if (word.GetLength() == 1)
 		{
 			//如果是最后一个单词，则向最后一个字母所在节点增加叶子数据
 			PLEAFDATA lfd = new LEAFDATA;
@@ -141,6 +139,17 @@ const bool CTrieTree::Insert(CString word, PWORDNODE tg,int level)
 	{
 		if (word.GetLength() == 1)
 		{
+			buf.Format("///INSERT: found alphabert,current node:%c", tg->ch);
+			//log(buf);
+			if (tg->pnextlist[chindex]->pdata == nullptr)
+			{
+				PLEAFDATA lfd = new LEAFDATA;
+				lfd->word_count = 1;
+				lfd->word_length = ll;
+				tg->pnextlist[chindex]->pdata = lfd;
+				return false;
+			}
+			tg->pnextlist[chindex]->pdata->word_count++;
 			//单词已经添加完毕
 			return false;
 		}
@@ -157,52 +166,49 @@ const bool CTrieTree::Search(CString word, PWORDNODE tg)
 	一个单词的定义是：从树根到一个带叶数据节点的一条路径即构成一个单词。
 	带叶数据节点是指pdata域非空
 	/*/
-	//CString buf = "";
-	//log("in function Search:");
-	int chindex = SearchForAlphabetIndex(word[0], *tg);
-	//buf.Format("\talphabet %c 's searching result (root=%c):postion=%d", word[0],GetRoot()->ch,chindex);
+	CString buf = "";
+	int chindex = SearchForAlphabetIndex(word[0], tg);
+	buf.Format("\t函数SEARCH：字母 %c 的搜索结果 (上一节点值=%c):位置=%d", word[0],tg->ch,chindex);
 	//log(buf);
-	if (word[0] == '\0' || word[0] == ' ')
+	if (!isAlphabert(word[0]))
 	{
-		//log("return in \\0 and SPACE");
-
+		//log("^^^^return:non-alphabert characters.");
 		return true;
 	}
 	//在当前节点寻找字符，未找到：则返回
 	if (chindex == -1)
 	{
+		//log("^^^^return: no match characters.");
 		return false;
 	}
 	else//找到，继续寻找下一个
 	{
-		//log("word =/"+ word+"/");
-		if (word[1] == '\0' || word[1] == ' ' || tg->size_nextlist == 0)
+		int leftsize = word.GetLength();   //获取剩余查找长度,该长度永远大于等于1
+		if(leftsize == 1)  
 		{
-			//这种情况说明已经找到了一个符合条件的元单词（可能是一个单词，也可能是单词的一部分如be和bee），其中，be为元单词
-			//log("ready to return，tg->data="+CString(tg->ch));
-			//只有pdata非空的情况下才说明这是一个单词，否则只能说明是其它单词的一部分
+			//还剩一个单词，注意，到这一步说明该单词已经查找过且存在，所以，这里需要判断其对应节点是否是单词结束位置
+			//即 pdata为nullptr，如果是，则查找成功，否则，查找失败
 			if (tg->pnextlist[chindex]->pdata != nullptr)
 			{
 				lastfoundendingchar = tg->pnextlist[chindex];
-				//log("return in pdata");
+				buf.Format("^^^^return:  word found,next alphabert:%c", tg->pnextlist[chindex]->ch);
+				//log(buf);
 				return true;
 			}
-		}
-		/*/
-		if (tg->size_nextlist == 0)
-		{
-			//这种情况是走完从树根到叶子的一条路径，找到相应的单词
-			//最后一个单词无子节点
-			return true;
-		}
-		/*/
-		if (!Search(word.Mid(1), tg->pnextlist[chindex]))
-		{
+			buf.Format("^^^^return:  word found but not the ending of word,next alphabert:%c", tg->pnextlist[chindex]->ch);
+			//log(buf);
 			return false;
 		}
 		else
 		{
-			return true;
+			if (!Search(word.Mid(1), tg->pnextlist[chindex]))
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
 		}
 	}
 }
@@ -246,7 +252,7 @@ const int CTrieTree::Delete(CString word, PWORDNODE tg, int level)
 	删除逻辑，当找到单词后删除pdata中的计数数据，然后在判断计数数据是否为0，如果为0
 	且改单词非其它单词的一部分则删除所有路径节点，否则仅删除pdata，然后设置pdata为nullptr
 	/*/
-	int chindex = SearchForAlphabetIndex(word[0], *tg);
+	int chindex = SearchForAlphabetIndex(word[0], tg);
 	//在当前节点寻找字符，未找到：则返回
 	if (chindex == -1)
 	{
@@ -309,6 +315,7 @@ const int CTrieTree::Delete(CString word, PWORDNODE tg, int level)
 	}
 }
 
+/*/
 const bool CTrieTree::IncreaseWordCount()
 {
 	//该函数的作用是将
@@ -318,6 +325,7 @@ const bool CTrieTree::IncreaseWordCount()
 	p->pdata->word_count++;
 	return true;
 }
+/*/
 
 const PROOT CTrieTree::GetRoot()
 {
@@ -371,11 +379,11 @@ const int CTrieTree::GetLLCLSize()
 	return size_LLCL;
 }
 
-const int CTrieTree::SearchForAlphabetIndex(const char ch, const WORDNODE & node)
+const int CTrieTree::SearchForAlphabetIndex(const char ch, const PWORDNODE node)
 {
-	for (int i = 0; i < node.nextlist_fill; i++)
+	for (int i = 0; i < node->nextlist_fill; i++)
 	{
-		if (node.pnextlist[i]->ch == ch)
+		if (node->pnextlist[i]->ch == ch)
 		{
 			return i;
 		}

@@ -144,6 +144,8 @@ PGRAPHDATA CTrieGraph::ConvertTrieToDrawable( CTrieTree * trie)
 BEGIN_MESSAGE_MAP(CTrieGraph, CDialogEx)
 	ON_WM_CLOSE()
 	ON_WM_PAINT()
+	ON_WM_SIZING()
+	ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 
@@ -191,7 +193,7 @@ const bool CTrieGraph::InitGraph( CTrieTree * trie)
 	//循环绘制点集合
 	for (int i = 0; i <= graphdata->nodessum; i++)
 	{
-		dcd.Ellipse(graphdata->nodeslist[i].x - 15, graphdata->nodeslist[i].y - 15, graphdata->nodeslist[i].x + 15, graphdata->nodeslist[i].y + 15);
+		dcd.Ellipse(graphdata->nodeslist[i].x - 12, graphdata->nodeslist[i].y - 12, graphdata->nodeslist[i].x + 12, graphdata->nodeslist[i].y + 12);
 		if (i)
 		{
 			dcd.TextOutA(graphdata->nodeslist[i].x - 4, graphdata->nodeslist[i].y - 8, CString(graphdata->nodeslist[i].data));
@@ -204,8 +206,8 @@ const bool CTrieGraph::InitGraph( CTrieTree * trie)
 			CString buf = "";
 			buf.Format("Parent Point %d(%c):\tx=%d,y=%d\n", i,graphdata->nodeslist[i].data ,graphdata->nodeslist[i].parent->x, graphdata->nodeslist[i].parent->y);
 			xxx += buf;
-			dcd.MoveTo(CPoint(graphdata->nodeslist[i].x, graphdata->nodeslist[i].y-15));
-			dcd.LineTo(CPoint(graphdata->nodeslist[i].parent->x, graphdata->nodeslist[i].parent->y+15));
+			dcd.MoveTo(CPoint(graphdata->nodeslist[i].x, graphdata->nodeslist[i].y-12));
+			dcd.LineTo(CPoint(graphdata->nodeslist[i].parent->x, graphdata->nodeslist[i].parent->y+12));
 		}
 	}
 #ifdef KDEBUG
@@ -238,6 +240,7 @@ BOOL CTrieGraph::OnInitDialog()
 	graphdata->x_split = 0;
 	graphdata->y_split = 0;
 	trie = nullptr;
+	vf = false;
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // 异常: OCX 属性页应返回 FALSE
@@ -246,16 +249,31 @@ BOOL CTrieGraph::OnInitDialog()
 
 void CTrieGraph::OnPaint()
 {
-	CPaintDC dc(this); // device context for painting
+	CPaintDC dcd(this); // device context for painting
 					   // TODO: 在此处添加消息处理程序代码
 					   // 不为绘图消息调用 CDialogEx::OnPaint()
 	CRect rect;
 	//设置对话框背景颜色为白色
 	GetClientRect(rect);
-	dc.FillSolidRect(rect, RGB(255, 255, 255));
+	dcd.FillSolidRect(rect, RGB(255, 255, 255));
 	//重新绘制Trie树
 	InitGraph(trie);
-	//{
-		//MessageBoxA("Init Graph Failed!");
-	//}
+	
+}
+
+
+void CTrieGraph::OnSizing(UINT fwSide, LPRECT pRect)
+{
+	CDialogEx::OnSizing(fwSide, pRect);
+
+	// TODO: 在此处添加消息处理程序代码
+	
+}
+
+
+void CTrieGraph::OnSize(UINT nType, int cx, int cy)
+{
+	CDialogEx::OnSize(nType, cx, cy);
+
+	// TODO: 在此处添加消息处理程序代码
 }

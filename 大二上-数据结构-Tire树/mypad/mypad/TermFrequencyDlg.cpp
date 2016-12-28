@@ -41,9 +41,9 @@ BOOL CTermFrequencyDlg::OnInitDialog()
 	CDialogEx::OnInitDialog();
 
 	// TODO:  在此添加额外的初始化
-	m_tflist.InsertColumn(0, "单词",LVCFMT_CENTER, 140);
-	m_tflist.InsertColumn(1, "频次", LVCFMT_CENTER, 60);
-	m_tflist.InsertColumn(2, "频率", LVCFMT_CENTER, 60);
+	m_tflist.InsertColumn(0, "单词",LVCFMT_CENTER, 140,0);
+	m_tflist.InsertColumn(1, "频次", LVCFMT_CENTER, 60,1);
+	m_tflist.InsertColumn(2, "频率", LVCFMT_CENTER, 60,2);
 
 	CString buf;
 	TFDLIST tl = pt->GetTermFrequencyList();
@@ -69,8 +69,9 @@ BOOL CTermFrequencyDlg::OnInitDialog()
 	}
 	for (int i = 0; i < tl.size(); i++)
 	{
-		double t = tl.at(i).second / sum* 100;
-		buf.Format("%.2f", t);
+		TFD tfd = tl.at(i);
+		double t = (double(tfd.second) / sum)* 100;
+		buf.Format("%.2f%%", t);
 		m_tflist.SetItemText(i, 2, buf);
 	}
 	CString pp;
