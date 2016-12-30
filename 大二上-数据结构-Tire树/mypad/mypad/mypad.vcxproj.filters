@@ -54,6 +54,9 @@
     <ClInclude Include="types.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="LinkListArraryImplement.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mypad.cpp">
@@ -81,6 +84,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="InteliDlg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="LinkListArraryImplement.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

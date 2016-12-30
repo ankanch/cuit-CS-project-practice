@@ -1,7 +1,7 @@
-﻿  TrieGraph.cpp
-  LINK : 没有找到 Q:\0_作业\工程实践\大二上-数据结构-Tire树\mypad\mypad\Debug\mypad.exe 或上一个增量链接没有生成它；正在执行完全链接
+﻿  LinkListArraryImplement.cpp
+q:\0_作业\工程实践\大二上-数据结构-tire树\mypad\mypad\linklistarraryimplement.h(3): warning C4005: “OVERFLOW”: 宏重定义
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\math.h(954): note: 参见“OVERFLOW”的前一个定义
+q:\0_作业\工程实践\大二上-数据结构-tire树\mypad\mypad\linklistarraryimplement.cpp(29): warning C4996: 'scanf': This function or variable may be unsafe. Consider using scanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(1270): note: 参见“scanf”的声明
   mypad.vcxproj -> Q:\0_作业\工程实践\大二上-数据结构-Tire树\mypad\mypad\Debug\mypad.exe
   mypad.vcxproj -> Q:\0_作业\工程实践\大二上-数据结构-Tire树\mypad\mypad\Debug\mypad.pdb (Partial PDB)
-  Microsoft (R) COFF/PE Editor Version 14.00.24210.0
-  Copyright (C) Microsoft Corporation.  All rights reserved.
-  

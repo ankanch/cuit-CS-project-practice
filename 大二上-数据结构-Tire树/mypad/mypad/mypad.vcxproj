@@ -75,14 +75,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
+    <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
+    <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -203,6 +203,7 @@
   <ItemGroup>
     <ClInclude Include="DlgProxy.h" />
     <ClInclude Include="InteliDlg.h" />
+    <ClInclude Include="LinkListArraryImplement.h" />
     <ClInclude Include="mypad.h" />
     <ClInclude Include="mypadDlg.h" />
     <ClInclude Include="Resource.h" />
@@ -217,6 +218,7 @@
   <ItemGroup>
     <ClCompile Include="DlgProxy.cpp" />
     <ClCompile Include="InteliDlg.cpp" />
+    <ClCompile Include="LinkListArraryImplement.cpp" />
     <ClCompile Include="mypad.cpp" />
     <ClCompile Include="mypadDlg.cpp" />
     <ClCompile Include="SearchSuggestDlg.cpp" />
