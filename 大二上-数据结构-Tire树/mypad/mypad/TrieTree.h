@@ -3,6 +3,7 @@
 #include<iostream>
 #include<vector>
 #include<stack>
+#include<queue>
 #include<utility>
 #include<algorithm>
 #define BUFFER_LEVEL_COUNT 20   //每一层的节点数数组的初始长度（假设会有20层）
@@ -17,6 +18,7 @@
 typedef std::pair<CString,int> TFD;	//用于词频统计的自定义类型
 typedef std::vector<TFD> TFDLIST;		//用于词频统计
 typedef std::stack<CString> WORDSTACK;	//用于字典排序
+typedef std::queue<CHANGENODE> POCESSLIST;
 typedef struct leafdata {
 	int word_count;			//该单词出现的次数
 	int word_length;		//该单词的长度
@@ -53,9 +55,12 @@ public:
 	//下面的函数为统计/应用接口
 	const TFDLIST GetTermFrequencyList(); 	//用于显示词频
 	const CString Sort();		//对Trie树进行排序,按照ASCII码大小顺序
+	//下面的代码用于===
+	POCESSLIST GetLastPocessList();	//该函数用于返回上一次的处理过程列表
 	void log(const CString data);//调试函数
 	
 private:
+	void clearPocessList();	//清空处理过程列表
 	const bool AppendMemoryForLLCL();  //该函数用来向levelnodes_count_list追加空间
 	const int GetLLCLSize();  //获取levelnodes_count_list的大小
 	const int SearchForAlphabetIndex(const char ch,const PWORDNODE node); //该函数用来查找数据为ch的节点在当前node中的pnexlist索引,未找到：-1
@@ -78,5 +83,7 @@ private:
 
 	int size_LLCL;   //记录levelnodes_count_list的大小
 	int *levelnodes_count_list;	//记录树每一层的节点数
+
+	POCESSLIST pl;	//储存处理过程列表
 };
 

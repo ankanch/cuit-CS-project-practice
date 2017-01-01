@@ -216,6 +216,45 @@ const bool CTrieGraph::InitGraph( CTrieTree * trie)
 	return true;
 }
 
+const bool CTrieGraph::showPocess(POCESSLIST &pl)
+{
+	//展示进程用黄色标记出
+	CClientDC dcd(this);
+	if (trie->GetNodesCount() == 0)
+	{
+		return false;
+	}
+	CPen pen;
+	pen.CreatePen(PS_SOLID, 2, RGB(255, 255, 0));
+	dcd.SelectObject(&pen);
+	for (int i = 0; i < pl.size(); i++)
+	{
+		CHANGENODE cn;
+		cn = pl.front();
+		for (int j = 0; j < graphdata->nodessum; j++)
+		{
+			//寻找点，并改变颜色
+			if (cn.data == graphdata->nodeslist[j].data && cn.level == graphdata->nodeslist[j].level)
+			{
+				dcd.Ellipse(graphdata->nodeslist[j].x - 12, graphdata->nodeslist[j].y - 12, graphdata->nodeslist[j].x + 12, graphdata->nodeslist[j].y + 12);
+				if (i)
+				{
+					dcd.TextOutA(graphdata->nodeslist[j].x - 4, graphdata->nodeslist[j].y - 8, CString(graphdata->nodeslist[j].data));
+					if (graphdata->nodeslist[j].wordscount != -1)
+					{
+						CString countx;
+						countx.Format("%d", graphdata->nodeslist[j].wordscount);
+						dcd.TextOutA(graphdata->nodeslist[j].x - 4, graphdata->nodeslist[j].y + 16, countx);
+					}
+					dcd.MoveTo(CPoint(graphdata->nodeslist[j].x, graphdata->nodeslist[j].y - 12));
+					dcd.LineTo(CPoint(graphdata->nodeslist[j].parent->x, graphdata->nodeslist[j].parent->y + 12));
+				}
+			}
+		}
+	}
+	return true;
+}
+
 void CTrieGraph::setTrieTree(CTrieTree *trieroot)
 {
 	trie = trieroot;

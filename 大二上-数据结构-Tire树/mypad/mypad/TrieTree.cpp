@@ -70,6 +70,11 @@ const int CTrieTree::deleteFromNextList(PWORDNODE desnode, const int delindex)
 	return desnode->nextlist_fill;
 }
 
+POCESSLIST CTrieTree::GetLastPocessList()
+{
+	return pl;
+}
+
 void CTrieTree::log(const CString data)
 {
 	std::cout << data << std::endl;
@@ -350,6 +355,15 @@ const int * CTrieTree::GetLLCList()
 const PWORDNODE CTrieTree::GetLastFoundEndingChar()
 {
 	return lastfoundendingchar;
+}
+
+void CTrieTree::clearPocessList()
+{
+	while (!pl.empty())
+	{
+		pl.pop();
+	}
+
 }
 
 const bool CTrieTree::AppendMemoryForLLCL()

@@ -259,6 +259,7 @@ void CMypadDlg::OnEnChangeEditContent()
 	CString partword = "";
 	int bno = editstr.ReverseFind(' ');
 	INK = false;
+	POCESSLIST pl;
 	if (  bno != editstr.GetLength() && bno != -1)
 	{
 		//MessageBoxA("A");

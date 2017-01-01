@@ -1,12 +1,15 @@
 #pragma once
 #include"TrieTree.h"
+#include "types.h"
 #include<queue>
 //大二上-工程实践-2-Trie树
 //张龙 2015051152 应用153
 //mailto://kanchisme@gmail.com
 //http://akakanch.com
 // CTrieGraph 对话框
+
 typedef std::queue<PWORDNODE> CONVERSEQUEUE;
+typedef std::queue<CHANGENODE> POCESSLIST;
 //绘制图点的结构
 typedef struct graphnode {
 	int level;	//指示该字母在Trie中的层数
@@ -24,6 +27,7 @@ typedef struct graphdata {
 	int x_split = 0;	//储存各个点之间x的距离
 	int y_split = 0;	//储存每一层的距离
 }GRAPHDATA,*PGRAPHDATA;
+
 
 class CTrieGraph : public CDialogEx
 {
@@ -50,6 +54,7 @@ private:
 public:
 	const bool UpdateGraph();   //该函数用来更新图画
 	const bool InitGraph( CTrieTree * trie);		//该函数用来绘制初始图画
+	const bool showPocess(POCESSLIST& pl);		//该函数的作用是绘制程序的处理进程
 	void setTrieTree(CTrieTree * trieroot);
 	afx_msg void OnClose();
 	virtual BOOL OnInitDialog();
