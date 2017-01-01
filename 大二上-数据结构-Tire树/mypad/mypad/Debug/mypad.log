@@ -1,19 +1,2 @@
-﻿  mypadDlg.cpp
-q:\0_作业\工程实践\大二上-数据结构-tire树\mypad\mypad\mypaddlg.cpp(329): warning C4244: “/=”: 从“double”转换到“int”，可能丢失数据
-q:\0_作业\工程实践\大二上-数据结构-tire树\mypad\mypad\mypaddlg.cpp(331): warning C4244: “*=”: 从“double”转换到“int”，可能丢失数据
-  TrieTree.cpp
-  正在生成代码...
-  正在编译...
-  mypad.cpp
-  TrieGraph.cpp
-q:\0_作业\工程实践\大二上-数据结构-tire树\mypad\mypad\triegraph.cpp(230): warning C4018: “<”: 有符号/无符号不匹配
-  TermFrequencyDlg.cpp
-q:\0_作业\工程实践\大二上-数据结构-tire树\mypad\mypad\termfrequencydlg.cpp(55): warning C4018: “<”: 有符号/无符号不匹配
-q:\0_作业\工程实践\大二上-数据结构-tire树\mypad\mypad\termfrequencydlg.cpp(70): warning C4018: “<”: 有符号/无符号不匹配
-  SearchSuggestDlg.cpp
-  DlgProxy.cpp
-  正在生成代码...
-  正在跳过...(未检测到相关更改)
-  InteliDlg.cpp
-  mypad.vcxproj -> Q:\0_作业\工程实践\大二上-数据结构-Tire树\mypad\mypad\Debug\mypad.exe
+﻿  mypad.vcxproj -> Q:\0_作业\工程实践\大二上-数据结构-Tire树\mypad\mypad\Debug\mypad.exe
   mypad.vcxproj -> Q:\0_作业\工程实践\大二上-数据结构-Tire树\mypad\mypad\Debug\mypad.pdb (Partial PDB)
