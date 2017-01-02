@@ -75,6 +75,8 @@ public:
 	CListBox *lb;
 	//标记智能提示框状态
 	bool INK;
+	//标记是否需要显示操作过程
+	bool SHOWPOCESS;
 
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	afx_msg void OnMenuShowTrie();
@@ -82,4 +84,5 @@ public:
 	afx_msg void OnMenuSort();
 	afx_msg void OnMenuSearch();
 	CStatic m_tipsxx;
+	afx_msg void OnMenuShowOperationProcess();
 };

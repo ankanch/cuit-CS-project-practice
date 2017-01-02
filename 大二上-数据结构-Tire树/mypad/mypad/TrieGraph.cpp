@@ -104,6 +104,7 @@ PGRAPHDATA CTrieGraph::ConvertTrieToDrawable( CTrieTree * trie)
 	graphdata->nodeslist[0].data = '*';
 	graphdata->nodeslist[0].x = level_width[max/2];
 	graphdata->nodeslist[0].y = 14;
+	graphdata->nodeslist[0].uid = 0;
 	graphdata->nodeslist[0].parent = nullptr;
 	cq.push(lastlevel);
 	int lastfill = 0;  //记录上一次的装载点
@@ -118,6 +119,7 @@ PGRAPHDATA CTrieGraph::ConvertTrieToDrawable( CTrieTree * trie)
 			graphdata->nodeslist[conversenodes].data = lastlevel->pnextlist[i]->ch;
 			graphdata->nodeslist[conversenodes].x = level_width[level_node_looped[lastlevel->pnextlist[i]->level-1] ];
 			graphdata->nodeslist[conversenodes].y = level_height[lastlevel->pnextlist[i]->level-1];
+			graphdata->nodeslist[conversenodes].uid = lastlevel->pnextlist[i]->uid;
 			graphdata->nodeslist[conversenodes].parent = &graphdata->nodeslist[lastfill];  //指向其父节点
 			if (lastlevel->pnextlist[i]->pdata != nullptr)
 			{
@@ -227,30 +229,23 @@ const bool CTrieGraph::showPocess(POCESSLIST &pl)
 	CPen pen;
 	pen.CreatePen(PS_SOLID, 2, RGB(255, 255, 0));
 	dcd.SelectObject(&pen);
-	for (int i = 0; i < pl.size(); i++)
+	while(!pl.empty())
 	{
 		CHANGENODE cn;
 		cn = pl.front();
+		std::cout <<"cn.data=" <<cn.data << "\tcn.uid="<<cn.uid<<std::endl;
 		for (int j = 0; j < graphdata->nodessum; j++)
 		{
 			//寻找点，并改变颜色
-			if (cn.data == graphdata->nodeslist[j].data && cn.level == graphdata->nodeslist[j].level)
+			//cn.data == graphdata->nodeslist[j].data && cn.level == graphdata->nodeslist[j].level &&
+			if ( cn.uid == graphdata->nodeslist[j].uid && cn.data== graphdata->nodeslist[j].data)
 			{
 				dcd.Ellipse(graphdata->nodeslist[j].x - 12, graphdata->nodeslist[j].y - 12, graphdata->nodeslist[j].x + 12, graphdata->nodeslist[j].y + 12);
-				if (i)
-				{
-					dcd.TextOutA(graphdata->nodeslist[j].x - 4, graphdata->nodeslist[j].y - 8, CString(graphdata->nodeslist[j].data));
-					if (graphdata->nodeslist[j].wordscount != -1)
-					{
-						CString countx;
-						countx.Format("%d", graphdata->nodeslist[j].wordscount);
-						dcd.TextOutA(graphdata->nodeslist[j].x - 4, graphdata->nodeslist[j].y + 16, countx);
-					}
-					dcd.MoveTo(CPoint(graphdata->nodeslist[j].x, graphdata->nodeslist[j].y - 12));
-					dcd.LineTo(CPoint(graphdata->nodeslist[j].parent->x, graphdata->nodeslist[j].parent->y + 12));
-				}
+				dcd.TextOutA(graphdata->nodeslist[j].x - 4, graphdata->nodeslist[j].y - 8, CString(graphdata->nodeslist[j].data));
 			}
 		}
+		pl.pop();
+		Sleep(500);
 	}
 	return true;
 }

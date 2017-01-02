@@ -89,6 +89,7 @@ BEGIN_MESSAGE_MAP(CMypadDlg, CDialogEx)
 	ON_COMMAND(ID_MENU_TF, &CMypadDlg::OnMenuTf)
 	ON_COMMAND(ID_MENU_SORT, &CMypadDlg::OnMenuSort)
 	ON_COMMAND(ID_MENU_SEARCH, &CMypadDlg::OnMenuSearch)
+	ON_COMMAND(ID_MENU_SHOW_OPERATION_PROCESS, &CMypadDlg::OnMenuShowOperationProcess)
 END_MESSAGE_MAP()
 
 
@@ -155,6 +156,7 @@ BOOL CMypadDlg::OnInitDialog()
 	lb = (CListBox*)intdlg->GetDlgItem(IDC_LIST_INTEL);
 	//
 	clkvkdown = false;
+	SHOWPOCESS = false;
 	
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
@@ -459,9 +461,9 @@ const WORDSTACK  CMypadDlg::RetriveWords(const CString raw)
 		spacebeg = spaceend;
 		spaceend = -1;
 		ws.push(word);
-		//mm += "/" + word + "/\n";
+		mm += "/" + word + "/\t";
 	}
-	//MessageBoxA(mm);
+	std::cout << "WORDS_LIST=" << mm<<std::endl;
 	WORDSTACK wws;
 	while (!ws.empty())
 	{
@@ -581,5 +583,23 @@ void CMypadDlg::OnMenuSearch()
 		i++;
 	}
 	ssdlg.SetTrieData(tpp);
+	ssdlg.SetTrieGraphDlg(triegraphdlg);
 	ssdlg.DoModal();
+}
+
+
+void CMypadDlg::OnMenuShowOperationProcess()
+{
+	// TODO: 在此添加命令处理程序代码
+	if (SHOWPOCESS)
+	{
+		SHOWPOCESS = false;
+		GetMenu()->CheckMenuItem(ID_MENU_SHOW_OPERATION_PROCESS, false);
+	}
+	else
+	{
+		SHOWPOCESS = true;
+		GetMenu()->CheckMenuItem(ID_MENU_SHOW_OPERATION_PROCESS, true);
+	}
+	
 }

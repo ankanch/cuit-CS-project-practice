@@ -65,6 +65,10 @@ void CSearchSuggestDlg::OnEnChangeEdit1()
 		i++;
 		ws.pop();
 	}
+	POCESSLIST pt = trie->GetLastPocessList();
+	std::cout << "pt.szie()=" << pt.size() << std::endl;
+	tg->showPocess(pt);
+	trie->clearPocessList();
 
 }
 

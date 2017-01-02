@@ -3,6 +3,7 @@
 #include "mypadDlg.h"
 #include "afxwin.h"
 #include "afxcmn.h"
+#include "TrieGraph.h"
 
 // CSearchSuggestDlg ¶Ô»°¿ò
 
@@ -25,6 +26,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 private:
 	CMypadDlg mypaddlg;
+	CTrieGraph *tg;
 	CTrieTree *trie;
 	WORDSTACK ws;
 public:
@@ -32,6 +34,7 @@ public:
 	CEdit m_searchword;
 	CListCtrl m_searchresultlist;
 	void SetTrieData(CTrieTree *triedata) { trie = triedata; }
+	void SetTrieGraphDlg(CTrieGraph *triegraph) { tg = triegraph; }
 	virtual BOOL OnInitDialog();
 	CStatic m_tips;
 };

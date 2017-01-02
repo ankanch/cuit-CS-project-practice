@@ -30,6 +30,7 @@ typedef struct TNode{
 	int size_nextlist;		//节点索引大小
 	struct TNode* *pnextlist;	//节点索引指针数组
 	int nextlist_fill;		//节点索引装填量
+	int uid;	//节点id
 	PLEAFDATA pdata;			//如果是叶子节点，这里则应该包含数据
 }WORDNODE,*PWORDNODE;
 
@@ -58,9 +59,9 @@ public:
 	//下面的代码用于===
 	POCESSLIST GetLastPocessList();	//该函数用于返回上一次的处理过程列表
 	void log(const CString data);//调试函数
+	void clearPocessList();	//清空处理过程列表
 	
 private:
-	void clearPocessList();	//清空处理过程列表
 	const bool AppendMemoryForLLCL();  //该函数用来向levelnodes_count_list追加空间
 	const int GetLLCLSize();  //获取levelnodes_count_list的大小
 	const int SearchForAlphabetIndex(const char ch,const PWORDNODE node); //该函数用来查找数据为ch的节点在当前node中的pnexlist索引,未找到：-1

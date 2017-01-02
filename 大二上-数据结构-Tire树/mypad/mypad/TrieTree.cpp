@@ -13,6 +13,7 @@ CTrieTree::CTrieTree()
 	proot->pnextlist = nullptr;
 	proot->size_nextlist = 0;
 	proot->nextlist_fill = 0;
+	proot->uid = 0;
 	proot->level = 0;
 	levelnodes_count_list = new int[BUFFER_LEVEL_COUNT];  //初始化层节点数数组
 	for (int i = 0; i < BUFFER_LEVEL_COUNT; i++)
@@ -101,6 +102,7 @@ const bool CTrieTree::Insert(CString word, PWORDNODE tg,int level)
 		newnode->pnextlist = nullptr;
 		newnode->size_nextlist = 0;
 		newnode->level = ll;
+		newnode->uid = tg->uid + word[0]*9 + 9*ll + 6*word.GetLength();
 		if (word.GetLength() == 1)
 		{
 			//如果是最后一个单词，则向最后一个字母所在节点增加叶子数据
@@ -220,6 +222,13 @@ const bool CTrieTree::Search(CString word, PWORDNODE tg)
 
 void CTrieTree::Suggest(CString wordpart,CString pathword ,WORDSTACK &ws, PWORDNODE tg, int matchlevel)
 {
+	//下面的代码用于过程展示
+	CHANGENODE cn;
+	cn.level = tg->level;
+	cn.data = tg->ch;
+	cn.uid = tg->uid;
+	pl.push(cn);
+	//上面的代码用于过程展示
 	CString word = "";
 	if (matchlevel == wordpart.GetLength())
 	{
@@ -536,6 +545,13 @@ void CTrieTree::dictsort(PWORDNODE tg,WORDSTACK &wg, CString wordsuffix)
 
 void CTrieTree::searchOutWord(PWORDNODE tg, CString wordsuffix, WORDSTACK &ws)
 {
+	//下面的代码用于过程展示
+	CHANGENODE cn;
+	cn.level = tg->level;
+	cn.data = tg->ch;
+	cn.uid = tg->uid;
+	pl.push(cn);
+	//上面的代码用于过程展示
 	CString word = "";
 	if (tg->ch != '*')
 	{
