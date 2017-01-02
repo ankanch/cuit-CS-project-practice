@@ -52,11 +52,14 @@ private:
 	CTrieTree * trie;		//储存trie树的数据
 	PGRAPHDATA  ConvertTrieToDrawable( CTrieTree * trie);	//该函数用来将Trie中的节点转换成GRAPHNODE，方便绘制
 	bool vf;
+	int presentionMilesecond;	//展示速度（毫秒，默认500）
 public:
 	const bool UpdateGraph();   //该函数用来更新图画
 	const bool InitGraph( CTrieTree * trie);		//该函数用来绘制初始图画
 	const bool showPocess(POCESSLIST& pl);		//该函数的作用是绘制程序的处理进程
 	void setTrieTree(CTrieTree * trieroot);
+	void setPresentionMilesecond(const int milesec) { presentionMilesecond = milesec; }	//设置演示速度
+	const int getPresentionMilesecond() { return presentionMilesecond; }
 	afx_msg void OnClose();
 	virtual BOOL OnInitDialog();
 	afx_msg void OnPaint();

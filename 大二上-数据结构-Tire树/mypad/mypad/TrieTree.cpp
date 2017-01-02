@@ -224,7 +224,7 @@ void CTrieTree::Suggest(CString wordpart,CString pathword ,WORDSTACK &ws, PWORDN
 {
 	//下面的代码用于过程展示
 	CHANGENODE cn;
-	cn.level = tg->level;
+	cn.type = 0;
 	cn.data = tg->ch;
 	cn.uid = tg->uid;
 	pl.push(cn);
@@ -491,6 +491,13 @@ const CString CTrieTree::Sort()
 
 void CTrieTree::sortpnextlist(PWORDNODE tg)
 {
+	//下面的代码用于过程展示
+	CHANGENODE cn;
+	cn.type = ORANGE;
+	cn.data = tg->ch;
+	cn.uid = tg->uid;
+	pl.push(cn);
+	//上面的代码用于过程展示
 	if (tg->pnextlist != nullptr)
 	{
 		PWORDNODE p1;
@@ -523,6 +530,13 @@ void CTrieTree::sortpnextlist(PWORDNODE tg)
 
 void CTrieTree::dictsort(PWORDNODE tg,WORDSTACK &wg, CString wordsuffix)
 {
+	//下面的代码用于过程展示
+	CHANGENODE cn;
+	cn.type = GREEN;
+	cn.data = tg->ch;
+	cn.uid = tg->uid;
+	pl.push(cn);
+	//上面的代码用于过程展示
 	CString word = "";
 	if (tg->ch != '*')
 	{
@@ -547,7 +561,7 @@ void CTrieTree::searchOutWord(PWORDNODE tg, CString wordsuffix, WORDSTACK &ws)
 {
 	//下面的代码用于过程展示
 	CHANGENODE cn;
-	cn.level = tg->level;
+	cn.type = 3;
 	cn.data = tg->ch;
 	cn.uid = tg->uid;
 	pl.push(cn);

@@ -75,14 +75,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
+    <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
+    <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -208,6 +208,7 @@
     <ClInclude Include="mypadDlg.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SearchSuggestDlg.h" />
+    <ClInclude Include="SetPresentionSpeed.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="TermFrequencyDlg.h" />
@@ -222,6 +223,7 @@
     <ClCompile Include="mypad.cpp" />
     <ClCompile Include="mypadDlg.cpp" />
     <ClCompile Include="SearchSuggestDlg.cpp" />
+    <ClCompile Include="SetPresentionSpeed.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

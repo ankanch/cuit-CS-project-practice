@@ -90,6 +90,7 @@ BEGIN_MESSAGE_MAP(CMypadDlg, CDialogEx)
 	ON_COMMAND(ID_MENU_SORT, &CMypadDlg::OnMenuSort)
 	ON_COMMAND(ID_MENU_SEARCH, &CMypadDlg::OnMenuSearch)
 	ON_COMMAND(ID_MENU_SHOW_OPERATION_PROCESS, &CMypadDlg::OnMenuShowOperationProcess)
+	ON_COMMAND(ID_TRIE_SETTIME, &CMypadDlg::OnTrieSettime)
 END_MESSAGE_MAP()
 
 
@@ -562,6 +563,11 @@ void CMypadDlg::OnMenuSort()
 		i++;
 	}
 	CString sortstr = tpp->Sort();
+	POCESSLIST pt = tpp->GetLastPocessList();
+	CString buf;
+	buf.Format("pt.length()=", pt.size());
+	MessageBox("开始展示访问过程");
+	triegraphdlg->showPocess(pt);
 	delete tpp;
 	MessageBoxA(sortstr);
 }
@@ -602,4 +608,13 @@ void CMypadDlg::OnMenuShowOperationProcess()
 		GetMenu()->CheckMenuItem(ID_MENU_SHOW_OPERATION_PROCESS, true);
 	}
 	
+}
+
+
+void CMypadDlg::OnTrieSettime()
+{
+	// TODO: 在此添加命令处理程序代码
+	CSetPresentionSpeed spsdlg;
+	spsdlg.setTrieGraphDlg(triegraphdlg);
+	spsdlg.DoModal();
 }

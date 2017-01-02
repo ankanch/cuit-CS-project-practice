@@ -226,18 +226,37 @@ const bool CTrieGraph::showPocess(POCESSLIST &pl)
 	{
 		return false;
 	}
-	CPen pen;
-	pen.CreatePen(PS_SOLID, 2, RGB(255, 255, 0));
-	dcd.SelectObject(&pen);
+	CPen yellopen,orangepen,blackpen,greenpen;
+	yellopen.CreatePen(PS_SOLID, 3, RGB(255, 255, 0));
+	orangepen.CreatePen(PS_SOLID, 2, RGB(255, 255, 0));
+	blackpen.CreatePen(PS_SOLID, 2, RGB(0,0,0));
+	greenpen.CreatePen(PS_SOLID, 4, RGB(0, 255, 0));
+	dcd.SelectObject(&yellopen);
 	while(!pl.empty())
 	{
 		CHANGENODE cn;
 		cn = pl.front();
 		std::cout <<"cn.data=" <<cn.data << "\tcn.uid="<<cn.uid<<std::endl;
+		//选择画笔颜色
+		if (cn.type == YELLOW)
+		{
+			dcd.SelectObject(&yellopen);
+		}
+		else if (cn.type == ORANGE)
+		{
+			dcd.SelectObject(&orangepen);
+		}
+		else if (cn.type == BLACK)
+		{
+			dcd.SelectObject(&blackpen);
+		}
+		else if (cn.type == GREEN)
+		{
+			dcd.SelectObject(&greenpen);
+		}
 		for (int j = 0; j < graphdata->nodessum; j++)
 		{
 			//寻找点，并改变颜色
-			//cn.data == graphdata->nodeslist[j].data && cn.level == graphdata->nodeslist[j].level &&
 			if ( cn.uid == graphdata->nodeslist[j].uid && cn.data== graphdata->nodeslist[j].data)
 			{
 				dcd.Ellipse(graphdata->nodeslist[j].x - 12, graphdata->nodeslist[j].y - 12, graphdata->nodeslist[j].x + 12, graphdata->nodeslist[j].y + 12);
@@ -245,7 +264,7 @@ const bool CTrieGraph::showPocess(POCESSLIST &pl)
 			}
 		}
 		pl.pop();
-		Sleep(500);
+		Sleep(presentionMilesecond);
 	}
 	return true;
 }
@@ -275,6 +294,7 @@ BOOL CTrieGraph::OnInitDialog()
 	graphdata->y_split = 0;
 	trie = nullptr;
 	vf = false;
+	presentionMilesecond = 500;
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // 异常: OCX 属性页应返回 FALSE

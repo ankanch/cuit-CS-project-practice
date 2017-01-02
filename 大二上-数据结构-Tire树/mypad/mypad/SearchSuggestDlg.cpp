@@ -50,8 +50,14 @@ void CSearchSuggestDlg::OnEnChangeEdit1()
 	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
 
 	// TODO:  在此添加控件通知处理程序代码
+	tg->setTrieTree(trie);
+	tg->UpdateGraph();
 	CString data = "";
 	m_searchword.GetWindowTextA(data);
+	if (data.GetLength() == 0 || data == " ")
+	{
+		return;
+	}
 	trie->Suggest(data, "", ws, trie->GetRoot());
 	int i = 0;
 	m_searchresultlist.DeleteAllItems();

@@ -6,6 +6,7 @@
 #include "TrieTree.h"
 #include "TrieGraph.h"
 #include "InteliDlg.h"
+#include "SetPresentionSpeed.h"
 #include "afxwin.h"
 
 class CmypadDlgAutoProxy;
@@ -85,4 +86,5 @@ public:
 	afx_msg void OnMenuSearch();
 	CStatic m_tipsxx;
 	afx_msg void OnMenuShowOperationProcess();
+	afx_msg void OnTrieSettime();
 };
