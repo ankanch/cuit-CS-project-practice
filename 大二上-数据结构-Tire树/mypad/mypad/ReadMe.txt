@@ -1,1 +1,1 @@
-Israel a Middle Eastern country on the Mediterranean Sea
+Israel a Middle Eastern country on the Mediterranean Sea  

@@ -1,12 +1,13 @@
-##说明##
 ---
+##说明##
+
 
 这里存放了我在校期间完成的工程实践的源代码
 
 
-
-##包含项目##
 ---
+##包含项目##
+
 ###成都地铁查询系统###
 
 实现成都地铁查询系统，主要使用C++/MFC/ACCESS实现
@@ -22,8 +23,30 @@
 
 程序可以根据输入数据，动态构造Trie树并展示，其中一些基于Trie树的应用程序也**可以动态展示节点访问过程**。
 
-##最后##
+####程序示例####
+
+智能提示：
+
+![智能提示](https://github.com/ankanch/cuit-CS-project-practice/blob/master/image/trie1.PNG)
+
+建立Trie树：
+
+![动态建立树](https://github.com/ankanch/cuit-CS-project-practice/blob/master/image/trie2.PNG)
+
+显示搜索过程：
+
+![搜索过程](https://github.com/ankanch/cuit-CS-project-practice/blob/master/image/trie3.PNG)
+
+https://github.com/ankanch/cuit-CS-project-practice/blob/master/image/trie5.PNG
+
+词频统计：
+
+https://github.com/ankanch/cuit-CS-project-practice/blob/master/image/trie4.PNG
+
+
 ---
+##最后##
+
 该repo的代码仅供参考，对使用该repo的代码造成的问题，我可没有任何责任。
 
 
