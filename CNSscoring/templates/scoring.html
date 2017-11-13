@@ -38,7 +38,10 @@
 
     function submit(){
         if(validateForm()){
-            SubmitForm("/sc","scoring_form","提交失败！该组您已经评过分了。","提交成功！");
+            SubmitForm("/sc","scoring_form","提交失败！该组您已经评过分了。","提交成功！",function success(){
+                var x = document.getElementById("selectuser");
+                x.remove(x.selectedIndex);
+            });
             var cfd = document.getElementById("comfirm");
             cfd.checked = false;
             cc.style.background = "";

@@ -27,11 +27,6 @@ def add(uid,name,sid):
 def loadSession():
     return DM.init()
 
-# add an test user to system
-def add_test():
-    if len(GV.VAR_USER_DATA_LIST) == 0:
-        add("test","Kanch Zhang","2015051152")
-
 # archive session in time
 def archive_session(sec):
     while True:

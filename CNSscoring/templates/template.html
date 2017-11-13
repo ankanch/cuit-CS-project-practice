@@ -35,9 +35,6 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="/">主页 <span class="sr-only">(current)</span></a>
-                    </li>
                 </ul>
             </div>
         </nav>
@@ -45,7 +42,7 @@
         <script src="../static/jquery-3.2.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
         <script src="../static/bootstrap-4.0.0-beta/js/bootstrap.min.js"></script>
-        <script src="../static/querydata.js"></script>
+        <!--script src="../static/querydata.js"></script-->
         <div class="container" id="superdiv" style="margin-top:60px;">
             {% block content %}{% endblock %}
         </div>
@@ -73,6 +70,25 @@
             }
         });
     }
+
+    function SubmitForm (url,formid,error_msg,success_msg,success_func){
+        // function from https://stackoverflow.com/questions/25983603/how-to-submit-html-form-without-redirection
+        $.ajax({
+            url:url,
+            type:'post',
+            data:$('#'+formid).serialize(),
+            success:function(data){
+                console.log(data)
+                if(data.indexOf("U") > -1){
+                    showMsg(error_msg,5);
+                }else{
+                    showMsg(success_msg,5);
+                    success_func();
+                }
+            }
+        });
+    }
+
 
     function showMsg(message, sec) {
         // Get the snackbar DIV

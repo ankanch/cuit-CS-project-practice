@@ -1,20 +1,62 @@
 {% extends "template.html" %} {% block title %}{{title}}{% endblock %} {% block content %}
+        
+<style>
+    .card {
+        margin: 0 auto; /* Added */
+        margin-bottom: 10px; /* Added */
+        width:100%;
+}
+</style>
 
-<p></p>
-<p> <a href="#" onclick='toLogin()'>
-        <img src="http://qzonestyle.gtimg.cn/qzone/vas/opensns/res/img/Connect_logo_4.png"></a></p>
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">注册用户</h4>
+          <form id="scoring_form" method="post">
+            <div class="form-group">
+                    <label for="scoreinput">您的学号：</label>
+                    <input type="number" class="form-control" name="sid" id="usid" placeholder="请填入你自己的学号，如2015051152">
+            </div>
+          </form>
+          <p >当前登陆用户：<span style="color:blue;">{{CUR_UID}}</span> </p>
+          <p><label id="cc"> <input type="checkbox" id="comfirm"> 我确认输入了我自己的学号！[请仔细检查]</label></p>
+          <a href="javascript:submit()" class="btn btn-primary">注册</a>
+        </div>
+      </div>
 
 <script>
     $(document).ready(function () {
 
     });
-     function toLogin()
- {
-   //以下为按钮点击事件的逻辑。注意这里要重新打开窗口
-   //否则后面跳转到QQ登录，授权页面时会直接缩小当前浏览器的窗口，而不是打开新窗口
-   var url = "https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=101436803&redirect_uri=http://0.akakanch.com/regist";
-   var A=window.open(url,"TencentLogin", 
-   "width=450,height=320,menubar=0,scrollbars=1,resizable=1,status=1,titlebar=0,toolbar=0,location=1");
- } 
+
+
+    function submit(){
+        if(validateForm()){
+          var url = "/regist/" + document.getElementById("usid").value;
+          $.get(url, function (data) {
+            window.location = "/scoring";
+          });
+            var cfd = document.getElementById("comfirm");
+            cfd.checked = false;
+            cc.style.background = "";
+        }
+    }
+
+    function validateForm(){
+        var score = document.getElementById("usid").value  ;
+        var cfd = document.getElementById("comfirm");
+        var cc = document.getElementById("cc");
+        console.log(score);
+        if(score.length != 10){
+            showMsg("你输入的学号位数不正确！",3);
+            return false;
+        }
+        if( cfd.checked == false ){
+            showMsg("请勾选确认学号复选框！一定要确认你输入的学号是你自己的！仔细检查！",6);
+            cc.style.background = "red";
+            return false;
+        }
+        return true;
+    }
+
 </script>
 {% endblock %}

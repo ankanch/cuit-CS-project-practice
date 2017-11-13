@@ -13,7 +13,6 @@ from flask import Flask, jsonify, redirect, render_template, request,make_respon
 app = Flask(__name__)
 
 GV.VAR_USER_DATA_LIST = sessionManager.loadSession()
-sessionManager.add_test()
 thread = threading.Thread(target = sessionManager.archive_session, args = (60, ))
 #thread.start()
 print(GV.VAR_USER_DATA_LIST)
@@ -30,7 +29,7 @@ def index():
 def registe(access_token):
     resp = make_response(redirect('/scoring'))
     resp.set_cookie('uid',access_token)
-    sessionManager.add(access_token,"no_name","no_sid")
+    sessionManager.add(access_token,access_token,access_token)
     return resp
 
 @app.route('/scorelist/<pwd>')
@@ -40,8 +39,10 @@ def scoreslist(pwd):
 @app.route('/scoring')
 def scoring():
     uid =  request.cookies.get('uid')
+    scored = scoringManager.getScoredlist(uid)
     if sessionManager.check(uid):
-        return render_template('scoring.html',TITLE="计算机网络打分系统 - Kanch",title="开始评分",GID_LIST=GV.GID,CUR_UID=uid)
+        uGID = [ x for x in GV.GID if x not in scored ]
+        return render_template('scoring.html',TITLE="计算机网络打分系统 - Kanch",title="开始评分",GID_LIST=uGID,CUR_UID=uid)
     else:
         return error("您还未登陆！")
 
