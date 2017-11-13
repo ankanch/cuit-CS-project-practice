@@ -1,0 +1,65 @@
+{% extends "template.html" %} {% block title %}{{title}}{% endblock %} {% block content %}
+<style>
+    .card {
+        margin: 0 auto; /* Added */
+
+        margin-bottom: 10px; /* Added */
+        width:100%;
+}
+</style>
+
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">小组评分</h4>
+          <form id="scoring_form" method="post">
+            <div class="form-group">
+                <label for="selectuser">选择要评分的组号：</label>
+                <select class="form-control" name="gid" id="selectuser">
+                {% for gid in GID_LIST %}
+                <option>{{gid}}</option>
+                {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                    <label for="scoreinput">您的评分：</label>
+                    <input type="number" class="form-control" name="score" id="scoreinput" placeholder="请填入0到100之间的整数">
+            </div>
+          </form>
+          <p >当前登陆用户：<span style="color:blue;">{{CUR_UID}}</span> </p>
+          <p><label id="cc"> <input type="checkbox" id="comfirm"> 确认评分</label></p>
+          <a href="javascript:submit()" class="btn btn-primary">提交评分</a>
+        </div>
+      </div>
+
+<script>
+    $(document).ready(function () {
+
+    });
+
+    function submit(){
+        if(validateForm()){
+            SubmitForm("/sc","scoring_form","提交失败！该组您已经评过分了。","提交成功！");
+            var cfd = document.getElementById("comfirm");
+            cfd.checked = false;
+            cc.style.background = "";
+        }
+    }
+
+    function validateForm(){
+        var score = document.getElementById("scoreinput").value  ;
+        var cfd = document.getElementById("comfirm");
+        var cc = document.getElementById("cc");
+        console.log(score);
+        if(score.length < 1 ||  parseInt(score) < 0 || parseInt(score) > 100){
+            showMsg("WTF？？？请输入正确的分数！",3);
+            return false;
+        }
+        if( cfd.checked == false ){
+            showMsg("***k,请勾选确认评分复选框！",3);
+            cc.style.background = "red";
+            return false;
+        }
+        return true;
+    }
+</script>
+{% endblock %}
