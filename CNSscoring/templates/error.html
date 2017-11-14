@@ -1,7 +1,8 @@
 {% extends "template.html" %} {% block title %}{{title}}{% endblock %} {% block content %}
 <div class="row"  style="margin-top:85px;margin-left:45px;margin-right:35px;">
     <div class=" sidebar-header">
-        <h5 class="sidebar-header-title">{{error_message}}</h5>
+        <h5 class="sidebar-header-title">{{error_message}}，请返回！</h5>
+        <p>如果你持续遇到该问题，请<a href="javascript:del()" >点击这里清除本站缓存</a>。</p>
     </div>
 </div>
 <br/>
@@ -15,8 +16,10 @@
 
 </div>
 <script>
-    $(document).ready(function () {
 
-    });
+    function del(){
+        document.cookie = "uid" + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        showMsg("缓存清理完毕！请点击返回进行注册或登陆",5);
+    }
 </script>
 {% endblock %}

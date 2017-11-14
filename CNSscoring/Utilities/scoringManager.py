@@ -38,7 +38,12 @@ def getScoredlist(uid):
 
 # get all groups score
 def getAllGroupScores():
-    resultlist = "<h3>Scores List by Group </h3><br/><p></p>"
+    resultlist = """
+                    <h3>Scores List by Group </h3>
+                    <p style="margin-bottom:2px;">Made with ♥ by Kanch</p>
+                    <p style="margin-bottom:2px;">kanch@ieee.org</p>
+                    <br/>
+                """
     resultlist += SS.table
     mstr = ""
     for gid in GV.GID:

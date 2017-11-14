@@ -11,7 +11,7 @@
       <div class="card">
         <div class="card-body">
           <h4 class="card-title">小组评分</h4>
-          <form id="scoring_form" method="post">
+          <form id="scoring_form">
             <div class="form-group">
                 <label for="selectuser">选择要评分的组号：</label>
                 <select class="form-control" name="gid" id="selectuser">
@@ -33,7 +33,12 @@
 
 <script>
     $(document).ready(function () {
-
+        $('#scoreinput').keypress(function (e) {
+            if (e.which == 13) {
+                submit();
+                return false;
+            }
+        });
     });
 
     function submit(){

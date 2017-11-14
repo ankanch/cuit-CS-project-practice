@@ -10,7 +10,7 @@
       <div class="card">
         <div class="card-body">
           <h4 class="card-title">注册用户</h4>
-          <form id="scoring_form" method="post">
+          <form id="scoring_form">
             <div class="form-group">
                     <label for="scoreinput">您的学号：</label>
                     <input type="number" class="form-control" name="sid" id="usid" placeholder="请填入你自己的学号，如2015051152">
@@ -24,7 +24,12 @@
 
 <script>
     $(document).ready(function () {
-
+        $('#usid').keypress(function (e) {
+            if (e.which == 13) {
+                submit();
+                return false;
+            }
+        });
     });
 
     function SubmitForm2 (url,formid,error_msg,success_msg,success_func){
