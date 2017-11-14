@@ -13,8 +13,8 @@ from flask import Flask, jsonify, redirect, render_template, request,make_respon
 app = Flask(__name__)
 
 GV.VAR_USER_DATA_LIST,GV.VAR_STULIST = sessionManager.loadSession()
-thread = threading.Thread(target = sessionManager.archive_session, args = (120, ))
-#thread.start()
+thread = threading.Thread(target = sessionManager.archive_session, args = (96, ))
+thread.start()
 print(GV.VAR_USER_DATA_LIST)
 
 @app.route('/')
