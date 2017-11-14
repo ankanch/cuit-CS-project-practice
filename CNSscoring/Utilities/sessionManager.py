@@ -13,13 +13,20 @@ def check(uid):
         return False
     # check if in list
     if getStuName(uid) == None:
-        return True
+        return False
     #print("-check--=log-in-uid=",uid)
     # check if already registed
     for user in GV.VAR_USER_DATA_LIST:
         if user[0].find(uid) > -1:
             return True
     return False
+
+# check if an openid exist
+def checkOpenID(openid):
+    for stu in GV.VAR_USER_DATA_LIST:
+        if stu[2].find(openid) > -1:
+            return True,stu[0]
+    return False,""
 
 # add an uid to the system
 def add(uid,name,sid):

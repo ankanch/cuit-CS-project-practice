@@ -14,7 +14,7 @@ app = Flask(__name__)
 
 GV.VAR_USER_DATA_LIST,GV.VAR_STULIST = sessionManager.loadSession()
 thread = threading.Thread(target = sessionManager.archive_session, args = (120, ))
-thread.start()
+#thread.start()
 print(GV.VAR_USER_DATA_LIST)
 
 @app.route('/')
@@ -30,9 +30,19 @@ def error(msg="遇到未知错误！请重试！"):
     uid =  request.cookies.get('uid')
     return render_template('error.html',TITLE="计算机网络打分系统 ",title="出错了",error_message=msg)
 
+@app.route('/login/<openid>')
+def login(openid):
+    status,sid = sessionManager.checkOpenID(openid)
+    if status:
+        resp = make_response(redirect("scoring"))
+        resp.set_cookie('uid',sid)
+        return resp
+    else:
+        return error("您还没有注册，请返回注册！")
 
 @app.route('/regist',methods=['POST'])
 def registe():
+    openid = request.form['openid']
     access_token = request.form['sid']
     print("access_tocken=",access_token)
     if sessionManager.check(access_token):
@@ -41,8 +51,8 @@ def registe():
     else:
         resp = make_response("OK")
         resp.set_cookie('uid',access_token)
-        sessionManager.add(access_token,access_token,access_token)
-        print(">>Student",access_token,"registed!")
+        sessionManager.add(access_token,"_",openid)
+        print(">>Student",access_token,"registed! With openid=",openid)
         return resp
 
 @app.route('/s/<pwd>')
