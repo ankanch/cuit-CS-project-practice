@@ -50,11 +50,16 @@
 
     function validateForm(){
         var score = document.getElementById("scoreinput").value  ;
+        var x = document.getElementById("selectuser");
         var cfd = document.getElementById("comfirm");
         var cc = document.getElementById("cc");
         console.log(score);
         if(score.length < 1 ||  parseInt(score) < 0 || parseInt(score) > 100){
             showMsg("WTF？？？请输入正确的分数！",3);
+            return false;
+        }
+        if(x.selectedIndex < 0){
+            showMsg("您已经评完了所有分组！",3);
             return false;
         }
         if( cfd.checked == false ){

@@ -15,7 +15,6 @@ def init():
         for line in data:
             if len(line) > 4:
                 s = line.split("@")
-                print(s[-1])
                 s[-1] = eval(s[-1])
                 credentials.append(s)
         return credentials
@@ -35,15 +34,6 @@ def add(dlist):
         ras = "@".join([ str(x) for x in dlist ])
         print("ras=",ras)
         f.write( ras + "\n" )
-
-# update exist data
-def update(dlist):
-    cur = init()
-    for i,x in enumerate(cur):
-        if dlist[0] == x[0]:
-            cur[i] = dlist
-            break
-    archive(cur)
 
 # delete a specified data
 def delete():

@@ -27,13 +27,29 @@
 
     });
 
+    function SubmitForm2 (url,formid,error_msg,success_msg,success_func){
+        // function from https://stackoverflow.com/questions/25983603/how-to-submit-html-form-without-redirection
+        $.ajax({
+            url:url,
+            type:'post',
+            data:$('#'+formid).serialize(),
+            success:function(data){
+                console.log(data)
+                if(data.indexOf("U22UkanchU22") > -1){
+                    showMsg(error_msg,5);
+                }else{
+                    showMsg(success_msg,5);
+                    success_func();
+                }
+            }
+        });
+    }
 
     function submit(){
         if(validateForm()){
-          var url = "/regist/" + document.getElementById("usid").value;
-          $.get(url, function (data) {
+          SubmitForm2 ("/regist","scoring_form","注册失败！可能该学号已经注册了！","注册成功！跳转中...",function success(){
             window.location = "/scoring";
-          });
+          })
             var cfd = document.getElementById("comfirm");
             cfd.checked = false;
             cc.style.background = "";

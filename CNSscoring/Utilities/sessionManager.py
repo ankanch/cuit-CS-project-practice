@@ -2,18 +2,18 @@
 from Utilities import gV as GV
 from Utilities import dataManager as DM
 import os
-import random
-import string
+import shutil
 import time
 import datetime
 
 
 # check if an uid  valid
 def check(uid):
+    if uid == None:
+        return False
     print("-check--=log-in-uid=",uid)
-    print("-check--=current-uids=",GV.VAR_USER_DATA_LIST)
     for user in GV.VAR_USER_DATA_LIST:
-        if user[0] == uid:
+        if user[0].find(uid) > -1:
             return True
     return False
 
@@ -22,6 +22,7 @@ def add(uid,name,sid):
     sdata = [ uid,name,sid, [] ]
     GV.VAR_USER_DATA_LIST.append(sdata)
     DM.add(sdata)
+    DM.archive(GV.VAR_USER_DATA_LIST)
 
 # load all users
 def loadSession():
@@ -31,7 +32,4 @@ def loadSession():
 def archive_session(sec):
     while True:
         time.sleep(sec)
-        print("saving data...")
-        GV.VAR_USER_DATA_LIST = [ x for x in GV.VAR_USER_DATA_LIST if len(x)==4 ]
-        DM.archive(GV.VAR_USER_DATA_LIST)
-        print("done.")
+        shutil.copy2( "data/userdata", "data/backup/"+ str(time.time())    )
