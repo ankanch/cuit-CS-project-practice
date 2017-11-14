@@ -17,8 +17,11 @@ def score(uid,gid,score):
 # get avg score and all score of an group
 # return sum,avg
 def getscore(gid):
-    scorelist = [ y[1] for y in x[-1] for x in GV.VAR_USER_DATA_LIST if y[0] == gid]
-    return sum(scorelist),sum(scorelist)/len(scorelist)
+    rbl = [ x[-1] for x in GV.VAR_USER_DATA_LIST if len(x[-1])==2 ]
+    scorelist = [ x[1] for x in rbl if x[0]== gid ]
+    if len(scorelist) < 1:
+        return False,[],[]
+    return True,sum(scorelist),sum(scorelist)/len(scorelist)
 
 # get user scored list
 def getScoredlist(uid):
@@ -26,3 +29,11 @@ def getScoredlist(uid):
         if user[0] == uid:
             return [ x[0] for x in user[-1] ]
 
+# get all groups score
+def getAllGroupScores():
+    resultlist = "<h3>Scores List by Group ID</h3><br/><br/>组号,总分,平均分<br/>"
+    for gid in GV.GID:
+        status,sumx,avgx = getscore(gid)
+        if status:
+            resultlist += "<br/>%d,%d,%f"%(gid,sumx, round(avgx,3) )
+    return resultlist

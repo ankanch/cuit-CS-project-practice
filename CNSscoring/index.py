@@ -32,9 +32,11 @@ def registe(access_token):
     sessionManager.add(access_token,access_token,access_token)
     return resp
 
-@app.route('/scorelist/<pwd>')
+@app.route('/s/<pwd>')
 def scoreslist(pwd):
-    return render_template("scorelist.html",TITLE="计算机网络打分系统 - Kanch",title="各组得分情况")
+    if pwd == "1996":
+        return scoringManager.getAllGroupScores()
+    return error("禁止访问！")
 
 @app.route('/scoring')
 def scoring():
@@ -68,7 +70,7 @@ def test():
 if __name__ == '__main__':
     if "mode.server" in os.listdir("./"):
         # when a specific file in current dir,bind IP below  
-        app.run(host=CFG.SITE_HOST,port=8000)
+        app.run(host="10.139.150.91",port=80)
     else:
         # local machine for test
         print(">>>Running on local machine.")

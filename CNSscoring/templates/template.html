@@ -16,7 +16,7 @@
     <link href="../static/snackbar.css" rel="stylesheet">
     <style>
         body {
-            min-width: 1000px;
+            min-width: 90px;
             width: auto !important;
             width: 1000px;
             background-size: cover;
@@ -30,13 +30,6 @@
     <div class="bs-component">
         <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light" id="nav_template">
             <a class="navbar-brand" href="/"><b>{{TITLE}}</b></a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                </ul>
-            </div>
         </nav>
         <!-- Include all compiled plugins (below), or include individual files as needed -->
         <script src="../static/jquery-3.2.1.min.js"></script>
@@ -45,8 +38,15 @@
         <!--script src="../static/querydata.js"></script-->
         <div class="container" id="superdiv" style="margin-top:60px;">
             {% block content %}{% endblock %}
+           
         </div>
-        <div id="snackbar"></div>
+        <div class="row" style="margin: 0 auto;text-align:center;">
+            <div id="snackbar" style="margin: 0 auto;"></div>
+        </div>
+        <div class="row" style="text-align:center;margin:0 auto;">
+            <p style="text-align:center;margin:0 auto;margin-top:22px;">Made with ♥ by Kanch</p>
+        </div>
+       
     </div>
 </body>
 <script>
