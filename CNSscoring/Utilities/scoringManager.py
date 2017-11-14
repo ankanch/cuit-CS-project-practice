@@ -1,6 +1,7 @@
 #encoding:utf-8
 from Utilities import gV as GV
 from Utilities import dataManager as DM
+from Utilities import stringx as SS
 
 
 # this script controls user scoring
@@ -32,12 +33,20 @@ def getScoredlist(uid):
         if user[0] == uid:
             return [ x[0] for x in user[-1] ]
 
+
+
+
 # get all groups score
 def getAllGroupScores():
-    resultlist = "<h3>Scores List by Group ID</h3><br/><br/>组号,总分,平均分<br/>"
+    resultlist = "<h3>Scores List by Group </h3><br/><p></p>"
+    resultlist += SS.table
+    mstr = ""
     for gid in GV.GID:
         status,sumx,avgx = getscore(gid)
         #print(status,sumx,avgx)
         if status:
-            resultlist += "<br/> %d , %d , %f "%(gid,sumx, round(avgx,3) )
-    return resultlist
+            st = SS.table_item
+            mstr += st.replace("@GID",str(gid)).replace("@SUM",str(sumx)).replace("@AVG",str(avgx)[:7])
+            #mstr += st
+            print(mstr)
+    return resultlist.replace("@TBODY@",mstr)

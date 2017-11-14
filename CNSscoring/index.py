@@ -12,7 +12,7 @@ from flask import Flask, jsonify, redirect, render_template, request,make_respon
 
 app = Flask(__name__)
 
-GV.VAR_USER_DATA_LIST = sessionManager.loadSession()
+GV.VAR_USER_DATA_LIST,GV.VAR_STULIST = sessionManager.loadSession()
 thread = threading.Thread(target = sessionManager.archive_session, args = (60, ))
 thread.start()
 print(GV.VAR_USER_DATA_LIST)
@@ -38,7 +38,6 @@ def registe():
         print("already registed!")
         return "U22UkanchU22"
     else:
-        print("1111")
         resp = make_response("OK")
         resp.set_cookie('uid',access_token)
         sessionManager.add(access_token,access_token,access_token)
@@ -56,7 +55,8 @@ def scoring():
     scored = scoringManager.getScoredlist(uid)
     if sessionManager.check(uid):
         uGID = [ x for x in GV.GID if x not in scored ]
-        return render_template('scoring.html',TITLE="计算机网络打分系统 ",title="开始评分",GID_LIST=uGID,CUR_UID=uid)
+        name = sessionManager.getStuName(uid)
+        return render_template('scoring.html',TITLE="计算机网络打分系统 ",title="开始评分",GID_LIST=uGID,CUR_UID=name)
     else:
         return error("您还未登陆！")
 
@@ -76,7 +76,7 @@ def sc():
 if __name__ == '__main__':
     if "mode.server" in os.listdir("./"):
         # when a specific file in current dir,bind IP below  
-        app.run(host="10.139.150.91",port=80)
+        app.run(host=GV.BIND_IP,port=int(GV.BIND_PORT)) 
     else:
         # local machine for test
         print(">>>Running on local machine.")

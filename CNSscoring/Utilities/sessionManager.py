@@ -11,7 +11,11 @@ import datetime
 def check(uid):
     if uid == None:
         return False
+    # check if in list
+    if getStuName(uid) == None:
+        return True
     print("-check--=log-in-uid=",uid)
+    # check if already registed
     for user in GV.VAR_USER_DATA_LIST:
         if user[0].find(uid) > -1:
             return True
@@ -27,6 +31,13 @@ def add(uid,name,sid):
 # load all users
 def loadSession():
     return DM.init()
+
+# get name of an student
+def getStuName(uid):
+    for x in GV.VAR_STULIST:
+        if x[1].find(uid) > -1:
+            return x[2]
+    return None
 
 # archive session in time
 def archive_session(sec):

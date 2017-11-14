@@ -17,7 +17,11 @@ def init():
                 s = line.split("@")
                 s[-1] = eval(s[-1])
                 credentials.append(s)
-        return credentials
+        # open student list
+        with open("data/stulist.txt",'r',errors='ignore',encoding='utf-8') as f:
+            data = f.readlines()
+            stulist = [ line.split(",") for line in data if len(line) > 15 ]
+            return credentials,stulist
 
 # archive data to the local disk
 def archive(all_list):
@@ -35,9 +39,6 @@ def add(dlist):
         print("ras=",ras)
         f.write( ras + "\n" )
 
-# delete a specified data
-def delete():
-    pass
 
 
 
