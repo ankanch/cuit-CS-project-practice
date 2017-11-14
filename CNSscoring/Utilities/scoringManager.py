@@ -43,10 +43,7 @@ def getAllGroupScores():
     mstr = ""
     for gid in GV.GID:
         status,sumx,avgx = getscore(gid)
-        #print(status,sumx,avgx)
         if status:
             st = SS.table_item
             mstr += st.replace("@GID",str(gid)).replace("@SUM",str(sumx)).replace("@AVG",str(avgx)[:7])
-            #mstr += st
-            print(mstr)
     return resultlist.replace("@TBODY@",mstr)

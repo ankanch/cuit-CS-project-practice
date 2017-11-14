@@ -28,7 +28,7 @@ def archive(all_list):
     with open(PATH_USER_CREDENTIALS,"w",errors='ignore') as f:
         f.truncate()
         for x in all_list:
-            print(x,":",type(x),len(x))
+            #print(x,":",type(x),len(x))
             if len(x) == 4 and type(x) == list:
                 f.write("@".join([ str(xx) for xx in x ]) + "\n"  )
 
@@ -36,7 +36,6 @@ def archive(all_list):
 def add(dlist):
     with open(PATH_USER_CREDENTIALS,"a",errors='ignore') as f: 
         ras = "@".join([ str(x) for x in dlist ])
-        print("ras=",ras)
         f.write( ras + "\n" )
 
 

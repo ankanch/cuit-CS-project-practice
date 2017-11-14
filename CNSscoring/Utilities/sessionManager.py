@@ -14,7 +14,7 @@ def check(uid):
     # check if in list
     if getStuName(uid) == None:
         return True
-    print("-check--=log-in-uid=",uid)
+    #print("-check--=log-in-uid=",uid)
     # check if already registed
     for user in GV.VAR_USER_DATA_LIST:
         if user[0].find(uid) > -1:
