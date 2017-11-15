@@ -45,9 +45,3 @@ def getStuName(uid):
         if x[1].find(uid) > -1:
             return x[2]
     return None
-
-# archive session in time
-def archive_session(sec):
-    while True:
-        time.sleep(sec)
-        shutil.copy2( "data/userdata", "data/backup/"+ str(time.time())    )

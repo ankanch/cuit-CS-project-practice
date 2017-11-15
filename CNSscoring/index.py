@@ -3,7 +3,6 @@ import time
 import flask
 import os
 import json
-import threading
 from Utilities import gV as GV
 from Utilities import sessionManager,scoringManager
 from functools import wraps
@@ -13,8 +12,6 @@ from flask import Flask, jsonify, redirect, render_template, request,make_respon
 app = Flask(__name__)
 
 GV.VAR_USER_DATA_LIST,GV.VAR_STULIST = sessionManager.loadSession()
-thread = threading.Thread(target = sessionManager.archive_session, args = (96, ))
-thread.start()
 print(GV.VAR_USER_DATA_LIST)
 
 @app.route('/')
