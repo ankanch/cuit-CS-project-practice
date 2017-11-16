@@ -17,7 +17,7 @@ def check(uid):
     #print("-check--=log-in-uid=",uid)
     # check if already registed
     user = DBM.runSelect("SELECT SID FROM cns WHERE SID='%s'"%uid)
-    print("check-",user)
+    #print("check-",user)
     if len(user) > 0:
         return True
     return False
@@ -25,7 +25,7 @@ def check(uid):
 # check if an openid exist
 def checkOpenID(openid):
     userdata = DBM.runSelect("SELECT SID FROM cns WHERE OPENID='%s'"%openid)
-    print("OID-check-",userdata)
+    #print("OID-check-",userdata)
     if len(userdata)> 0 :
         return True,userdata[0][0]
     return False,""
@@ -38,7 +38,7 @@ def add(sid,name,uid):
 # load all users informations
 def loadSession():
     credentials  = DBM.runSelect("SELECT * FROM cns")
-    print(credentials)
+    #print(credentials)
     return credentials
 
 # get name of an student

@@ -31,6 +31,7 @@ def error(msg="遇到未知错误！请重试！"):
 def login(openid):
     status,sid = sessionManager.checkOpenID(openid)
     if status:
+        print("[Login]Student",sid,"logged in.")
         resp = make_response(redirect("scoring"))
         resp.set_cookie('uid',sid)
         return resp
@@ -46,6 +47,7 @@ def registe():
         print(">>ERROR:already registed! or not in the list.")
         return "U22UkanchU22"
     else:
+        print("[Registe]Student",access_token,"registed!.")
         resp = make_response("OK")
         resp.set_cookie('uid',access_token)
         sessionManager.add(access_token,"_",openid)
@@ -79,7 +81,7 @@ def sc():
     scored = scoringManager.getScoredlist(uid)
     if (gid in GV.GID) and (gid not in scored):
         scoringManager.score(uid,gid,score)
-        print(">>Student",uid,"scored",gid,"with",score,"marks.")
+        print("[Scoring]Student",uid,"scored",gid,"with",score,"marks.")
         return "OK"
     return "U"
 

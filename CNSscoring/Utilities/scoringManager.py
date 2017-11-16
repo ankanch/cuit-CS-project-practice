@@ -25,9 +25,9 @@ def getscore(gid,rbl):
 # get user scored list
 def getScoredlist(sid):
     data = DBM.runSelect("SELECT SCORELIST FROM cns WHERE SID='%s'"%sid)[0][0]
-    print(data)
+    #print(data)
     data = eval(data)
-    print(data)
+    #print(data)
     return [ x[0] for x in data ]
 
 
@@ -49,7 +49,7 @@ def getAllGroupScores():
         x = eval(uscorelist[0])
         if len(x) < 1:
             continue
-        print(x)
+        #print(x)
         rbl.extend(x)
     for gid in GV.GID:
         status,sumx,avgx = getscore(gid,rbl)
