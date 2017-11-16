@@ -1,6 +1,6 @@
 #encoding:utf-8
 from Utilities import gV as GV
-from Utilities import dataManager as DM
+from Utilities import runSQL as DBM
 import os
 import shutil
 import time
@@ -16,28 +16,30 @@ def check(uid):
         return False
     #print("-check--=log-in-uid=",uid)
     # check if already registed
-    for user in GV.VAR_USER_DATA_LIST:
-        if user[0].find(uid) > -1:
-            return True
+    user = DBM.runSelect("SELECT SID FROM cns WHERE SID='%s'"%uid)
+    print("check-",user)
+    if len(user) > 0:
+        return True
     return False
 
 # check if an openid exist
 def checkOpenID(openid):
-    for stu in GV.VAR_USER_DATA_LIST:
-        if stu[2].find(openid) > -1:
-            return True,stu[0]
+    userdata = DBM.runSelect("SELECT SID FROM cns WHERE OPENID='%s'"%openid)
+    print("OID-check-",userdata)
+    if len(userdata)> 0 :
+        return True,userdata[0][0]
     return False,""
 
 # add an uid to the system
-def add(uid,name,sid):
-    sdata = [ uid,name,sid, [] ]
-    GV.VAR_USER_DATA_LIST.append(sdata)
-    DM.add(sdata)
-    DM.archive(GV.VAR_USER_DATA_LIST)
+def add(sid,name,uid):
+    DBM.runInsert(" INSERT INTO cns VALUES('%s','%s','%s','[]')"%(sid,name,uid))
+    return True
 
-# load all users
+# load all users informations
 def loadSession():
-    return DM.init()
+    credentials  = DBM.runSelect("SELECT * FROM cns")
+    print(credentials)
+    return credentials
 
 # get name of an student
 def getStuName(uid):

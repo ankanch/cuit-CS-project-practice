@@ -103,7 +103,7 @@
 
     function submit(){
         if(validateForm()){
-          SubmitForm2 ("/regist","scoring_form","注册失败！可能该学号已经注册了，或者您输入的学号不在名单中！","注册成功！跳转中...",function success(){
+          SubmitForm2 ("/regist","scoring_form","注册失败！可能该学号(或QQ)已经注册了，或者您输入的学号不在名单中！","注册成功！跳转中...",function success(){
             window.location = "/scoring";
           })
             var cfd = document.getElementById("comfirm");

@@ -4,14 +4,14 @@ import flask
 import os
 import json
 from Utilities import gV as GV
-from Utilities import sessionManager,scoringManager
+from Utilities import sessionManager,scoringManager,dataManager2
 from functools import wraps
 from flask import Flask, jsonify, redirect, render_template, request,make_response,send_file,Response
 
 
 app = Flask(__name__)
 
-GV.VAR_USER_DATA_LIST,GV.VAR_STULIST = sessionManager.loadSession()
+GV.VAR_USER_DATA_LIST,GV.VAR_STULIST = dataManager2.init()
 print(GV.VAR_USER_DATA_LIST)
 
 @app.route('/')
@@ -41,8 +41,8 @@ def login(openid):
 def registe():
     openid = request.form['openid']
     access_token = request.form['sid']
-    print("access_tocken=",access_token)
-    if sessionManager.check(access_token):
+    status,rsid =  sessionManager.checkOpenID(openid)
+    if sessionManager.check(access_token) or status :
         print(">>ERROR:already registed! or not in the list.")
         return "U22UkanchU22"
     else:
@@ -61,8 +61,8 @@ def scoreslist(pwd):
 @app.route('/scoring')
 def scoring():
     uid =  request.cookies.get('uid')
-    scored = scoringManager.getScoredlist(uid)
     if sessionManager.check(uid):
+        scored = scoringManager.getScoredlist(uid)
         uGID = [ x for x in GV.GID if x not in scored ]
         name = sessionManager.getStuName(uid)
         return render_template('scoring.html',TITLE="计算机网络打分系统 ",title="开始评分",GID_LIST=uGID,CUR_UID=name)

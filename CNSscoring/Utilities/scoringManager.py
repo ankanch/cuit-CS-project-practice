@@ -1,37 +1,34 @@
 #encoding:utf-8
 from Utilities import gV as GV
-from Utilities import dataManager as DM
 from Utilities import stringx as SS
+from Utilities import runSQL as DBM
 
 
 # this script controls user scoring
 
 # scoring an group
-def score(uid,gid,score):
-    for i,user in enumerate(GV.VAR_USER_DATA_LIST):
-        if user[0] == uid:
-            for s in uid[-1]:
-                if s[0] == gid:
-                    return False,"You have scored this group before!"
-            GV.VAR_USER_DATA_LIST[i][-1].append([gid,score])
-            DM.archive(GV.VAR_USER_DATA_LIST)
+def score(sid,gid,score):
+    result = DBM.runSelect("SELECT SCORELIST FROM cns WHERE SID='%s'"%sid)[0][0]
+    data = eval(result)
+    data.append([ gid,score ])
+    strd = str(data)
+    DBM.runUpdate("UPDATE cns SET SCORELIST='%s' WHERE SID='%s'"%(strd,sid))
 
 # get avg score and all score of an group
 # return sum,avg
-def getscore(gid):
-    rbl = [ x[-1] for x in GV.VAR_USER_DATA_LIST if len(x[-1]) > 0 ]
-    scorelist = []
-    for u in rbl:
-        scorelist.extend([ x[1] for x in u if x[0]==gid ])
+def getscore(gid,rbl):
+    scorelist = [ x[1] for x in rbl if x[0]==gid ]
     if len(scorelist) < 1:
         return False,[],[]
     return True,sum(scorelist),sum(scorelist)/len(scorelist)
 
 # get user scored list
-def getScoredlist(uid):
-    for user in GV.VAR_USER_DATA_LIST:
-        if user[0] == uid:
-            return [ x[0] for x in user[-1] ]
+def getScoredlist(sid):
+    data = DBM.runSelect("SELECT SCORELIST FROM cns WHERE SID='%s'"%sid)[0][0]
+    print(data)
+    data = eval(data)
+    print(data)
+    return [ x[0] for x in data ]
 
 
 
@@ -46,8 +43,16 @@ def getAllGroupScores():
                 """
     resultlist += SS.table
     mstr = ""
+    result = DBM.runSelect("SELECT SCORELIST FROM cns")
+    rbl = []
+    for uscorelist in result:
+        x = eval(uscorelist[0])
+        if len(x) < 1:
+            continue
+        print(x)
+        rbl.extend(x)
     for gid in GV.GID:
-        status,sumx,avgx = getscore(gid)
+        status,sumx,avgx = getscore(gid,rbl)
         if status:
             st = SS.table_item
             mstr += st.replace("@GID",str(gid)).replace("@SUM",str(sumx)).replace("@AVG",str(avgx)[:7])
