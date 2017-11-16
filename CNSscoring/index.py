@@ -11,7 +11,7 @@ from flask import Flask, jsonify, redirect, render_template, request,make_respon
 
 app = Flask(__name__)
 
-GV.VAR_USER_DATA_LIST,GV.VAR_STULIST = dataManager2.init()
+GV.VAR_USER_DATA_LIST,GV.VAR_STULIST,GV.VAR_GROUPLIST = dataManager2.init()
 print(GV.VAR_USER_DATA_LIST)
 
 @app.route('/')

@@ -14,7 +14,7 @@
           <form id="scoring_form">
             <div class="form-group">
                 <label for="selectuser">选择要评分的组号：</label>
-                <select class="form-control" name="gid" id="selectuser">
+                <select class="form-control" name="gid" id="selectuser" onchange="sel_change()">
                 {% for gid in GID_LIST %}
                 <option>{{gid}}</option>
                 {% endfor %}
@@ -74,6 +74,10 @@
             return false;
         }
         return true;
+    }
+
+    function sel_change(){
+
     }
 </script>
 {% endblock %}

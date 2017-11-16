@@ -23,18 +23,11 @@
                     });
                 </script>  
                 </div>
-            </div>              
+            </div>   
 
-            <h5 style="margin-top:24px;">第二步：获取您的OpenID</h5>
-            <div class="col-md-4">
-                    <a href="javascript:getOpenID()">QQ登陆后，点我刷新OpenID</a>
-            </div>
-            <div class="form-group">
-                <label for="scoreinput">您的Open ID为：</label>
-                <input type="text" class="form-control" name="openid" id="openid" readonly>
-            </div>
+            <input type="text" class="form-control" name="openid" id="openid" readonly style="display:none;"> 
 
-            <h5 style="margin-top:24px;">第三步：输入您的学号</h5>
+            <h5 style="margin-top:24px;">第二步：输入您的学号（登陆请跳过此步骤）</h5>
             <div class="form-group">
                     <label for="scoreinput">您的学号：</label>
                     <input type="number" class="form-control" name="sid" id="usid" placeholder="请填入你自己的学号，如2015051152">
@@ -61,25 +54,18 @@
             }
         });
     });
-    
-    function getOpenID(){
-        if(QC.Login.check()){//如果已登录
-            QC.Login.getMe(function(openId, accessToken){
-                //alert(["当前登录用户的", "openId为："+openId, "accessToken为："+accessToken].join("\n"));
-                document.getElementById("openid").value = openId;
-                console.log(openId);
-                showMsg("OpenID获取成功!",5);
-            });
-        }
-    }
 
     function login(){
-        var openid = document.getElementById("openid").value;
-        if(openid.length < 8){
-            showMsg("请先登陆QQ获取OpenID后再点击登陆！",8);
-            return;
+        if(QC.Login.check()){//如果已登录
+            QC.Login.getMe(function(openId, accessToken){
+                document.getElementById("openid").value = openId;
+                console.log(openId);
+                showMsg("OpenID获取成功!",2);
+                window.location = "/login/" + openId;
+            });
+        }else{
+            showMsg("请先登陆QQ后再点击登陆！",8);
         }
-        window.location = "/login/" + openid;
 
     }
 
@@ -103,8 +89,14 @@
 
     function submit(){
         if(validateForm()){
-          SubmitForm2 ("/regist","scoring_form","注册失败！可能该学号(或QQ)已经注册了，或者您输入的学号不在名单中！","注册成功！跳转中...",function success(){
-            window.location = "/scoring";
+            QC.Login.getMe(function(openId, accessToken){
+                //alert(["当前登录用户的", "openId为："+openId, "accessToken为："+accessToken].join("\n"));
+                document.getElementById("openid").value = openId;
+                console.log(openId);
+                showMsg("OpenID获取成功!",2);
+                SubmitForm2 ("/regist","scoring_form","注册失败！可能该学号(或QQ)已经注册了，或者您输入的学号不在名单中！","注册成功！跳转中...",function success(){
+                window.location = "/scoring";
+            });
           })
             var cfd = document.getElementById("comfirm");
             cfd.checked = false;
@@ -114,11 +106,10 @@
 
     function validateForm(){
         var score = document.getElementById("usid").value  ;
-        var openid = document.getElementById("openid").value;
         var cfd = document.getElementById("comfirm");
         var cc = document.getElementById("cc");
         console.log(score);
-        if(!QC.Login.check() || openid.length < 8){
+        if(!QC.Login.check()){//如果已登录
             showMsg("您还未登陆QQ获取OpenID",3);
             return false;
         }
@@ -131,6 +122,7 @@
             cc.style.background = "red";
             return false;
         }
+
         return true;
     }
 

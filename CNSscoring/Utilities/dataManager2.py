@@ -10,4 +10,7 @@ def init():
     with open("data/stulist.txt",'r',errors='ignore',encoding='utf-8') as f:
         data = f.readlines()
         stulist = [ line.split(",") for line in data if len(line) > 15 ]
-        return credentials,stulist
+        with open("data/grouplist.txt",'r',errors='ignore',encoding='utf-8') as f:
+            data = f.readlines()
+            grouplist = [ line.split(",") for line in data if len(line) > 15 ]
+            return credentials,stulist,grouplist
