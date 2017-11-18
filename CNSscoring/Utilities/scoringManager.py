@@ -2,6 +2,7 @@
 from Utilities import gV as GV
 from Utilities import stringx as SS
 from Utilities import runSQL as DBM
+from Utilities import dataManager2 as DM2
 
 
 # this script controls user scoring
@@ -31,8 +32,6 @@ def getScoredlist(sid):
     return [ x[0] for x in data ]
 
 
-
-
 # get all groups score
 def getAllGroupScores():
     resultlist = """
@@ -57,3 +56,31 @@ def getAllGroupScores():
             st = SS.table_item
             mstr += st.replace("@GID",str(gid)).replace("@SUM",str(sumx)).replace("@AVG",str(avgx)[:7])
     return resultlist.replace("@TBODY@",mstr)
+
+
+#this function scores a student by SID
+def scoreStudent(sid,score):
+    ss = str(score) + ","
+    DBM.runUpdate("UPDATE stu SET SCORELIST=SCORELIST+'%s' WHERE SID='%s'"%(ss,sid))
+
+# this function comment a student
+def commentStudent(sid,comment):
+    cc = comment + GV.SPLITER
+    comment = DM2.secureString(comment)
+    DBM.runUpdate("UPDATE stu SET COMMENTS=COMMENTS+'%s' WHERE SID='%s'"%(cc,sid))
+
+# get score list of an student
+def getScoreListOf(sid):
+    result = DBM.runSelect("SELECT SCORELIST FROM stu WHERE SID='%s'"%(sid))
+
+def getCommentsListOf(sid):
+    result = DBM.runSelect("SELECT COMMENTS FROM stu WHERE SID='%s'"%(sid))
+    result = DM2.unsecureString(result)
+
+# this function returns group member data
+# returns group list [id,[member list]]
+def getGroupData(gid):
+    for g in GV.VAR_GROUPLIST:
+        if g[0] == gid:
+            return True,g
+    return False,[]

@@ -24,9 +24,13 @@
                     <label for="scoreinput">您的评分：</label>
                     <input type="number" class="form-control" name="score" id="scoreinput" placeholder="请填入0到100之间的整数">
             </div>
+            <div class="form-group" id="single-member">
+
+            </div>
           </form>
           <p >当前登陆用户：<span style="color:blue;">{{CUR_UID}}</span> </p>
-          <p>应用班 1到10组，工程班11到18组（即工程班讲解组组号加10）</p>
+          <span style="color:brown;"><p id="tips">应用班 2到11组，工程班12到19组（即工程班讲解组组号加11）</p></span>
+          <p style="font-size:10pt;font-weight:900;"><i>应用班 2到11组，工程班12到19组（即工程班讲解组组号加11）</i>></p>
           <p><label id="cc"> <input type="checkbox" id="comfirm"> 确认评分(评分后将无法更改)</label></p>
           <a href="javascript:submit()" class="btn btn-primary">提交评分</a>
         </div>
@@ -40,6 +44,7 @@
                 return false;
             }
         });
+        sel_change();
     });
 
     function submit(){
@@ -77,7 +82,25 @@
     }
 
     function sel_change(){
+        var selector = document.getElementById( "selectuser" );
+        var gid = selector.options[ selector.selectedIndex ].value;
+        showMsg("加载数据中...",3);
+        getGroupInfo(gid);
+    }
 
+    function getGroupInfo(gid){
+        Getdata("/api/getgroupinfo/" + gid, function success(data){
+            if(data.indexOf("错误") > -1){
+                console.log("error in get group info");
+            }else{
+                var groupinfo = "当前选中 第 " + data[0] + "组，成员：";
+                for(i=0;i<data[1].length;i++){
+                    groupinfo += data[1][i][0] + ",";
+                }
+                document.getElementById("tips").textContent = groupinfo;
+
+            }
+        });
     }
 </script>
 {% endblock %}

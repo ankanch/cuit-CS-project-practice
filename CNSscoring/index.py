@@ -71,6 +71,13 @@ def scoring():
     else:
         return error("您还未登陆！")
 
+@app.route('/api/getgroupinfo/<gid>')
+def getgroupinfo(gid):
+    status,group = scoringManager.getGroupData(int(gid)) # [id,[member list]]
+    if status:
+        return jsonify(group)
+    return "错误！组号%s不存在！"%gid
+
 @app.route('/sc',methods=['POST'])
 def sc():
     uid = request.cookies.get('uid')
