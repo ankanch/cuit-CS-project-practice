@@ -61,13 +61,16 @@ def getAllGroupScores():
 #this function scores a student by SID
 def scoreStudent(sid,score):
     ss = str(score) + ","
-    DBM.runUpdate("UPDATE stu SET SCORELIST=SCORELIST+'%s' WHERE SID='%s'"%(ss,sid))
+    DBM.runUpdate("UPDATE stu SET SCORELIST=CONCAT(SCORELIST,'%s') WHERE SID='%s'"%(ss,sid))
 
 # this function comment a student
 def commentStudent(sid,comment):
+    if len(comment) < 1:
+        return False
     cc = comment + GV.SPLITER
-    comment = DM2.secureString(comment)
-    DBM.runUpdate("UPDATE stu SET COMMENTS=COMMENTS+'%s' WHERE SID='%s'"%(cc,sid))
+    comment = DM2.secureString(cc)
+    sql = "UPDATE stu SET COMMENTS=CONCAT(COMMENTS,'%s') WHERE SID=\"%s\""%(comment,sid)
+    DBM.runUpdate(sql)
 
 # get score list of an student
 def getScoreListOf(sid):

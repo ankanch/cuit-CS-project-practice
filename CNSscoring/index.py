@@ -83,12 +83,29 @@ def sc():
     uid = request.cookies.get('uid')
     gid = int(request.form['gid'])
     score = int(request.form['score'])
+    stuscore = []
+    stucomments = []
+    for i in range(1,5):
+        try:
+            stuscore.append( int(request.form['score'+ str(i)]) )
+        except:
+            stuscore.append(score)
+    for i in range(1,5):
+        try:
+            stucomments.append( request.form['cm' + str(i)] )
+        except:
+            stucomments.append("")
     if int(score) < 0 or int(score) > 100:
         return "U"
     scored = scoringManager.getScoredlist(uid)
     if (gid in GV.GID) and (gid not in scored):
         scoringManager.score(uid,gid,score)
         print("[Scoring]Student",uid,"scored",gid,"with",score,"marks.")
+        status, group = scoringManager.getGroupData(gid)
+        for i,stu in enumerate(group[1]):
+            scoringManager.scoreStudent(stu[1],stuscore[i])
+            scoringManager.commentStudent(stu[1],stucomments[i])
+        print("[Scoring]Students scoring for student(%s) choose done."%uid)
         return "OK"
     return "U"
 

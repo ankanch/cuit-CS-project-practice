@@ -10,7 +10,7 @@
 
       <div class="card">
         <div class="card-body">
-          <h4 class="card-title">小组评分</h4>
+          <h4 class="card-title" style="font-weight:900;">小组评分</h4>
           <form id="scoring_form">
             <div class="form-group">
                 <label for="selectuser">选择要评分的组号：</label>
@@ -21,16 +21,35 @@
                 </select>
             </div>
             <div class="form-group">
-                    <label for="scoreinput">您的评分：</label>
+                    <label for="scoreinput">您的小组评分：</label>
                     <input type="number" class="form-control" name="score" id="scoreinput" placeholder="请填入0到100之间的整数">
             </div>
-            <div class="form-group" id="single-member">
-
+            <span style="color:brown;"><p id="tips">应用班 2到11组，工程班12到19组（即工程班讲解组组号加11）</p></span>
+            <p style="font-size:10pt;"><i>应用班 2到11组，工程班12到19组（即工程班讲解组组号加11）</i></p>
+            <h5 class="card-title" style="font-weight:900;">同学单独评分</h5>
+            <div class="collapse" id="collapseExample">
+                <div class="card card-body">
+                        <div class="form-group" id="single-member">
+                            <h6 id="stu_1">Student 1</h6>
+                                <input type="number" class="form-control" name="score1" id="score1" placeholder="请填入分数(留空将会使用小组分数)">
+                                <input type="text" class="form-control" name="cm1" id="cm1" placeholder="留下你的评论，完全匿名的评论，服务器也不会记录谁评论的。">
+                            <h6 id="stu_2" style="margin-top:12px;">Student 2</h6>
+                                <input type="number" class="form-control" name="score2" id="score2" placeholder="请填入分数(留空将会使用小组分数)">
+                                <input type="text" class="form-control" name="cm2" id="cm2" placeholder="完全匿名的评论，服务器也不会记录谁评论的。">
+                            <h6 id="stu_3" style="margin-top:12px;">Student 3</h6>
+                                <input type="number" class="form-control" name="score3" id="score3" placeholder="请填入分数(留空将会使用小组分数)">
+                                <input type="text" class="form-control" name="cm3" id="cm3" placeholder="服务器也不会记录谁评论的">
+                            <div id="lastone">
+                            <h6 id="stu_4" style="margin-top:12px;">Student 4</h6>
+                                <input type="number" class="form-control" name="score4" id="score4" placeholder="请填入分数(留空将会使用小组分数)">
+                                <input type="text" class="form-control" name="cm4" id="cm4" placeholder="请留下你的评论，完全匿名的评论，服务器也不会记录谁评论的。">                                                                
+                            </div>
+                                
+                        </div>
+                </div>
             </div>
           </form>
           <p >当前登陆用户：<span style="color:blue;">{{CUR_UID}}</span> </p>
-          <span style="color:brown;"><p id="tips">应用班 2到11组，工程班12到19组（即工程班讲解组组号加11）</p></span>
-          <p style="font-size:10pt;font-weight:900;"><i>应用班 2到11组，工程班12到19组（即工程班讲解组组号加11）</i>></p>
           <p><label id="cc"> <input type="checkbox" id="comfirm"> 确认评分(评分后将无法更改)</label></p>
           <a href="javascript:submit()" class="btn btn-primary">提交评分</a>
         </div>
@@ -49,9 +68,11 @@
 
     function submit(){
         if(validateForm()){
+            showMsg("提交评分中....",3);
             SubmitForm("/sc","scoring_form","提交失败！该组您已经评过分了。","提交成功！",function success(){
                 var x = document.getElementById("selectuser");
                 x.remove(x.selectedIndex);
+                sel_change();
             });
             var cfd = document.getElementById("comfirm");
             cfd.checked = false;
@@ -86,6 +107,10 @@
         var gid = selector.options[ selector.selectedIndex ].value;
         showMsg("加载数据中...",3);
         getGroupInfo(gid);
+        for(i=1;i<5;i++){
+            document.getElementById("score"+ i).value = "";
+            document.getElementById("cm"+ i).value = "";
+        }
     }
 
     function getGroupInfo(gid){
@@ -96,9 +121,15 @@
                 var groupinfo = "当前选中 第 " + data[0] + "组，成员：";
                 for(i=0;i<data[1].length;i++){
                     groupinfo += data[1][i][0] + ",";
+                    document.getElementById("stu_" + (i+1)).textContent = data[1][i][0] + ":";
+                }
+                if(data[1].length == 3){
+                    document.getElementById("lastone").style.display = "none";
+                }else{
+                    document.getElementById("lastone").style.display = "";
                 }
                 document.getElementById("tips").textContent = groupinfo;
-
+                $('#collapseExample').collapse();
             }
         });
     }
