@@ -36,8 +36,9 @@ def getScoredlist(sid):
 def getAllGroupScores():
     resultlist = """
                     <h3>Scores List by Group </h3>
-                    <p style="margin-bottom:2px;">Made with ♥ by Kanch</p>
-                    <p style="margin-bottom:2px;">kanch@ieee.org</p>
+                    <p style="margin-bottom:2px;"> Made with ♥ by Kanch</p>
+                    <p style="margin-bottom:2px;"> kanch@ieee.org</p>
+                    <a href="/s/1997">→view student score list</a>
                     <br/>
                 """
     resultlist += SS.table
@@ -72,13 +73,6 @@ def commentStudent(sid,comment):
     sql = "UPDATE stu SET COMMENTS=CONCAT(COMMENTS,'%s') WHERE SID=\"%s\""%(comment,sid)
     DBM.runUpdate(sql)
 
-# get score list of an student
-def getScoreListOf(sid):
-    result = DBM.runSelect("SELECT SCORELIST FROM stu WHERE SID='%s'"%(sid))
-
-def getCommentsListOf(sid):
-    result = DBM.runSelect("SELECT COMMENTS FROM stu WHERE SID='%s'"%(sid))
-    result = DM2.unsecureString(result)
 
 # this function returns group member data
 # returns group list [id,[member list]]
@@ -87,3 +81,33 @@ def getGroupData(gid):
         if g[0] == gid:
             return True,g
     return False,[]
+
+
+# get All setudent socres and comments 
+def getAllStudetnScoresComments():
+    resultlist = """
+                    <h3>Scores List by Student </h3>
+                    <p style="margin-bottom:2px;"> Made with ♥ by Kanch</p>
+                    <p style="margin-bottom:2px;"> kanch@ieee.org</p>
+                    <a href="/s/1996">→view group score list</a>
+                    <br/>
+                """
+    resultlist += SS.student_table
+    mstr = ""
+    result = DBM.runSelect("SELECT * FROM stu")
+    stst = ""
+    for student in result:
+        mstr = SS.student_item
+        mstr = mstr.replace("@NAME",student[1]).replace("@SID",student[0])
+        scores = [int(x) for x in student[3].split(",") if len(x) > 0]
+        print(scores)
+        sumx = sum(scores)
+        if len(scores) > 0:
+            mstr = mstr.replace("@SUM",str(sumx)).replace("@AVG",str(sumx/len(scores)))
+        else:
+            mstr = mstr.replace("@SUM",str(sumx)).replace("@AVG","0")
+        comments = "<br/>".join(student[4].split(GV.SPLITER))
+        mstr = mstr.replace("@COMMENTS",comments)
+        stst += mstr
+    resultlist = resultlist.replace("@TBODY@",stst)
+    return resultlist

@@ -58,6 +58,8 @@ def registe():
 def scoreslist(pwd):
     if pwd == "1996":
         return scoringManager.getAllGroupScores()
+    elif pwd == "1997":
+        return scoringManager.getAllStudetnScoresComments()
     return error("禁止访问！")
 
 @app.route('/scoring')
