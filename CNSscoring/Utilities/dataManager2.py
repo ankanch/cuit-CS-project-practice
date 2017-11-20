@@ -22,7 +22,9 @@ def init():
 
 SECURE_LIST = [
     ["'","@SIN@"],
-    ["\"","@DSIN@"]
+    ["\"","@DSIN@"],
+    ["=","@EQUAL@"],
+    [";","@semicolon@"]
 ]
 # secure an input for database
 def secureString(data):

@@ -18,7 +18,7 @@ print(GV.VAR_USER_DATA_LIST)
 def index():
     uid =  request.cookies.get('uid')
     if uid != None:
-        print("already registed!")
+        print("[REGERROR]already registed!")
         return redirect('/scoring')
     return render_template("index.html",TITLE="计算机网络打分系统 ",title="登陆")
 
@@ -44,7 +44,7 @@ def registe():
     access_token = request.form['sid']
     status,rsid =  sessionManager.checkOpenID(openid)
     if sessionManager.check(access_token) or status :
-        print(">>ERROR:already registed! or not in the list.")
+        print("[ERROR]already registed! or not in the list.")
         return "U22UkanchU22"
     else:
         print("[Registe]Student",access_token,"registed!.")

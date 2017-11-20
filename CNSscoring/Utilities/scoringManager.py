@@ -100,7 +100,6 @@ def getAllStudetnScoresComments():
         mstr = SS.student_item
         mstr = mstr.replace("@NAME",student[1]).replace("@SID",student[0])
         scores = [int(x) for x in student[3].split(",") if len(x) > 0]
-        print(scores)
         sumx = sum(scores)
         if len(scores) > 0:
             mstr = mstr.replace("@SUM",str(sumx)).replace("@AVG",str(sumx/len(scores)))
