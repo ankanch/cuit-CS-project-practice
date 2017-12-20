@@ -1,0 +1,40 @@
+类名： Admin  （系统管理员类）
+方法： addType（） 添加事件类型
+		alterType（）修改事件类型数据
+		requestVerfiy（）请求事件验证
+		lastReport（）获取最近报告的事件
+		showSubscriblers（）得到订阅列表
+		
+		
+类名：L2Admin （二级管理员类）
+方法：addIncident（）添加记录在案的真实事件
+		deleteIncident（）删除此管理员添加的事件
+		alterIncident（）修改此管理员添加的事件
+		hideIncident（）隐藏此管理员添加的事件
+		showIncidents（）显示此管理员添加的事件
+		
+		
+类名：User	（用户类）
+方法：report（）向系统报告一个事件
+		verify（）将请求验证结果返回给系统
+		getIncidetns（）获取指定地理位置的事件清单
+		subscrible（）订阅指定地理位置的事件
+		search（）搜索事件
+		flagCrediblity（）对事件进行可信度标记
+		
+类名： DatabaseHelper  数据库帮助类（用于执行所有数据库操作，作为底层类）
+方法：	runInsert（）向数据库插入数据
+		runSelect（）从数据库查询数据
+		runDelete（）从数据库删除数据
+		runUpdate（）更新数据库数据
+		
+类名： Incidetns  事件类（所有事件操作均需通过该类，为底层类，处于数据库帮助类之上）
+方法： getIncidetnsByLocation（）获取指定地理位置的时间信息
+		searchIncidetns（）搜索事件
+		getIncidetnsByType（）根据类型获取事件
+		addIncidetns（）添加事件
+		deleteIncidetns（）删除事件
+		updateCredibility（）更新事件可信度
+		updateIncidetns（）更新事件
+		
+		

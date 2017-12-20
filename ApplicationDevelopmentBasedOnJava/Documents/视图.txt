@@ -1,0 +1,33 @@
+主页面： index.jsp
+必要JavaScript函数：
+				searchIncidetns（）  搜索事件，调用事件类相应的接口函数（按照地理位置，事件类型那3个）
+				credibilityMark（）标记事件可信度，调用事件类相应的接口函数
+				
+				
+
+订阅页面： subscrible.jsp
+必要JavaScript函数：
+				subscribe（） 订阅，调用用户类相应的接口函数
+
+系统管理员管理页面： admin.jsp
+必要JavaScript函数：
+				addType（）
+				alterType（）
+				getLastReport（）
+				getSubscriablers（）
+				《以上4个函数都通过调用管理员类（Admin）中相应的函数实现》
+				
+
+
+二级管理员管理页面： l2admin.jsp
+必要JavaScript函数：
+				deleteIncideent（）
+				alterIncident（）
+				hideIncident（）
+				showIncidetns（）
+				《以上4个函数都通过调用二级管理员类（L2Admin）中相应的函数实现》
+ 
+ 
+事件报告页面： report.jsp
+必要JavaScript函数：
+				reportIncidetns（）报告事件，调用事件类相应的接口函数
