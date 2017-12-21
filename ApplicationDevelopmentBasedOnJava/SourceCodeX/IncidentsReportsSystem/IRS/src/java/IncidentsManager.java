@@ -20,7 +20,7 @@ import javax.sql.DataSource;
  * @author kanch
  */
 public class IncidentsManager {
-    
+
     String myDriver = DatabaseConfig.driver;
     String myUrl = DatabaseConfig.host;
 
@@ -35,7 +35,7 @@ public class IncidentsManager {
         double maxLat = lat + 0.2;
         double minLng = lng - 0.2;
         double maxLng = lng + 0.2;
-        
+
         System.out.println(ll[0] + "," + ll[1]);
         try {
             // 创建数据库连接
@@ -58,7 +58,7 @@ public class IncidentsManager {
                 ii.id = rs.getInt("IID");
                 ii.credit = rs.getString("ICREDIT");
                 ii.description = rs.getString("IDESCRIPTION");
-                ii.latlng = Double.toString(rs.getDouble("LAT")) + ", " + Double.toString(rs.getDouble("LNG")) ;
+                ii.latlng = Double.toString(rs.getDouble("LAT")) + ", " + Double.toString(rs.getDouble("LNG"));
                 ii.type = rs.getString("ITYPE");
                 ii.reportTime = rs.getString("IREPORTTIME");
                 ii.reportedby = rs.getInt("IWHOADD");
@@ -72,15 +72,50 @@ public class IncidentsManager {
         }
         return al;
     }
-    
+
+    //获取指定位置的sum条事件
+    public ArrayList<Incident> getIncidentsByL2Admin(String l2adminid, String sum) {
+        ArrayList<Incident> al = new ArrayList();
+        try {
+            // 创建数据库连接
+            Class.forName(myDriver);
+            Connection conn = DriverManager.getConnection(myUrl, DatabaseConfig.user, DatabaseConfig.password);
+            // 创建数据库语句
+            String query = "SELECT * FROM INCIDENTS WHERE IWHOADD=" + l2adminid + " LIMIT 0," + sum;
+            System.out.println(query);
+            // 创建对应Java Statement
+            Statement st = conn.createStatement();
+            // 执行数据库语句
+            ResultSet rs = st.executeQuery(query);
+            // 遍历获取结果
+            while (rs.next()) {
+                Incident ii = new Incident();
+                ii.id = rs.getInt("IID");
+                ii.credit = rs.getString("ICREDIT");
+                ii.description = rs.getString("IDESCRIPTION");
+                ii.latlng = Double.toString(rs.getDouble("LAT")) + ", " + Double.toString(rs.getDouble("LNG"));
+                ii.type = rs.getString("ITYPE");
+                ii.reportTime = rs.getString("IREPORTTIME");
+                ii.reportedby = rs.getInt("IWHOADD");
+                ii.printInfo();
+                al.add(ii);
+            }
+            st.close();
+        } catch (Exception e) {
+            System.err.println("错误：无法从数据库中读取数据，可能是网络问题或者驱动问题。");
+            System.err.println(e.getMessage());
+        }
+        return al;
+    }
+
     public Boolean addIncident(Incident ii) {
         try {
             // 创建数据库连接
             Class.forName(myDriver);
             Connection conn = DriverManager.getConnection(myUrl, DatabaseConfig.user, DatabaseConfig.password);
             // 创建数据库语句并填充
-            String query = "INSERT INTO INCIDENTS(ITYPE, IREPORTTIME, IDESCRIPTION, LAT,LNG, IWHOADD,ICREDIT,ILOCATION,IPRECISELOCATION)"
-                    + " values (?, ?, ?, ?, ?, ?,'1','no location','N/A')";
+            String query = "INSERT INTO INCIDENTS(ITYPE, IREPORTTIME, IDESCRIPTION, LAT,LNG, IWHOADD,ICREDIT,ILOCATION)"
+                    + " values (?, ?, ?, ?, ?, ?,'1','no location')";
             PreparedStatement preparedStmt = conn.prepareStatement(query);
             preparedStmt.setString(1, ii.type);
             preparedStmt.setString(2, ii.reportTime);
@@ -101,5 +136,5 @@ public class IncidentsManager {
         }
         return true;
     }
-    
+
 }

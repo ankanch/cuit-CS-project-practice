@@ -94,6 +94,7 @@
             var map;
             var selectPos;
 
+
             $(document).ready(function () {
                 //初始化样式
                 $('body').bootstrapMaterialDesign();

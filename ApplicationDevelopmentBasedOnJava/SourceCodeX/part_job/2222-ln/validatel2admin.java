@@ -6,24 +6,18 @@
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.annotation.WebInitParam;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author kanch
+ * @author JakeLin
  */
-@WebServlet(urlPatterns = {"/getIncidents"}, initParams = {
-    @WebInitParam(name = "latlng", value = "0")
-    , @WebInitParam(name = "vsum", value = "30")})
-public class getIncidents extends HttpServlet {
-
-    private IncidentsManager incidentsManager = new IncidentsManager();
+@WebServlet(urlPatterns = {"/validatel2admin"})
+public class validatel2admin extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,29 +32,16 @@ public class getIncidents extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            //获取地理位置和显示的个数
-            String vloc = request.getParameter("latlng");
-            String vsum = request.getParameter("vsum");
-            String l2admin = request.getParameter("l2admin");
-            String result = "";
-            ArrayList<Incident> al = new ArrayList();
-            if (vloc == null || vsum == null) {
-                if (l2admin == null) {
-                    out.println("ERROR<br/>");
-                    return;
-                } else {
-                    //给二级管理员返回事件列表
-                    al = incidentsManager.getIncidentsByL2Admin(l2admin, "50");
-                }
-            } else {
-                //向所有用户返回事件列表
-                al = incidentsManager.getIncidents(vloc, vsum);
-            }
-            for (Incident i : al) {
-                result += Integer.toString(i.id) + "@" + i.type + "@" + i.credit + "@"
-                        + i.description + "@" + i.latlng + "@" + i.roughLocation + "@" + i.reportTime + "$";
-            }
-            out.println("OK<br/>" + result);
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet validatel2admin</title>");            
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet validatel2admin at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
         }
     }
 
@@ -90,7 +71,23 @@ public class getIncidents extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        //processRequest(request, response);
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        System.out.println("username = " + username);
+        System.out.println("password = " + password);
+                try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            //创建二级管理员用户对象
+            L2AdminManager l2AdminManager = new L2AdminManager();
+            if(true == l2AdminManager.checkL2Admin(username, password))
+            {
+                out.println("OK");
+            }
+            else{
+                out.println("ERROR");
+            }
+        }
     }
 
     /**
