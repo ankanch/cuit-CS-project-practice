@@ -21,6 +21,7 @@
         <link rel="stylesheet" href="static/snackbarjs/snackbar.min.css">
         <script src="static/materialize/popper.js"></script>
         <script src="static/jquery-3.2.1.min.js"></script>
+        <script src="static/echarts.simple.min.js"></script>
         <script src="static/snackbarjs/snackbar.min.js"></script>
         <script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&key=DPIBZ-OHXKD-A6O4L-HPUN3-ZAAV7-A6B6P"></script>
         <!-- Compiled and minified JavaScript -->
