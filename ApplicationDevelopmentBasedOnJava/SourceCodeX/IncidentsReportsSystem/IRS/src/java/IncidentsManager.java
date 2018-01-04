@@ -134,7 +134,17 @@ public class IncidentsManager {
             System.err.println(e.getMessage());
             return false;
         }
+        alertUser(ii.latlng);
         return true;
+    }
+    
+    private void alertUser(String latlng){
+        try{
+        alert.send("Incidents Report 事件警报", "1075900121@qq.com", "这是测试发送的方法！");
+        }catch(Exception e){
+            System.out.println("邮件发送错误");
+            e.printStackTrace();
+        }
     }
 
     public Boolean confirmIncident(String iid) {

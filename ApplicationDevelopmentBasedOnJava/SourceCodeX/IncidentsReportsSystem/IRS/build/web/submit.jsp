@@ -65,21 +65,21 @@
                     <div class="col-md-5">
                         <input type="date" class="form-control " name="date" placeholder="请选择事件发生时间">
                     </div>
-                    
+
                 </div>
                 <div class="checkbox" style="margin-top:55px;">
                     <label>
-                        <input type="checkbox"> 我确定我输入的信息真实可靠
+                        <input type="checkbox" id="c1"> 我确定我输入的信息真实可靠
                     </label>
                 </div>
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox"> 我确认我提交的信息符合《Incidents Report系统信息提交规范》
+                        <input type="checkbox" id="c2"> 我确认我提交的信息符合《Incidents Report系统信息提交规范》
                     </label>
                 </div>
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox"> 我确认所报告的事件还没有得到解决
+                        <input type="checkbox" id="c3"> 我确认所报告的事件还没有得到解决
                     </label>
                 </div>
                 <br/>
@@ -127,15 +127,22 @@
                 document.getElementById("select_type").value = typex;
                 document.getElementById("current_type").textContent = typex;
             }
-            
-            function selCheck(){
-                return true;
+
+            function selCheck() {
+                var aa = document.getElementById("c1").checked;
+                var bb = document.getElementById("c2").checked;
+                var cc = document.getElementById("c3").checked;
+                if(aa && bb && cc){
+                    return true;
+                }
+                showMsg("请同意相关协议后再进行提交！");
+                return false;
             }
-            
-            function submitIncident(){
-                if(selCheck()){
+
+            function submitIncident() {
+                if (selCheck()) {
                     showMsg("提交中...");
-                    SubmitForm("/IncidentsReport/SubmitIncident","submit_incident","提交失败，请重试！","提交成功！");
+                    SubmitForm("/IncidentsReport/SubmitIncident", "submit_incident", "提交失败，请重试！", "提交成功！");
                 }
             }
         </script>
