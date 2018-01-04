@@ -21,7 +21,7 @@
         <link rel="stylesheet" href="static/snackbarjs/snackbar.min.css">
         <script src="static/materialize/popper.js"></script>
         <script src="static/jquery-3.2.1.min.js"></script>
-        <script src="static/echarts.simple.min.js"></script>
+        <script src="static/echarts.min.js"></script>
         <script src="static/snackbarjs/snackbar.min.js"></script>
         <script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&key=DPIBZ-OHXKD-A6O4L-HPUN3-ZAAV7-A6B6P"></script>
         <!-- Compiled and minified JavaScript -->
@@ -30,7 +30,7 @@
     <body>
         <jsp:include page="template/header.jsp"/>
         <div class="row" style="margin:0px;height:90vh;">
-            <div class="col-md-9">
+            <div class="col-md-9" style="padding-left: 0px;">
                 <div id="ttmap" style="width:100%;height:100%;margin:0px;">
 
                 </div>
@@ -63,7 +63,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-                                 <button type="button" class="btn btn-primary">建立警报</button>
+                                <button type="button" class="btn btn-primary" onclick="send()" data-dismiss="modal">建立警报</button>
                             </div>
                         </div>
                     </div>
@@ -71,13 +71,9 @@
             </div>
             <div class="col-md-3">
                 <form style="margin-top:5vh;">
-                    <div class="form-group">
-                        <div class="row" style="margin:0vh;margin-top:15px;">
-                            <input type="text" class="form-control" id="inputLocation" aria-describedby="emailHelp" placeholder="输入街道名称，查看事件情况" style="margin-top:4px; ">
-                        </div>
-                        <div class="row" style="margin:0vh;margin-top:15px;">
-                            <button type="button" class="btn btn-primary" style="width:100%;" onclick="search()" >搜索</button>
-                        </div>
+                    <div class="form-group" style="padding-top:0px;">
+                        <button type="button" class="btn btn-primary col-md-3" style="width:100%;float: right;" onclick="search()" >搜索</button>
+                        <input type="text" class="form-control col-md-9" id="inputLocation" aria-describedby="emailHelp" placeholder="输入街道名称，查看事件情况" style="margin-top:4px; ">
                     </div>
                     <div class="form-group">
                         <div class="row" style="margin: 0vh;">
@@ -101,22 +97,9 @@
                         </div>
 
                     </div>
-                    <div class="form-group">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                按事件发送时间筛选
-                            </button>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="#">显示最近1年</a>
-                                <a class="dropdown-item" href="#">最近6个月</a>
-                                <a class="dropdown-item" href="#">最近3个月</a>
-                                <a class="dropdown-item" href="#">最近1个月</a>
-                                <a class="dropdown-item" href="#">最近1周</a>
-                            </div>
-                        </div>
-                    </div>
 
                 </form>
+                <div id="main" style="width: 98%;height:300px;"></div>
             </div>
         </div>
 
@@ -125,7 +108,9 @@
             var inputLocationBox;
             var map;
             var loading = false;
-            var incidentsList = new Array();
+            var incidentsList = new Array();    // 事件信息数组，每一个元素由数组组成
+            ////（0：经纬度，1：卡片内容，2：事件图标，3：事件类型，4：事件ID，5：时间发生时间，6：marker）
+            var myChart = echarts.init(document.getElementById('main'));
 
             $(document).ready(function () {
                 //获取所有全局控件变量
@@ -141,7 +126,6 @@
                 );
                 //当地图中心属性更改时触发事件
                 qq.maps.event.addListener(map, 'center_changed', function () {
-                    console.log("latlng:" + map.getCenter());
                     updateOnmove();
                 });
                 //搜索服务
@@ -179,26 +163,6 @@
                 firstLoading();
             });
 
-            function decideType(tstr) {
-                switch (tstr) {
-                    case "/IncidentsReport/static/icons/car_stolen":
-                        return "汽车偷窃";
-                    case "/IncidentsReport/static/icons/fire":
-                        return "火灾";
-                    case "/IncidentsReport/static/icons/kidnapping":
-                        return "绑架";
-                    case "/IncidentsReport/static/icons/lie":
-                        return "欺诈";
-                    case "/IncidentsReport/static/icons/robbery":
-                        return "抢劫";
-                    case "/IncidentsReport/static/icons/stolen":
-                        return "入室盗窃";
-                    case "/IncidentsReport/static/icons/violence":
-                        return "暴力事件";
-                }
-                return tstr;
-            }
-
             function search() {
                 var keyword = inputLocationBox.value;
                 console.log("search location:" + keyword);
@@ -232,19 +196,21 @@
                             var infocontent = '<div style="text-align:left;white-space:nowrap;' +
                                     'margin:10px;">事件类型：@type<br/>' +
                                     '发生时间：@time<br/>' +
-                                    '事件描述：@des<br/>' +
-                                    '可信度：@credit</div>';
+                                    '已确认该事件人数：@credit</div>' +
+                                    '<button type="button" class="btn btn-outline-success btn-sm" onclick="support(@id)">标记为可靠</button>';
                             infocontent = infocontent.replace("@type", decideType(incident[1]))
                                     .replace("@time", incident[6])
-                                    .replace("@des", incident[3])
-                                    .replace("@credit", incident[2]);
+                                    .replace("@credit", incident[2])
+                                    .replace("@id", incident[0]);
                             incidentsarr.push(infocontent);
-                            incidentInfoObj.push(infocontent)   //1事件卡片内容
+                            incidentInfoObj.push(infocontent);   //1事件卡片内容
                             //添加标记图标
                             incidentIcons.push(incident[1] + ".png");
                             incidentInfoObj.push(incident[1] + ".png"); //2事件图标
                             incidentInfoObj.push(incident[1]);  //3 事件类型
-                            incidentsList.push(incidentInfoObj);
+                            incidentInfoObj.push(incident[0]); //4:事件ID
+                            incidentInfoObj.push(incident[6]); //5:发生日期
+                            incidentsList.push(incidentInfoObj); //
                         }
                     }
                     //显示提示窗口
@@ -262,54 +228,345 @@
                                 infoWin.open();
                                 infoWin.setContent(incidentsList[n][1]);
                                 infoWin.setPosition(incidentsList[n][0]);
+                                //加载类似事件统计图
+                                updateStatgraphBytime(incidentsList[n][3]);
                             });
-                            incidentsList[n].push(marker);
+                            incidentsList[n].push(marker);  //6：marker在对应incidentInfoObj数组的下标为4的位置，而不是incidentsList
                         })(i);
                     }
+                    //显示事件统计数据
+                    updateIncidentsStatgraph();
                 });
+            }
+
+
+            //删除地图上的所有事件标记
+            function deleteOverlays() {
+                if (incidentsList) {
+                    for (i in incidentsList) {
+                        if (typeof incidentsList[i][6] != 'undefined') {
+                            incidentsList[i][6].setMap(null);
+                        }
+                    }
+                    incidentsList.length = 0;
+                }
+            }
+
+            function setAllIncidentsVisable() {
+                for (var i = 0; i < incidentsList.length; i++) {
+                    if (typeof incidentsList[i][6] != 'undefined') {
+                        incidentsList[i][6].setVisible(true);
+                    }
+                }
             }
 
             function incidentTypeFilter(type) {
                 if (type == "all") {
                     for (var i = 0; i < incidentsList.length; i++) {
-                        if (typeof incidentsList[i][4] != 'undefined') {
-                            incidentsList[i][4].setVisible(true);
+                        if (typeof incidentsList[i][6] != 'undefined') {
+                            incidentsList[i][6].setVisible(true);
                         }
                     }
                     return;
                 }
+                setAllIncidentsVisable();
                 for (var i = 0; i < incidentsList.length; i++) {
-                    if (typeof incidentsList[i][4] != 'undefined' && incidentsList[i][3] != type) {
-                        incidentsList[i][4].setVisible(false);
+                    if (typeof incidentsList[i][6] != 'undefined' && incidentsList[i][3] != type) {
+                        incidentsList[i][6].setVisible(false);
                     }
                 }
             }
 
             function firstLoading() {
                 if (loading) {
+                    setTimeout(function () {
+                        return;
+                    }, 3000);
                     return;
                 }
-                incidentsList = new Array();
                 loading = true;
+                showMsg("加载数据...");
+                incidentsList = new Array();
                 center = map.getCenter();
                 getIncidents(center.getLat() + "," + center.getLng(), 30);
-                loading = false;
+                setTimeout(function () {
+                    loading = false;
+                }, 3000);
             }
 
             function updateOnmove() {
                 if (loading) {
+                    setTimeout(function () {
+                        return;
+                    }, 3000);
                     return;
                 }
-                incidentsList = new Array();
                 loading = true;
+                showMsg("加载数据...");
+                deleteOverlays();
+                console.log("moving_map_update_latlng:" + map.getCenter());
+                incidentsList = new Array();
                 center = map.getCenter();
                 getIncidents(center.getLat() + "," + center.getLng(), 30);
-                loading = false;
+                setTimeout(function () {
+                    loading = false;
+                }, 1500);
             }
-            
-            function setAlertLoc(){
+
+            function setAlertLoc() {
                 $('#exampleModal').modal('show');
                 document.getElementById('exampleInputPassword2').value = map.getCenter();
+            }
+
+            function checkEmail() {
+                var inputEmail = document.getElementById("exampleInputEmail1").value;
+                if (inputEmail === null || inputEmail === '') {
+                    alert("Please input Email!");
+                    return false;
+                }
+
+                var inputStatus = document.getElementById("exampleInputPassword1").value;
+                if (inputStatus === null || inputStatus === '') {
+                    alert("Please input Status!");
+                    return false;
+                }
+
+                var inputSubscriabe = document.getElementById("exampleInputPassword2").value;
+                if (inputSubscriabe === null || inputSubscriabe === '') {
+                    alert("Please input Subscriabe!");
+                    return false;
+                }
+                return true;
+            }
+            function send() {
+                if (true === checkEmail()) {
+                    showMsg("提交中...");
+                    SubmitForm("/IncidentsReport/getEmailMessage", "registe_for_alert", "注册失败", "注册成功！");
+                }
+            }
+
+            function sortFunction(a, b) {
+                if (a[0] === b[0]) {
+                    return 0;
+                } else {
+                    return (a[0] < b[0]) ? -1 : 1;
+                }
+            }
+
+            //本函数用来显示某一类事件最近一段时间的发生情况,默认最长粒度：60天
+            function updateStatgraphBytime(itype) {
+                var datelist = new Array();
+                var dv = new Array();
+                for (i in incidentsList) {
+                    if (incidentsList[i][3] == itype) {
+                        var xp = 0;
+                        for (j in datelist) {
+                            if (incidentsList[i][5] == datelist[j]) {
+                                break;
+                            }
+                            xp += 1;
+                        }
+                        if (xp == datelist.length) {
+                            var nd = new Array();
+                            nd = [incidentsList[i][5], 1];
+                            datelist.push(nd);
+                        } else {
+                            datelist[xp][1] += 1;
+                        }
+                    }
+                }
+                datelist.sort(sortFunction);
+                //组合数组
+                for (i in datelist) {
+                    dv.push(datelist[i][1]);
+                }
+                if (datelist.length < 7) {
+                    for (var i = datelist.length; i < 7 - datelist.length; i++) {
+                        dv.splice(i, 0, i % 2);
+                    }
+                }
+                console.log(dv);
+                drawLinerGraph(dv)
+            }
+
+            //该函数用来生成国区7天的数据,返回对应数组
+            function last7Days(d) {
+                d = +(d || new Date()), days = [], i = 7;
+                while (i--) {
+                    days.push(formatUSDate(new Date(d -= 8.64e7)));
+                }
+                return days;
+            }
+
+            // Return date string in mm/dd/y format
+            //function from:https://stackoverflow.com/questions/22850929/most-efficient-way-to-get-the-dates-for-the-past-7-days-in-javascript
+            function formatUSDate(d) {
+                function z(n) {
+                    return (n < 10 ? '0' : '') + +n;
+                }
+                return z(d.getMonth() + 1) + '/' + z(d.getDate()) + '/' + d.getFullYear();
+            }
+
+
+            //本函数用于统计在当前屏幕环境下各类事件的发生情况
+            function updateIncidentsStatgraph() {
+                var data = [["/IncidentsReport/static/icons/car_stolen", 0],
+                    ["/IncidentsReport/static/icons/fire", 0],
+                    ["/IncidentsReport/static/icons/kidnapping", 0],
+                    ["/IncidentsReport/static/icons/lie", 0],
+                    ["/IncidentsReport/static/icons/robbery", 0],
+                    ["/IncidentsReport/static/icons/stolen", 0],
+                    ["/IncidentsReport/static/icons/violence", 0]];
+                for (i in incidentsList) {
+                    for (j in data) {
+                        if (incidentsList[i][3] == data[j][0]) {
+                            data[j][1] += 1;
+                            break;
+                        }
+                    }
+                }
+                //将数据划分为两个数组
+                var pp = new Array();
+                for (i in data) {
+                    pp.push(data[i][1]);
+                }
+                console.log(pp);
+                drawBargraph(pp);
+            }
+
+            function drawBargraph(data) {
+                var dataAxis = ['汽车偷窃', '火灾', '绑架', '欺诈', '抢劫', '入室盗窃', "暴力事件"];
+                option = {
+                    title: {
+                        text: '各类事件发生情况',
+                        subtext: '基于当前显示区域'
+                    },
+                    xAxis: {
+                        data: dataAxis,
+                        axisTick: {
+                            show: false
+                        },
+                        axisLine: {
+                            show: false
+                        }
+                    },
+                    yAxis: {
+                        axisLine: {
+                            show: false
+                        },
+                        axisTick: {
+                            show: false
+                        },
+                        axisLabel: {
+                            textStyle: {
+                                color: '#999'
+                            }
+                        }
+                    },
+                    series: [
+                        {// For shadow
+                            type: 'bar',
+                            itemStyle: {
+                                normal: {color: 'rgba(0,0,0,0.05)'}
+                            },
+                            barGap: '-100%',
+                            barCategoryGap: '40%',
+                            animation: true
+                        },
+                        {
+                            type: 'bar',
+                            itemStyle: {
+                                normal: {
+                                    color: new echarts.graphic.LinearGradient(
+                                            0, 0, 0, 1,
+                                            [
+                                                {offset: 0, color: '#83bff6'},
+                                                {offset: 0.5, color: '#188df0'},
+                                                {offset: 1, color: '#188df0'}
+                                            ]
+                                            )
+                                },
+                                emphasis: {
+                                    color: new echarts.graphic.LinearGradient(
+                                            0, 0, 0, 1,
+                                            [
+                                                {offset: 0, color: '#2378f7'},
+                                                {offset: 0.7, color: '#2378f7'},
+                                                {offset: 1, color: '#83bff6'}
+                                            ]
+                                            )
+                                }
+                            },
+                            data: data
+                        }
+                    ]
+                };
+                myChart.clear();
+                myChart.setOption(option);
+            }
+
+            function drawLinerGraph(data) {
+                var date = last7Days();
+                option = {
+                    tooltip: {
+                        trigger: 'axis',
+                        position: function (pt) {
+                            return [pt[0], '10%'];
+                        }
+                    },
+                    title: {
+                        left: 'center',
+                        text: '同类事件最近发生情况',
+                    },
+                    xAxis: {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: date
+                    },
+                    yAxis: {
+                        type: 'value',
+                        boundaryGap: [0, '100%']
+                    },
+                    series: [
+                        {
+                            name: '报告事件数',
+                            type: 'line',
+                            smooth: true,
+                            symbol: 'none',
+                            sampling: 'average',
+                            itemStyle: {
+                                normal: {
+                                    color: 'rgb(255, 70, 131)'
+                                }
+                            },
+                            areaStyle: {
+                                normal: {
+                                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                                            offset: 0,
+                                            color: 'rgb(255, 158, 68)'
+                                        }, {
+                                            offset: 1,
+                                            color: 'rgb(255, 70, 131)'
+                                        }])
+                                }
+                            },
+                            data: data
+                        }
+                    ]
+                };
+                myChart.clear();
+                myChart.setOption(option);
+            }
+
+            function support(id) {
+                $.getScript("/IncidentsReport/supportIncidents?iid=" + id, function success(data) {
+                    console.log(data)
+                    if (data.indexOf("ERROR") > -1) {
+                        showMsg(data.split("<br/>")[1]);
+                    } else {
+                        showMsg("事件确认成功！");
+                    }
+                })
             }
         </script>
     </body>

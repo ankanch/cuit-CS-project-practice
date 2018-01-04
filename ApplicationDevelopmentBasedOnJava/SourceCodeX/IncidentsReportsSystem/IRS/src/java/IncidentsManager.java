@@ -137,4 +137,24 @@ public class IncidentsManager {
         return true;
     }
 
+    public Boolean confirmIncident(String iid) {
+        try {
+            // 创建数据库连接
+            Class.forName(myDriver);
+            Connection conn = DriverManager.getConnection(myUrl, DatabaseConfig.user, DatabaseConfig.password);
+            // 创建数据库语句并填充
+            String query = "UPDATE INCIDENTS SET ICREDIT=CAST(CAST(ICREDIT AS DECIMAL)+1 AS CHAR) WHERE IID=?";
+            PreparedStatement preparedStmt = conn.prepareStatement(query);
+            preparedStmt.setString(1, iid);
+            // 执行数据库语句
+            preparedStmt.execute();
+            conn.close();
+        } catch (Exception e) {
+            System.err.println("错误：事件可信度确认失败！事件ID=：" + iid);
+            System.err.println(e.getMessage());
+            return false;
+        }
+        return true;
+    }
+
 }

@@ -34,6 +34,26 @@
         $.snackbar({content: msg});
     }
 
+    function decideType(tstr) {
+        switch (tstr) {
+            case "/IncidentsReport/static/icons/car_stolen":
+                return "汽车偷窃";
+            case "/IncidentsReport/static/icons/fire":
+                return "火灾";
+            case "/IncidentsReport/static/icons/kidnapping":
+                return "绑架";
+            case "/IncidentsReport/static/icons/lie":
+                return "欺诈";
+            case "/IncidentsReport/static/icons/robbery":
+                return "抢劫";
+            case "/IncidentsReport/static/icons/stolen":
+                return "入室盗窃";
+            case "/IncidentsReport/static/icons/violence":
+                return "暴力事件";
+        }
+        return tstr;
+    }
+
     function SubmitForm(url, formid, error_msg, success_msg) {
         // function from https://stackoverflow.com/questions/25983603/how-to-submit-html-form-without-redirection
         $.ajax({
@@ -50,5 +70,13 @@
             }
         });
     }
+
+    function getRandomInt(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min)) + min;
+    }
+
+
 </script>
 
