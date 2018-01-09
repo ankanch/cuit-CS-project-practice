@@ -137,11 +137,11 @@ public class IncidentsManager {
         alertUser(ii.latlng);
         return true;
     }
-    
-    private void alertUser(String latlng){
-        try{
-        alert.send("Incidents Report 事件警报", "1075900121@qq.com", "这是测试发送的方法！");
-        }catch(Exception e){
+
+    private void alertUser(String latlng) {
+        try {
+            alert.send("Incidents Report 事件警报", "1075900121@qq.com", "这是测试发送的方法！");
+        } catch (Exception e) {
             System.out.println("邮件发送错误");
             e.printStackTrace();
         }
@@ -165,6 +165,78 @@ public class IncidentsManager {
             return false;
         }
         return true;
+    }
+
+    /**
+     * 删除指定事件
+     *
+     * @param adminID 事件所属管理员ID
+     * @param incidentID 事件ID
+     * @return
+     */
+    public boolean deleteIncident(String adminID, String incidentID) {
+        boolean result = false;
+        try {
+            // 创建数据库连接
+            Class.forName(myDriver);
+            Connection conn = DriverManager.getConnection(myUrl, DatabaseConfig.user, DatabaseConfig.password);
+            // 创建数据库语句并填充
+            String query = "DELETE FROM INCIDENTS WHERE IWHOADD = ? AND IID = ?";
+            PreparedStatement preparedStmt = conn.prepareStatement(query);
+            preparedStmt.setInt(1, Integer.parseInt(adminID));  //管理员ID
+            preparedStmt.setInt(2, Integer.parseInt(incidentID));   //事件ID
+            // 执行数据库语句
+            preparedStmt.executeUpdate();
+            result = true;      //删除操作执行成功
+            conn.close();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+        return result;
+    }
+
+    /**
+     * 更新事件信息
+     *
+     * @param incident 事件类 事件信息
+     * @return
+     */
+    public boolean updateIncident(Incident incident) {
+        boolean updateResult = false;
+        try {
+            // 创建数据库连接
+            Class.forName(myDriver);
+            Connection conn = DriverManager.getConnection(myUrl, DatabaseConfig.user, DatabaseConfig.password);
+            String query = "UPDATE FROM INCIDENTS SET "
+                    + "ITYPE = ?, "
+                    + "IREPORTTIME = ?, "
+                    + "IDESCRIPTION = ?, "
+                    + "LAT = ?, "
+                    + "LNG = ?,"
+                    + "IWHOADD = ?, "
+                    + "ICREDIT = ?, "
+                    + "ILOCATION = ? "
+                    + "WHERE IID = ?";
+            PreparedStatement preparedStmt = conn.prepareStatement(query);
+            preparedStmt.setString(1, incident.type);
+            preparedStmt.setDate(2, Date.valueOf(incident.reportTime));
+            preparedStmt.setString(3, incident.description);
+            preparedStmt.setDouble(4, Double.valueOf(incident.latlng.substring(0, incident.latlng.indexOf(","))));
+            preparedStmt.setDouble(5, Double.valueOf(incident.latlng.substring(incident.latlng.indexOf(",") + 1)));
+            preparedStmt.setInt(6, incident.reportedby);
+            preparedStmt.setString(7, incident.credit);
+            preparedStmt.setString(8, incident.roughLocation);
+
+            preparedStmt.setInt(9, incident.id);
+            preparedStmt.executeUpdate();   //执行更新操作
+            updateResult = true;
+            conn.close();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return false;
+        }
+
+        return updateResult;
     }
 
 }

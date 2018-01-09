@@ -8,6 +8,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 /**
  *用于管理二级管理员
@@ -15,6 +16,36 @@ import java.sql.Statement;
  * @author kanch
  */
 public class L2AdminManager {
+    
+    /**
+     * 获取指定登录名的二级管理员的ID(String)
+     * @param uname 二级管理员登录名
+     * @return  二级管理员ID
+     */
+    public int getL2AdminID(String uname){
+        int l2AdminID = 0;
+         try{
+            // 创建数据库连接
+            Class.forName(DatabaseConfig.driver);
+            Connection conn = DriverManager.getConnection(DatabaseConfig.host, DatabaseConfig.user,DatabaseConfig.password);
+          
+            String selectSql = "SELECT L2ID FROM L2ADMIN WHERE L2USERNAME = ?";
+            PreparedStatement preparedStmt = conn.prepareStatement(selectSql);
+            preparedStmt.setString(1, uname);
+            ResultSet rs = preparedStmt.executeQuery();            
+            
+            while(rs.next()){
+                l2AdminID = rs.getInt(1);
+            }
+            
+            preparedStmt.close();
+            //关闭数据库连接
+            conn.close();		
+	}catch(Exception e){
+            System.err.println(e.getMessage().toString());
+        }       
+         return l2AdminID;
+    }
     
     //注册二级管理员
     //uname指定管理员用户名，upass指定管理员密码
@@ -247,6 +278,37 @@ public class L2AdminManager {
             System.err.println(e.getMessage().toString());
         }
         return deleteResult;
+    }
+    
+    
+    public ArrayList<L2admin> getL2Admins(){
+        ArrayList<L2admin> l2admins = new ArrayList<>();
+        try{
+            // 创建数据库连接
+            Class.forName(DatabaseConfig.driver);
+            Connection conn = DriverManager.getConnection(DatabaseConfig.host, DatabaseConfig.user,DatabaseConfig.password);
+            String query = "SELECT * FROM L2ADMIN";
+            // 创建对应Java Statement
+            Statement st = conn.createStatement();
+            // 执行数据库语句
+            ResultSet rs = st.executeQuery(query);
+            while(rs.next()){
+                L2admin l2admin = new L2admin();
+                l2admin.id = rs.getInt(1);
+                l2admin.name = rs.getString(2);
+                l2admin.password = rs.getString(3);
+                l2admin.status = rs.getInt(4);
+                
+                l2admins.add(l2admin);
+            }
+            st.close();
+            //关闭数据库连接
+            conn.close();
+        }catch(Exception e){
+            System.err.println(e.getMessage().toString());
+        }
+        
+        return l2admins;
     }
     
 }

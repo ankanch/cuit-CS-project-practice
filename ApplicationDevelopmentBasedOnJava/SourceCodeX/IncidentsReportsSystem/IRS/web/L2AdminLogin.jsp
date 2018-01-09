@@ -9,7 +9,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>二级管理员登录</title>
+        <title>管理员登录</title>
         <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <!-- Compiled and minified CSS -->
@@ -29,11 +29,11 @@
             <div class="card" style="width: 20rem;margin:0 auto;margin-top:18vh;">
 
                 <div class="card-body">
-                    <h4 class="card-title">二级管理员登录</h4>
+                    <h4 class="card-title">管理员登录</h4>
                     <form id="submit_l2admin">
                         <div class="form-group">
-                            <label for="exampleInputEmail1">二级管理员用户名</label>
-                            <input type="text" name="username" class="form-control" id="inputL2AdminID" aria-describedby="emailHelp" placeholder="请输入二级管理员用户名">
+                            <label for="exampleInputEmail1">用户名</label>
+                            <input type="text" name="username" class="form-control" id="inputL2AdminID" aria-describedby="emailHelp" placeholder="请输入用户名">
                             <small id="emailHelp" class="form-text text-muted"></small>
                         </div>
                         <div class="form-group">
@@ -74,7 +74,11 @@
             function submitLogin() {
                 if (true === check()) {
                     showMsg("提交中...");
-                    SubmitForm("/IncidentsReport/validatel2admin", "submit_l2admin", "登陆失败，请检查账号或密码有无错误！", "提交成功！");
+                    localStorage.setItem("l2adminID", inputL2AdminID);
+                    SubmitFormF("/IncidentsReport/login?l2adminID=" + inputL2AdminID, "submit_l2admin", "登陆失败，请检查账号或密码有无错误！", function a() {
+                        window.location = "/IncidentsReport/System.jsp";
+                    });
+
                 }
             }
         </script>

@@ -1,19 +1,17 @@
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
-import java.sql.*;
-import java.util.*;
+
 /**
  * 本类用于管理订阅用户
  * 对于数据表： Users
@@ -21,7 +19,7 @@ import java.util.*;
  */
 public class SubscirableManager {
     
-    //检查指定邮箱的用户是否已经注册
+  //检查指定邮箱的用户是否已经注册
     // email，要检查的邮箱
     public Boolean checkEmail(String email){
         String myDriver = DatabaseConfig.driver;
@@ -75,31 +73,8 @@ public class SubscirableManager {
         return true;
     }
     
-    //用户修改用户邮箱
-    // uid指定要修改的用户， newMail指定更改后的邮箱
-    public Boolean alterUserEmail(String uid,String newMail){     
-        String myDriver = DatabaseConfig.driver;
-        String myUrl = DatabaseConfig.host;
-        int Inuid = Integer.parseInt(uid);
-              try{
-          	Class.forName(myDriver);
-                Connection conn = DriverManager.getConnection(myUrl, DatabaseConfig.user,DatabaseConfig.password);
-        	//Statement state = conn.createStatement();
-                String sql = "update USERS set UEMAIL = ? where UID = ?"; 
-                PreparedStatement psmt = conn.prepareStatement(sql);
-                psmt.setString(1, newMail);
-                psmt.setInt(2, Inuid);
-        	psmt.execute();
-        	conn.close();
-        }
-        catch(Exception e){
-        	System.err.println("AlterUserEmail got an exception");
-        	System.err.println(e.getMessage());
-        }
-        return true;
-    }
-    
-    //用于从数据库删除一个用户
+
+//用于从数据库删除一个用户
     // uid指定要删除用户的UID字段
     public Boolean removeUser(String uid){
         String myDriver = DatabaseConfig.driver;
@@ -118,10 +93,39 @@ public class SubscirableManager {
         return true;
     }
     
+    
     public Boolean alterSubscrible(){
         //不忙写这一个
         return true;
     }
     
-    
+    public ArrayList<User> getUsers(){
+        ArrayList<User> userList = new ArrayList<>();
+        try{
+            // 创建数据库连接
+            Class.forName(DatabaseConfig.driver);
+            Connection conn = DriverManager.getConnection(DatabaseConfig.host, DatabaseConfig.user,DatabaseConfig.password);
+            String query = "SELECT UID, UEMAIL, USTATUS, USUBSCRIABE FROM USERS";
+            // 创建对应Java Statement
+            Statement st = conn.createStatement();
+            // 执行数据库语句
+            ResultSet rs = st.executeQuery(query);
+            while(rs.next()){
+                User user = new User();
+                user.user_ID = rs.getInt(1);
+                user.user_email = rs.getString(2);
+                user.user_status = rs.getInt(3);
+                user.user_location = rs.getString(4);
+                
+                userList.add(user);
+            }
+            st.close();
+            //关闭数据库连接
+            conn.close();
+        }catch(Exception e){
+            System.err.println(e.getMessage().toString());
+        }
+        
+        return userList;
+    }
 }

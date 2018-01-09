@@ -25,6 +25,25 @@
         </ul>
     </div>
 </nav>
+<style>
+    .xunchangable {
+        background-color:rgba(0, 0, 0, 0);
+        color:black;
+        border: none;
+        outline:none;
+        transition:height 1s;
+        -webkit-transition:height 1s;
+    }
+
+    .xchangable {
+        background-color:white;
+        color:black;
+        border:1px solid black;
+        border-color:black;
+        transition:height 1s;
+        -webkit-transition:height 1s;
+    }
+</style>
 
 <script>
     function showMsg(msg) {
@@ -63,6 +82,23 @@
                     showMsg(error_msg);
                 } else {
                     showMsg(success_msg);
+                }
+            }
+        });
+    }
+    function SubmitFormF(url, formid, error_msg, success) {
+        // function from https://stackoverflow.com/questions/25983603/how-to-submit-html-form-without-redirection
+        $.ajax({
+            url: url,
+            type: 'post',
+            data: $('#' + formid).serialize(),
+            success: function (data) {
+                console.log(data)
+                if (data.indexOf("ERROR") > -1) {
+                    showMsg(error_msg);
+                } else {
+                    showMsg("success_msg");
+                    success();
                 }
             }
         });
