@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+The MIT License
+
+*** Copyright © Long Zhang(kanch)
+*** Email: kanchisme@gmail.com
+*** Code created on Apr 12 2018
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-->
+
+
+<root>
+    <!-- User Interface Localization Start Here   -->
+    <!-- credential.jsp -->
+    <l id="JSP_CONSOLE_CREDENTIAL_MGR_TITLE" value="Credentials" />
+    <l id="JSP_CONSOLE_CREDENTIAL_MGR_CSUM_PRE" value="You have " />
+    <l id="JSP_CONSOLE_CREDENTIAL_MGR_CSUM_SUF" value=" database credentials in total." />
+    <l id="JSP_CONSOLE_CREDENTIAL_MGR_BUTTON_ADD" value="Add Credentials" />
+    <l id="JSP_CONSOLE_CREDENTIAL_MGR_TIP_SEARCH" value="Search" />
+    <l id="JSP_CONSOLE_CREDENTIAL_MGR_BUTTON_SEARCH" value="Search" />
+    <l id="JSP_CONSOLE_CREDENTIAL_MGR_TABLE_DBNAME" value="Database" />
+    <l id="JSP_CONSOLE_CREDENTIAL_MGR_TABLE_HOST" value="Host" />
+    <l id="JSP_CONSOLE_CREDENTIAL_MGR_TABLE_ACCOUNT" value="Account" />
+    <l id="JSP_CONSOLE_CREDENTIAL_MGR_TABLE_PASSWORD" value="Password" />
+    <l id="JSP_CONSOLE_CREDENTIAL_MGR_TABLE_OPERATIONS" value="Operations" />
+    <l id="JSP_CONSOLE_CREDENTIAL_MGR_TABLE_OPERATION_SAVE" value="Save" />
+    <l id="JSP_CONSOLE_CREDENTIAL_MGR_TABLE_OPERATION_EDIT" value="Edit" />
+    <l id="JSP_CONSOLE_CREDENTIAL_MGR_TABLE_OPERATION_DELETE" value="Delete" />
+    <l id="JSP_CONSOLE_CREDENTIAL_MGR_TIP_FAILED_DELETE" value="Failed to delete,please try again later." />
+    <l id="JSP_CONSOLE_CREDENTIAL_MGR_TIP_SUCCESS_DELETE" value="Credential has been deleted." />
+    <l id="JSP_CONSOLE_CREDENTIAL_MGR_TIP_FAILED_UPDATE" value="Failed to update,please try again later." />
+    <l id="JSP_CONSOLE_CREDENTIAL_MGR_TIP_SUCCESS_UPDATE" value="Update successfully!" />
+    <l id="JSP_CONSOLE_CREDENTIAL_MGR_TIP_NO_DATA" value="&lt;strong&gt;Holy guacamole!&lt;/strong&gt; You do not have any database added yet. &lt;br&gt;Let's start by click ADD CREDENTIALS button on the top." />
+
+    <!-- console_add_credentials.jsp -->
+    <l id="JSP_CONSOLE_CREDENTIAL_ADD_TITLE" value="Add database credential"/>
+    <l id="JSP_CONSOLE_CREDENTIAL_ADD_SELECT" value="Select your database"/>
+    <l id="JSP_CONSOLE_CREDENTIAL_ADD_HOST" value="Database Host"/>
+    <l id="JSP_CONSOLE_CREDENTIAL_ADD_DBNAME" value="Database Name"/>
+    <l id="JSP_CONSOLE_CREDENTIAL_ADD_USERNAME" value="Username"/>
+    <l id="JSP_CONSOLE_CREDENTIAL_ADD_PASSWORD" value="Password"/>
+    <l id="JSP_CONSOLE_CREDENTIAL_ADD_IAGREE_PRE" value="I agree with the"/>
+    <l id="JSP_CONSOLE_CREDENTIAL_ADD_IAGREE_SUF" value="End User Agreement"/>
+    <l id="JSP_CONSOLE_CREDENTIAL_ADD_BUTTON_ADD" value="Add Database"/>
+    <l id="JSP_CONSOLE_CREDENTIAL_ADD_BUTTON_CANCEL" value="Cancel"/>
+    <l id="JSP_CONSOLE_CREDENTIAL_ADD_HOST_TIP" value="Enter the database host address."/>
+    <l id="JSP_CONSOLE_CREDENTIAL_ADD_DBNAME_TIP" value="Enter the database instance name."/>
+    <l id="JSP_CONSOLE_CREDENTIAL_ADD_USERNAME_TIP" value="Enter login account name of the database."/>    
+    <l id="JSP_CONSOLE_CREDENTIAL_ADD_PASSWORD_TIP" value="Enter the password corresponding to the account."/>
+    <l id="JSP_CONSOLE_CREDENTIAL_ADD_TIP_AGREEMENT" value="Please agree our aggrement to continue!"/>
+    <l id="JSP_CONSOLE_CREDENTIAL_ADD_TIP_CHECKING" value="Checking information provided..."/>
+    <l id="JSP_CONSOLE_CREDENTIAL_ADD_TIP_FAILED" value="Failed to added! Please check your database information again."/>
+    <l id="JSP_CONSOLE_CREDENTIAL_ADD_TIP_SUCCESS" value="Successfully added!"/>
+
+    <!-- console footer.jsp -->
+    <l id="JSP_CONSOLE_FOOTER_HOME" value="Analytics Home" />
+    <l id="JSP_CONSOLE_FOOTER_SERVICE" value="Terms of Service" />
+    <l id="JSP_CONSOLE_FOOTER_POLICY" value="Privacy Policy" />
+    <!-- signin.jsp -->
+    <l id="JSP_SIGNIN_PAGE_TITLE"  value="Signin - Database Insights Console" />
+    <l id="JSP_SIGNIN_FORM_TITLE"  value="Signin" />
+    <l id="JSP_SIGNIN_LABEL_EMAIL"  value="Email address" />
+    <l id="JSP_SIGNIN_LABEL_PASSWORD"  value="Password" />
+    <l id="JSP_SIGNIN_LABEL_REMEMBERME"  value="Remember me" />
+    <l id="JSP_SIGNIN_LABEL_LOGIN"  value="Login" />
+    <l id="JSP_SIGNIN_LABEL_PROBLEMLOGIN"  value="Problem in login?" />
+    <l id="JSP_SIGNIN_JS_NAVTITLE"  value="Console" />
+    <l id="JSP_SIGNIN_TIP_FAILED" value="Failed to log you in! Either the user isn't exists or password incorrect!" />
+    <l id="JSP_SIGNIN_TIP_SUCCESS" value="Successfully logged in! Redirecting you to console..." />
+    <!-- signup.jsp -->
+    <l id="JSP_SIGNUP_LABEL_USERNAME" value="Username" />
+    <l id="JSP_SIGNUP_LABEL_EMAIL" value="Email address" />
+    <l id="JSP_SIGNUP_LABEL_PASSWORD" value="Password" />
+    <l id="JSP_SIGNUP_LABEL_CONFIRMPASSWORD" value="Confirm Password" />
+    <l id="JSP_SIGNUP_BUTTON_SIGNUP" value="Register" />
+    <l id="JSP_SIGNUP_BUTTON_LOGIN" value="Login" />
+    <l id="JSP_SIGNUP_INFO_USERNAME" value="Start with alphberts, only alphberts and numbers allowed." />
+    <l id="JSP_SIGNUP_INFO_EMAIL" value="We'll never share your email with anyone else." />
+    <l id="JSP_SIGNUP_INFO_PASSWORD" value="Including symbol,lowercase,uppercase and number." />
+    <l id="JSP_SIGNUP_INFO_AGGREMENT" value="I agree with the [End User Agreement]" />
+    <!-- settings.jsp -->
+    <l id="JSP_CONSOLE_SETTINGS_TITLE" value="Settings" />
+    <l id="JSP_CONSOLE_SETTINGS_LABEL_REGISTEDON" value="Account Registed on" />
+    <l id="JSP_CONSOLE_SETTINGS_LABEL_STATUS" value="Account Status" />    
+    <l id="JSP_CONSOLE_SETTINGS_LABEL_LASTLOGIN" value="Last Login" />    
+    <l id="JSP_CONSOLE_SETTINGS_LABEL_USERNAME" value="Username" />    
+    <l id="JSP_CONSOLE_SETTINGS_LABEL_EMAIL" value="Email address" />
+    <l id="JSP_CONSOLE_SETTINGS_BUTTON_SAVE" value="Save Change" />
+    <l id="JSP_CONSOLE_SETTINGS_LABEL_OLDPASSWORD" value="Old Password" />
+    <l id="JSP_CONSOLE_SETTINGS_LABEL_NEWPASSWORD" value="New Password" />
+    <l id="JSP_CONSOLE_SETTINGS_LABEL_COMFIRM_NEWPASSWORD" value="Confirm New Password" />
+    <l id="JSP_CONSOLE_SETTINGS_TIP_USERNAME" value="You can't change your username." />
+    <l id="JSP_CONSOLE_SETTINGS_TIP_EMAIL" value="We'll never share your email with anyone else." />
+    <l id="JSP_CONSOLE_SETTINGS_LABEL_WARNING" value="Delete Account&lt;/button&gt; &lt;small&gt;Watch out, it can not be reversed&lt;/small&gt;" />
+
+
+
+    <!-- console left nav panel (console_nav_side.jsp)  -->
+    <l id="JSP_NAV_SIDE_OVERVIEW"  value="Overview" />
+    <l id="JSP_NAV_SIDE_REPORTS"  value="Reports" />
+    <l id="JSP_NAV_SIDE_REALTIME"  value="Realtime" />
+    <l id="JSP_NAV_SIDE_ANALYTICS"  value="Analytics" />
+    <l id="JSP_NAV_SIDE_AUTO"  value="Auto" />
+    <l id="JSP_NAV_SIDE_CROSSTABLE"  value="Cross-table" />
+    <l id="JSP_NAV_SIDE_CUSTOMIZE"  value="Customize" />
+    <l id="JSP_NAV_SIDE_OTHERS"  value="Others" />
+    <l id="JSP_NAV_SIDE_CREDENTIALS"  value="Credentials" />
+    <l id="JSP_NAV_SIDE_LOGS"  value="Logs" />
+    <l id="JSP_NAV_SIDE_SETTINGS"  value="Settings" />
+    <l id="JSP_NAV_SIDE_TITLE_ANALYTICS"  value="Analytics" />
+    <l id="JSP_NAV_SIDE_TITLE_DATABASE"  value="Database" />
+    <l id="JSP_NAV_SIDE_TITLE_ACCOUNT"  value="Account" />
+
+    
+    <!-- dbi.mgr.user -->
+
+    <l id="USER_STATUS_UNKNOW"  value="Unknow" />
+    <l id="USER_STATUS_UNVERFIED"  value="Unverfied" />
+    <l id="USER_STATUS_NORMAL"  value="Normal" />
+    <l id="USER_STATUS_RESTRICTED"  value="Restricted" />
+
+    <!-- dbi.mgr.credential  -->
+    <!-- dbi.db.adaptor   -->
+    <!-- dbi.utils   -->
+    <!-- web pages   -->
+    <!-- autoanalytics.jsp -->
+    <l id="ANA_AUTO_TIP_SELECDBT" value="Select your database and table to start" />
+    <l id="ANA_AUTO_TIP_BTN_SELDB" value="Select Database" />
+    <l id="ANA_AUTO_TIP_BTN_SELTB" value="Select Table" />
+    <l id="ANA_AUTO_TIP_RET_TITLE" value="Auto Analytics" />
+    <l id="ANA_AUTO_TIP_RESULT" value="Please select database and table to obtain the result." />
+    <!-- costomizeAnalysis.jsp -->
+    <l id="ANA_CUSTOM_TITLE" value="Costomize Analytics" />
+    <l id="ANA_CUSTOM_TIP_SELECDBT" value="Select your database and table to start" />
+    <l id="ANA_CUSTOM_TIP_BTN_SELDB" value="Select Database" />
+    <l id="ANA_CUSTOM_TIP_BTN_SELTB" value="Select Table" />
+    <l id="ANA_CUSTOM_TIP_CLP_TITLE1" value="1.Select Fields" />
+    <l id="ANA_CUSTOM_TIP_CLP_TITLE2" value="2.View Results" />
+    <l id="ANA_CUSTOM_TIP_C1" value="Please Choose Database and Table first, then you can continue." />
+    <l id="ANA_CUSTOM_TIP_C2" value="Comeback after you first setp 1 : Select Fields" />
+    <l id="ANA_CUSTOM_TABLE_C1_INDEX" value="Index" />
+    <l id="ANA_CUSTOM_TABLE_C2_FIELD" value="Column" />
+    <l id="ANA_CUSTOM_TABLE_C3_TYPE" value="Data Type" />
+    <l id="ANA_CUSTOM_TABLE_C4_POOLF" value="Pooling" />
+    <l id="ANA_CUSTOM_TABLE_C5_COMMENT" value="Comment" />
+    <l id="ANA_CUSTOM_BTN_START" value="Start Analyze" />
+    <!-- reports.jsp -->
+    <l id="JSP_CONSOLE_REPORT_TITLE" value="Reports" />
+    <l id="JSP_CONSOLE_REPORT_CW_DETAIL_TITLE" value="Report Details" />
+    <l id="JSP_CONSOLE_REPORT_CW_TITLE" value="Confirm Delete?" />
+    <l id="JSP_CONSOLE_REPORT_CW_TIP" value="Once delete, you will not access this report anymore!" />
+    <l id="JSP_CONSOLE_REPORT_CW_CANCEL" value="Cancel" />
+    <l id="JSP_CONSOLE_REPORT_CW_CONFIRM" value="Confirm" />
+    <l id="JSP_CONSOLE_REPORT_BTN_VIEWFULL" value="View Full Report" />
+    <l id="JSP_CONSOLE_REPORT_TIP_REPORT_TITLE" value="Title:" />
+    <l id="JSP_CONSOLE_REPORT_TIP_REPORT_DATE" value="Created on:" />
+    <l id="JSP_CONSOLE_REPORT_TIP_REPORT_DES" value="Description:" />
+    <l id="JSP_CONSOLE_REPORT_TIP_REPORT_RELATION" value="Relations:" />
+    <!-- overview.jsp -->
+    <l id="JSP_OVERVIEW_CONSOLE_ACCOUNTINFO_TITLE" value="Account Info" />
+    <l id="JSP_OVERVIEW_CONSOLE_DATABASEINFO_TITLE" value="Database Info" />
+    <l id="JSP_OVERVIEW_CONSOLE_NEWS_TITLE" value="Database Insights News" />
+    <l id="JSP_OVERVIEW_CONSOLE_RECENTACT_TITLE" value="Recent Activities" />
+    <l id="JSP_OVERVIEW_CONSOLE_TIP_NORECENT" value="No Recent Activities recorded." />
+    <l id="JSP_OVERVIEW_CONSOLE_TIP_WELCOME" value="Welcome " />
+    <l id="JSP_OVERVIEW_CONSOLE_TIP_LASTLOGIN" value="Last Login at " />
+    <!-- crossableanalytics.jsp -->
+    <l id="JSP_CTA_CONSOLE_TITLE" value="Cross-Table Analytics" />
+    <l id="JSP_CTA_CONSOLE_BTN_ADDCHART" value="Add Chart" />
+    <l id="JSP_CTA_CONSOLE_BTN_GENERATEREPORT" value="Generate Report" />
+    <l id="JSP_CTA_CONSOLE_CL1_TITLE" value="1. Select Fields" />
+    <l id="JSP_CTA_CONSOLE_CL1_TIP" value="Click button on the top left to add a chart to start." />
+    <l id="JSP_CTA_CONSOLE_CL2_TITLE" value="2. View Results" />
+    <l id="JSP_CTA_CONSOLE_CL2_TIP" value="Come back after you finish step 1." />
+    
+</root>

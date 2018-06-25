@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+The MIT License
+
+*** Copyright © Long Zhang(kanch)
+*** Email: kanchisme@gmail.com
+*** Code created on Apr 12 2018
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-->
+
+
+<root>
+    <!-- User Interface Localization Start Here -->
+    <!-- credential.jsp -->
+    <l id="JSP_CONSOLE_CREDENTIAL_MGR_TITLE" value="数据库管理" />
+    <l id="JSP_CONSOLE_CREDENTIAL_MGR_CSUM_PRE" value="您当前有 " />
+    <l id="JSP_CONSOLE_CREDENTIAL_MGR_CSUM_SUF" value=" 个数据库." />
+    <l id="JSP_CONSOLE_CREDENTIAL_MGR_BUTTON_ADD" value="添加数据库" />
+    <l id="JSP_CONSOLE_CREDENTIAL_MGR_TIP_SEARCH" value="搜索..." />
+    <l id="JSP_CONSOLE_CREDENTIAL_MGR_BUTTON_SEARCH" value="搜索" />
+    <l id="JSP_CONSOLE_CREDENTIAL_MGR_TABLE_DBNAME" value="数据库实例名" />
+    <l id="JSP_CONSOLE_CREDENTIAL_MGR_TABLE_HOST" value="数据库服务器地址" />
+    <l id="JSP_CONSOLE_CREDENTIAL_MGR_TABLE_ACCOUNT" value="数据库帐户" />
+    <l id="JSP_CONSOLE_CREDENTIAL_MGR_TABLE_PASSWORD" value="帐户密码" />
+    <l id="JSP_CONSOLE_CREDENTIAL_MGR_TABLE_OPERATIONS" value="操作" />
+    <l id="JSP_CONSOLE_CREDENTIAL_MGR_TABLE_OPERATION_SAVE" value="保存" />
+    <l id="JSP_CONSOLE_CREDENTIAL_MGR_TABLE_OPERATION_EDIT" value="编辑" />
+    <l id="JSP_CONSOLE_CREDENTIAL_MGR_TABLE_OPERATION_DELETE" value="删除" />
+    <l id="JSP_CONSOLE_CREDENTIAL_MGR_TIP_FAILED_DELETE" value="数据库信息删除失败！请稍后再试。" />
+    <l id="JSP_CONSOLE_CREDENTIAL_MGR_TIP_SUCCESS_DELETE" value="数据库信息已删除。" />
+    <l id="JSP_CONSOLE_CREDENTIAL_MGR_TIP_FAILED_UPDATE" value="数据库信息更新失败！请稍后再试。" />
+    <l id="JSP_CONSOLE_CREDENTIAL_MGR_TIP_SUCCESS_UPDATE" value="数据库信息更新成功！" />
+    <l id="JSP_CONSOLE_CREDENTIAL_MGR_TIP_NO_DATA" value="&lt;strong&gt;糟糕!&lt;/strong&gt; 您还没有添加任何数据库. &lt;br&gt;您可以点击顶部的添加数据库按钮进行添加." />
+    
+    <!-- console_add_credentials.jsp -->
+    <l id="JSP_CONSOLE_CREDENTIAL_ADD_TITLE" value="添加数据库"/>
+    <l id="JSP_CONSOLE_CREDENTIAL_ADD_SELECT" value="请选择您的数据库系统"/>
+    <l id="JSP_CONSOLE_CREDENTIAL_ADD_HOST" value="数据库主机名（IP地址或域名）"/>
+    <l id="JSP_CONSOLE_CREDENTIAL_ADD_DBNAME" value="数据库名称"/>
+    <l id="JSP_CONSOLE_CREDENTIAL_ADD_USERNAME" value="数据库登陆用户名"/>
+    <l id="JSP_CONSOLE_CREDENTIAL_ADD_PASSWORD" value="数据库登陆密码"/>
+    <l id="JSP_CONSOLE_CREDENTIAL_ADD_IAGREE_PRE" value="我同意"/>
+    <l id="JSP_CONSOLE_CREDENTIAL_ADD_IAGREE_SUF" value="《最终用户许可协议》"/>
+    <l id="JSP_CONSOLE_CREDENTIAL_ADD_BUTTON_ADD" value="添加数据库"/>
+    <l id="JSP_CONSOLE_CREDENTIAL_ADD_BUTTON_CANCEL" value="取消"/>
+    <l id="JSP_CONSOLE_CREDENTIAL_ADD_HOST_TIP" value="请输入数据库服务器地址。"/>
+    <l id="JSP_CONSOLE_CREDENTIAL_ADD_DBNAME_TIP" value="请输入数据库实例名。"/>
+    <l id="JSP_CONSOLE_CREDENTIAL_ADD_USERNAME_TIP" value="请输入数据库登录用户名。"/>    
+    <l id="JSP_CONSOLE_CREDENTIAL_ADD_PASSWORD_TIP" value="请输入数据库登陆密码。"/>
+    <l id="JSP_CONSOLE_CREDENTIAL_ADD_TIP_AGREEMENT" value="请同意我们的用户服务协议以继续！"/>
+    <l id="JSP_CONSOLE_CREDENTIAL_ADD_TIP_CHECKING" value="测试能否连接到给定数据库中..."/>
+    <l id="JSP_CONSOLE_CREDENTIAL_ADD_TIP_FAILED" value="数据库添加失败！请检查您是否提供了正确的信息"/>
+    <l id="JSP_CONSOLE_CREDENTIAL_ADD_TIP_SUCCESS" value="数据库添加成功！"/>
+    <!-- console footer.jsp -->
+    <l id="JSP_CONSOLE_FOOTER_HOME" value="系统主页" />
+    <l id="JSP_CONSOLE_FOOTER_SERVICE" value="服务政策" />
+    <l id="JSP_CONSOLE_FOOTER_POLICY" value="隐私政策" />
+    <!-- signin.jsp -->
+    <l id="JSP_SIGNIN_PAGE_TITLE"  value="登陆 - Database Insights Console" />
+    <l id="JSP_SIGNIN_FORM_TITLE"  value="登陆" />
+    <l id="JSP_SIGNIN_LABEL_EMAIL"  value="电子邮件地址" />
+    <l id="JSP_SIGNIN_LABEL_PASSWORD"  value="密码" />
+    <l id="JSP_SIGNIN_LABEL_REMEMBERME"  value="记住密码" />
+    <l id="JSP_SIGNIN_LABEL_LOGIN"  value="登陆" />
+    <l id="JSP_SIGNIN_LABEL_PROBLEMLOGIN"  value="登陆遇到问题?" />
+    <l id="JSP_SIGNIN_JS_NAVTITLE"  value="控制台" />
+    <l id="JSP_SIGNIN_TIP_FAILED" value="登陆失败！用户名或密码不正确。" />
+    <l id="JSP_SIGNIN_TIP_SUCCESS" value="登陆成功！重定向至控制台..." />
+    <!-- signup.jsp -->
+    <l id="JSP_SIGNUP_LABEL_USERNAME" value="用户名" />
+    <l id="JSP_SIGNUP_LABEL_EMAIL" value="邮箱地址" />
+    <l id="JSP_SIGNUP_LABEL_PASSWORD" value="密码" />
+    <l id="JSP_SIGNUP_LABEL_CONFIRMPASSWORD" value="确认密码" />
+    <l id="JSP_SIGNUP_BUTTON_SIGNUP" value="注册" />
+    <l id="JSP_SIGNUP_BUTTON_LOGIN" value="登陆" />
+    <l id="JSP_SIGNUP_INFO_USERNAME" value="仅允许字母开头，由字母和数字组成" />
+    <l id="JSP_SIGNUP_INFO_EMAIL" value="我们不会像任何人泄露您的邮箱地址" />
+    <l id="JSP_SIGNUP_INFO_PASSWORD" value="请输入强密码，包含数字，大小写字母和符号" />
+    <l id="JSP_SIGNUP_INFO_AGGREMENT" value="我同意 《Database Insights 用户服务协议》" />
+    <!-- settings.jsp -->
+    <l id="JSP_CONSOLE_SETTINGS_TITLE" value="用户设置" />
+    <l id="JSP_CONSOLE_SETTINGS_LABEL_REGISTEDON" value="帐户注册时间" />
+    <l id="JSP_CONSOLE_SETTINGS_LABEL_STATUS" value="账户状态" />    
+    <l id="JSP_CONSOLE_SETTINGS_LABEL_LASTLOGIN" value="上次登录时间" />    
+    <l id="JSP_CONSOLE_SETTINGS_LABEL_USERNAME" value="用户名" />    
+    <l id="JSP_CONSOLE_SETTINGS_LABEL_EMAIL" value="邮箱地址" />
+    <l id="JSP_CONSOLE_SETTINGS_BUTTON_SAVE" value="保存更改" />
+    <l id="JSP_CONSOLE_SETTINGS_LABEL_OLDPASSWORD" value="旧密码" />
+    <l id="JSP_CONSOLE_SETTINGS_LABEL_NEWPASSWORD" value="新密码" />
+    <l id="JSP_CONSOLE_SETTINGS_LABEL_COMFIRM_NEWPASSWORD" value="确认新密码" />
+    <l id="JSP_CONSOLE_SETTINGS_TIP_USERNAME" value="用户名无法更改。" />
+    <l id="JSP_CONSOLE_SETTINGS_TIP_EMAIL" value="我们不会与任何人分享您的邮箱地址。" />
+    <l id="JSP_CONSOLE_SETTINGS_LABEL_WARNING" value="删除帐户&lt;/button&gt; &lt;small&gt;注意，此操作不可逆转！&lt;/small&gt;" />
+    
+    <!-- console left nav panel (console_nav_side.jsp)  -->
+    <l id="JSP_NAV_SIDE_OVERVIEW"  value="总览" />
+    <l id="JSP_NAV_SIDE_REPORTS"  value="报表" />
+    <l id="JSP_NAV_SIDE_REALTIME"  value="实时分析" />
+    <l id="JSP_NAV_SIDE_ANALYTICS"  value="分析器" />
+    <l id="JSP_NAV_SIDE_AUTO"  value="自动化分析" />
+    <l id="JSP_NAV_SIDE_CROSSTABLE"  value="跨表分析" />
+    <l id="JSP_NAV_SIDE_CUSTOMIZE"  value="自定义分析" />
+    <l id="JSP_NAV_SIDE_OTHERS"  value="其它" />
+    <l id="JSP_NAV_SIDE_CREDENTIALS"  value="数据库凭证管理" />
+    <l id="JSP_NAV_SIDE_LOGS"  value="日志" />
+    <l id="JSP_NAV_SIDE_SETTINGS"  value="设置" />
+    <l id="JSP_NAV_SIDE_TITLE_ANALYTICS"  value="分析" />
+    <l id="JSP_NAV_SIDE_TITLE_DATABASE"  value="数据库" />
+    <l id="JSP_NAV_SIDE_TITLE_ACCOUNT"  value="账户" />
+
+    
+    <!-- dbi.mgr.user  -->
+
+    <l id="USER_STATUS_UNKNOW"  value="未知账户状态" />
+    <l id="USER_STATUS_UNVERFIED"  value="未验证账户" />
+    <l id="USER_STATUS_NORMAL"  value="正常账户" />
+    <l id="USER_STATUS_RESTRICTED"  value="受限账户" />
+
+    <!-- dbi.mgr.credential   -->
+    <!-- dbi.db.adaptor  -->
+    <!-- dbi.utils  -->
+    <!-- web pages   -->
+    <!-- autoanalytics.jsp -->
+    <l id="ANA_AUTO_TIP_SELECDBT" value="请选择要执行自动化分析的数据库和表：" />
+    <l id="ANA_AUTO_TIP_BTN_SELDB" value="选择数据库" />
+    <l id="ANA_AUTO_TIP_BTN_SELTB" value="选择表" />
+    <l id="ANA_AUTO_TIP_RET_TITLE" value="自动化分析结果" />
+    <l id="ANA_AUTO_TIP_RESULT" value="请选择数据库和表后查看分析结果。" />
+    <!-- costomizeAnalysis.jsp -->
+    <l id="ANA_CUSTOM_TITLE" value="自定义分析" />
+    <l id="ANA_CUSTOM_TIP_SELECDBT" value="请选择要执行自定义分析的数据库和表：" />
+    <l id="ANA_CUSTOM_TIP_BTN_SELDB" value="选择数据库" />
+    <l id="ANA_CUSTOM_TIP_BTN_SELTB" value="选择表" />
+    <l id="ANA_CUSTOM_TIP_CLP_TITLE1" value="1.选择字段" />
+    <l id="ANA_CUSTOM_TIP_CLP_TITLE2" value="2.查看分析结果" />
+    <l id="ANA_CUSTOM_TIP_C1" value="请选择数据库和表，选后可进行下一步操作" />
+    <l id="ANA_CUSTOM_TIP_C2" value="请完成第一步后，再查看分析结果" />
+    <l id="ANA_CUSTOM_TABLE_C1_INDEX" value="索引" />
+    <l id="ANA_CUSTOM_TABLE_C2_FIELD" value="字段" />
+    <l id="ANA_CUSTOM_TABLE_C3_TYPE" value="数据类型" />
+    <l id="ANA_CUSTOM_TABLE_C4_POOLF" value="聚合函数" />
+    <l id="ANA_CUSTOM_TABLE_C5_COMMENT" value="说明" />
+    <l id="ANA_CUSTOM_BTN_START" value="执行分析" />
+    <!-- reports.jsp -->
+    <l id="JSP_CONSOLE_REPORT_TITLE" value="报告管理" />
+    <l id="JSP_CONSOLE_REPORT_CW_DETAIL_TITLE" value="详细信息" />
+    <l id="JSP_CONSOLE_REPORT_CW_TITLE" value="确认删除?" />
+    <l id="JSP_CONSOLE_REPORT_CW_TIP" value="一旦删除，你将无法获取此报告。需要重新生成。" />
+    <l id="JSP_CONSOLE_REPORT_CW_CANCEL" value="取消" />
+    <l id="JSP_CONSOLE_REPORT_CW_CONFIRM" value="确认" />
+    <l id="JSP_CONSOLE_REPORT_BTN_VIEWFULL" value="查看完整报告" />
+    <l id="JSP_CONSOLE_REPORT_TIP_REPORT_TITLE" value="报告标题：" />
+    <l id="JSP_CONSOLE_REPORT_TIP_REPORT_DATE" value="创建日期:" />
+    <l id="JSP_CONSOLE_REPORT_TIP_REPORT_DES" value="报告描述：" />
+    <l id="JSP_CONSOLE_REPORT_TIP_REPORT_RELATION" value="数据库关系：" />
+    <!-- overview.jsp -->
+    <l id="JSP_OVERVIEW_CONSOLE_ACCOUNTINFO_TITLE" value="账户信息" />
+    <l id="JSP_OVERVIEW_CONSOLE_DATABASEINFO_TITLE" value="数据库信息" />
+    <l id="JSP_OVERVIEW_CONSOLE_NEWS_TITLE" value="Database Insights 新闻" />
+    <l id="JSP_OVERVIEW_CONSOLE_RECENTACT_TITLE" value="帐户最近活动" />
+    <l id="JSP_OVERVIEW_CONSOLE_TIP_NORECENT" value="此帐户无最近活动" />
+    <l id="JSP_OVERVIEW_CONSOLE_TIP_WELCOME" value="欢迎 " />
+    <l id="JSP_OVERVIEW_CONSOLE_TIP_LASTLOGIN" value="上次登陆时间：" />
+    <!-- crossableanalytics.jsp -->
+    <l id="JSP_CTA_CONSOLE_TITLE" value="数据库跨表分析" />
+    <l id="JSP_CTA_CONSOLE_BTN_ADDCHART" value="添加图表" />
+    <l id="JSP_CTA_CONSOLE_BTN_GENERATEREPORT" value="生成分析报告" />
+    <l id="JSP_CTA_CONSOLE_CL1_TITLE" value="1. 选择字段" />
+    <l id="JSP_CTA_CONSOLE_CL1_TIP" value="请点击左上方添加图表按钮以开始。" />
+    <l id="JSP_CTA_CONSOLE_CL2_TITLE" value="2. 查看分析结果" />
+    <l id="JSP_CTA_CONSOLE_CL2_TIP" value="请完成第一步后再查看分析结果。" />
+    <!-- Debug Message Localization Start Here -->
+    
+</root>

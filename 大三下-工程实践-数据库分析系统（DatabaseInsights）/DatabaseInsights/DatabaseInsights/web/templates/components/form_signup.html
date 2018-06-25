@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<!--
+The MIT License
+
+**** Copyright © Long Zhang(kanch).
+**** Email: kanchisme@gmail.com
+**** Code created on Mar 01 2018
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-->
+<form action="api/RegisteUser" method="post" id="form_signup">
+    <div class="form-group">
+        <label for="signup_name" class="bmd-label-floating"><%=local.getString(langID.JSP_SIGNUP_LABEL_USERNAME)%></label>
+        <input type="text" required="required" class="form-control" id="signup_name" name="name">
+        <span class="bmd-help"><%=local.getString(langID.JSP_SIGNUP_INFO_USERNAME)%></span>
+    </div>
+    <div class="form-group">
+        <label for="signup_email" class="bmd-label-floating"><%=local.getString(langID.JSP_SIGNUP_LABEL_EMAIL)%></label>
+        <input type="email" required="required" class="form-control" id="signup_email" name="email">
+        <span class="bmd-help"><%=local.getString(langID.JSP_SIGNUP_INFO_EMAIL)%></span>
+    </div>
+    <div class="form-group">
+        <label for="signup_password" class="bmd-label-floating"><%=local.getString(langID.JSP_SIGNUP_LABEL_PASSWORD)%></label>
+        <input type="password" required="required" class="form-control" id="signup_password" name="password">
+        <span class="bmd-help"><%=local.getString(langID.JSP_SIGNUP_INFO_PASSWORD)%></span>
+    </div>
+    <div class="form-group">
+        <label for="signup_confirmpassword" class="bmd-label-floating"><%=local.getString(langID.JSP_SIGNUP_LABEL_CONFIRMPASSWORD)%></label>
+        <input type="password" required="required" class="form-control" id="signup_confirmpassword" oninput="checkpassword(this)">
+    </div>
+    <div class="checkbox pt-md-5 pb-md-4">
+        <label>
+            <input type="checkbox" name="optionsRadios" id="agreement" value="option1">
+            <%=local.getString(langID.JSP_SIGNUP_INFO_AGGREMENT)%>
+        </label>
+    </div>
+
+    <button type="button" class="btn btn-raised btn-success btn-lg btn-block" onclick="signup(this)"><%=local.getString(langID.JSP_SIGNUP_BUTTON_SIGNUP)%></button>
+    <button type="button" class="btn btn-link btn-block"><small><%=local.getString(langID.JSP_SIGNUP_BUTTON_LOGIN)%></small></button>
+</form>
+<script>
+    function checkpassword(input) {
+        if (input.value != document.getElementById('signup_password').value) {
+            input.setCustomValidity('Password Not Match.');
+        } else {
+            input.setCustomValidity('');
+        }
+    }
+
+    function signup(btn) {
+        var form = document.getElementById("form_signup");
+        // Form is invalid!
+        if (!form.checkValidity()) {
+            // Create the temporary button, click and remove it
+            const tmpSubmit = document.createElement('button');
+            form.appendChild(tmpSubmit);
+            tmpSubmit.click();
+            form.removeChild(tmpSubmit);
+        } else {
+            if ($("#agreement").is(':checked') == false) {
+                showMsg("Please agree our aggrement to continue!");
+                console.log("agreement not checked.");
+                return;
+            }
+            // Form is valid, then we submit form
+            $("#progressbar").show();
+            btn.disabled = true;
+            SubmitFormFF("/api/RegisteUser", "form_signup", function error(data) {
+                showMsg("Failed to registe! Please try again later.Username may already in use.");
+                $("#progressbar").hide();
+                btn.disabled = false;
+            }, function success(data) {
+                showMsg("Successfully registed!Redirecting you to the login page...");
+                $("#progressbar").hide();
+                window.location = "signin.jsp";
+            });
+        }
+    }
+</script>
